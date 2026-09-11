@@ -21,3 +21,7 @@ For each future feature, record: user-visible behavior; private implementation; 
 ## Validation for this styling/workflow update
 
 Public release checks cover formatting, tests, allowed files, and credential-pattern detection. Screenshots must be reviewed manually and captured only from the synthetic demo. Existing integration tests use mocks; they do not establish provider acceptance. The initial parity gaps above are explicit backlog, not completed features.
+
+## Overhaul execution plan
+
+The [implementation plan](design/IMPLEMENTATION-PLAN.md) schedules M0–M6 with an early shell/Home/history trial and a complete-overhaul checkpoint. Both runtimes remain unmodified by this planning update. Each milestone must carry its generic counterpart, tests, setup changes and explicit gaps.

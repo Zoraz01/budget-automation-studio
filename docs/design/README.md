@@ -6,6 +6,10 @@ Open [mobile-concept.html](mobile-concept.html) through a static local server. U
 
 ## Deliverables
 
+- [Feature implementation ledger](IMPLEMENTATION-LEDGER.md): milestone and verification status for every feature and chart.
+
+- [Implementation and rollout plan](IMPLEMENTATION-PLAN.md): seven milestones, two release checkpoints, migration order, validation and rollback.
+
 - [Feature-by-feature UI plan](UI-FUNCTIONS.md): all existing page functionality, two API-only capabilities, and explicitly new history/mobile requirements.
 - [Chart specification](CHARTS.md): all 12 current visualizations, units, series, interaction, missing data and accessibility.
 - [Persistent AI conversation design](CHAT-HISTORY.md): owner-scoped storage, API contract, request lifecycle, retention and acceptance.
