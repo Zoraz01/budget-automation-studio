@@ -33,3 +33,10 @@ Live provider connections, OAuth institution support, physical-phone use and hos
 - Added a synthetic 19-screen preview, 66 feature contracts and 12 chart specifications in the established emerald/slate theme.
 - Planned durable AI conversations and phone home-screen lifecycle, keyboard, accessibility and performance acceptance.
 - Added local demo conversation persistence, recovery-state controls and dark mobile screenshots. These are design artifacts; runtime feature gaps remain documented in the parity table.
+
+## BAS identity and public mobile UI
+
+- Renamed the project and repository to BAS — Budget Automation Studio (`budget-automation-studio`).
+- Added an original emerald fish logo, favicon and phone installation icons.
+- Updated the real public mobile UI with a compact BAS header, five labeled tabs, clearer page hierarchy and a unified cash-flow card.
+- Refreshed dark mobile screenshots and setup/clone instructions. The complete overhaul and durable server chat history remain planned.

@@ -58,3 +58,9 @@ Advisory results are time-sensitive. Content pattern checks are partial evidence
 Matched dark background, surfaces, emerald accents, system typography, cards and tabular numbers to the companion design language. Refreshed five 390x844 mobile screenshots and the 1440x1150 desktop overview, all from the invented demo. Reviewed every screen visually; the mobile Connections document width equals its 390px viewport. Icons and manifest use the matching dark background.
 
 35 tests pass, including the HTTP manifest/icon checks. Formatting and release-content checks pass. HTTP tests require permission to bind ephemeral loopback ports in restricted environments. No real accounts, remote hosting or physical-phone installation was used in this validation.
+
+## BAS public UI and identity — 2026-09-11
+
+Updated the real app name, original vector fish mark, install icons, login, navigation, page hierarchy and cash-flow card. All five runtime destinations fit 360px and 390px viewports without document overflow. Captured new dark 390×844 mobile screenshots and a 1440×1000 desktop reference from an isolated synthetic database with providers disabled. Rebranded the design preview and its three screenshots separately. Browser diagnostics returned no warnings or errors.
+
+The 35 regression tests and formatting checks passed after the runtime changes. Existing accounting/provider behavior is unchanged. Home-screen icons were rendered from the original SVG at 180, 192 and 512px. These are browser checks; physical-phone installation and the larger overhaul/history plan remain separate work.

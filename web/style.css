@@ -1277,3 +1277,199 @@ dialog {
     font-size: 16px;
   }
 }
+
+/* BAS identity and mobile presentation, shared emerald/slate design language. */
+.brand {
+  gap: 12px;
+}
+.brand img {
+  width: 48px;
+  height: 48px;
+}
+.brand > span {
+  font-size: 25px;
+  letter-spacing: -1px;
+  font-weight: 800;
+}
+.brand small {
+  font-size: 8px;
+  letter-spacing: 1.2px;
+  line-height: 1.8;
+}
+.page-eyebrow {
+  color: #6ee7b7;
+  font-size: 11px;
+  letter-spacing: 1.7px;
+  font-weight: 750;
+  margin-bottom: 12px;
+}
+h1 {
+  font-weight: 750;
+  line-height: 1.12;
+}
+.hero {
+  background: linear-gradient(135deg, #10221f, #12161d 70%);
+  border-color: #28423c;
+  border-radius: 16px;
+}
+.hero .big {
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.flow-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+  margin-top: 26px;
+}
+.flow-metrics span {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+.flow-metrics strong {
+  font-size: clamp(19px, 3vw, 26px);
+  font-variant-numeric: tabular-nums;
+}
+.review-callout {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  margin-top: 18px;
+  color: #eef2f7;
+}
+.review-callout strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.review-callout small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.review-count {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 40px;
+  border-radius: 10px;
+  color: #6ee7b7;
+  background: #173329;
+}
+button,
+a {
+  color: #6ee7b7;
+}
+@media (max-width: 850px) {
+  .sidebar {
+    padding: calc(18px + env(safe-area-inset-top))
+      max(18px, env(safe-area-inset-right)) 8px
+      max(18px, env(safe-area-inset-left));
+  }
+  .sidebar .brand {
+    margin-bottom: 0;
+  }
+  .brand img {
+    width: 42px;
+    height: 42px;
+  }
+  .brand > span {
+    font-size: 23px;
+  }
+  .topbar {
+    height: auto;
+    min-height: 50px;
+    margin-bottom: 25px;
+  }
+  .top-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .breadcrumbs {
+    display: none;
+  }
+  .nav {
+    background: #12161df5;
+    backdrop-filter: blur(18px);
+  }
+  .nav button {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 3px;
+    font-size: 10px;
+  }
+  .workspace {
+    padding-bottom: calc(105px + env(safe-area-inset-bottom));
+  }
+}
+@media (max-width: 650px) {
+  .page-head {
+    display: grid;
+    gap: 20px;
+  }
+  .page-head h1 {
+    font-size: 32px;
+    max-width: 340px;
+    margin-bottom: 12px;
+    letter-spacing: -1.2px;
+  }
+  .page-head p {
+    font-size: 14px;
+    max-width: 340px;
+    line-height: 1.6;
+  }
+  .month-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    max-width: none;
+    font-size: 10px;
+  }
+  .month-label input {
+    flex: 1;
+    width: 165px;
+    min-width: 0;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .hero {
+    padding: 24px 20px;
+  }
+  .hero .big {
+    font-size: clamp(30px, 10vw, 44px);
+    overflow-wrap: anywhere;
+  }
+  .hero .eyebrow {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  .login {
+    margin: 4vh auto;
+    padding: 24px;
+  }
+  .login h1 {
+    font-size: 39px;
+  }
+  .login .brand {
+    margin-bottom: 34px;
+  }
+}

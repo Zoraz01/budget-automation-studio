@@ -25,3 +25,7 @@ Public release checks cover formatting, tests, allowed files, and credential-pat
 ## Overhaul execution plan
 
 The [implementation plan](design/IMPLEMENTATION-PLAN.md) schedules M0–M6 with an early shell/Home/history trial and a complete-overhaul checkpoint. Both runtimes remain unmodified by this planning update. Each milestone must carry its generic counterpart, tests, setup changes and explicit gaps.
+
+## BAS public identity and mobile presentation
+
+Public project renamed **BAS — Budget Automation Studio**, with an original fish mark, matching home-screen icons, updated mobile runtime typography/navigation/summary cards and refreshed synthetic screenshots. The personal app keeps its Finance name and the shared emerald/slate design direction. Product naming is intentionally different; advanced overhaul/history milestones remain planned.

@@ -9,7 +9,9 @@ const server = createApp(config, store);
 server.requestTimeout = 60000;
 server.headersTimeout = 10000;
 server.listen(config.port, "127.0.0.1", () =>
-  console.log(`Budget Automation Starter: ${config.origin} (${config.mode})`),
+  console.log(
+    `BAS — Budget Automation Studio: ${config.origin} (${config.mode})`,
+  ),
 );
 server.on("error", () => {
   console.error(

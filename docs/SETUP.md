@@ -134,7 +134,7 @@ Installation starts from **your running web app**, not this GitHub repository. O
 2. Tap **Share**. Depending on Safari's layout, Share may be inside the browser menu.
 3. Choose **Add to Home Screen**. If it is hidden, use **Edit Actions** to add it to the share sheet.
 4. Keep **Open as Web App** enabled when that option appears.
-5. Use the name **My Budget**, then tap **Add**.
+5. Use the name **BAS**, then tap **Add**.
 6. Launch the new budget icon from your Home Screen. Sign in again if prompted.
 
 These steps follow [Apple's Home Screen web app guide](https://support.apple.com/en-kw/guide/iphone/iphea86e5236/ios). Names and menu locations can vary by OS version.
@@ -144,7 +144,7 @@ These steps follow [Apple's Home Screen web app guide](https://support.apple.com
 1. Open your deployed web app in **Chrome** and sign in.
 2. Tap the **three-dot menu** beside the address bar.
 3. Select **Install and create shortcut → Install**, or **Add to Home screen → Install**, depending on the Chrome version.
-4. Confirm the installation, then open **My Budget** from your Home Screen or app drawer.
+4. Confirm the installation, then open **BAS** from your Home Screen or app drawer.
 
 See [Google's web app installation guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). If only a shortcut is offered, verify HTTPS and the manifest/icon responses; browser install eligibility varies. A shortcut can open in a browser tab rather than a standalone window.
 

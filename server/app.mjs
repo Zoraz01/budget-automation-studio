@@ -282,7 +282,7 @@ export function createApp(config, store) {
             }
             const data = await requestPlaid("/link/token/create", {
               user: { client_user_id: id },
-              client_name: "Budget Automation Starter",
+              client_name: "BAS — Budget Automation Studio",
               products: ["transactions"],
               country_codes: (config.env.PLAID_COUNTRY_CODES || "US").split(
                 ",",

@@ -23,3 +23,7 @@ Mobile first: emerald #10b981, near-black #0a0d12, slate cards #12161d, secondar
 ## This public starter
 
 Run npm test, npm run check:format, and npm run check:release before release. Add intentional new source/documentation paths to the release allowlist when necessary; never broaden it to admit private artifacts. The starter must run with synthetic demo data and no provider credentials. Keep the loopback-only security boundary explicit until secure remote hosting is implemented and validated. Upstream personal infrastructure is not required to contribute or run this repository.
+
+## BAS identity
+
+Use BAS — Budget Automation Studio (pronounced bass), the original fish mark and the shared emerald/slate palette. Canonical repository: `Zoraz01/budget-automation-studio`. The personal companion retains its own name; keep capabilities aligned through the paired workflow.

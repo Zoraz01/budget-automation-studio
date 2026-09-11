@@ -1,6 +1,10 @@
-# Budget Automation Starter
+# BAS · Budget Automation Studio
 
-**Your budget. Your connections. Your code.**
+<img src="web/logo.svg" alt="BAS emerald fish logo" width="88">
+
+**Find your financial flow.**
+
+BAS (pronounced “bass,” like the fish) is your open-source budget studio. Your budget. Your connections. Your code.
 
 A local-first personal finance starter with a mobile-responsive dashboard, customizable monthly budgets, Plaid transaction ingestion, read-only SnapTrade account values, and an optional local AI assistant.
 
@@ -27,8 +31,8 @@ Designed for your phone, with a dark interface and bottom navigation throughout.
 Install [Node.js 24 LTS](https://nodejs.org/en/download) (24.10 or newer within the 24.x line) and Git. Then:
 
 ```sh
-git clone https://github.com/Zoraz01/budget-automation-starter.git
-cd budget-automation-starter
+git clone https://github.com/Zoraz01/budget-automation-studio.git
+cd budget-automation-studio
 npm ci
 npm start
 ```
@@ -102,6 +106,8 @@ npm audit --omit=dev    # Check current dependency advisories
 Node 24 currently labels `node:sqlite` experimental. The project pins its supported Node major and uses its synchronous SQLite API for a single personal workspace. The prototype favors small, understandable modules; larger deployments need a database and request-concurrency design appropriate to their workloads.
 
 ## Documentation
+
+- [BAS name and logo](docs/BRAND.md)
 
 - [Setup and provider connections](docs/SETUP.md)
 - [Architecture, semantics and customization](docs/ARCHITECTURE.md)
