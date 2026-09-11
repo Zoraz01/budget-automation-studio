@@ -11,7 +11,8 @@ Reviewed 2026-09-11. These repositories share a product direction, not identical
 | AI / chatbot | Richer personal analytics tools | Read-only summaries, optional local Ollama | Available with reduced data scope; no private prompts or context copied |
 | Goywise / shared expenses | OAuth, prepare/commit, stable purchase identity and Review UI | Not implemented | Existing parity gap: next adapter port must use adopter-owned OAuth, fictional participants, integer cents, explicit commit and retry-safe action identity |
 | Home-screen app | Mobile web UI | Manifest, icons, iPhone/Android setup instructions | Public install metadata available; secure remote hosting and physical-phone validation remain separate gates |
-| UI redesign | Synthetic interactive concept and implementation plan | Not implemented | Plan only; implement reusable approved changes in both repos together |
+| UI redesign | Detailed synthetic preview: 19 screens, 66 feature contracts and 12 chart contracts | Same generic preview and specification | Design parity only; runtime implementation remains pending |
+| Saved AI conversations | Browser-local demo plus authenticated server-history design | Same generic demo and provider-neutral persistence design | Production persistence not implemented in either runtime by this design update |
 
 ## Per-change record
 

@@ -27,3 +27,9 @@ Live provider connections, OAuth institution support, physical-phone use and hos
 - Match the emerald/slate dark palette, system font, card styling and app icons.
 - Refresh mobile and desktop demo screenshots; use 16px mobile form fields.
 - Add paired-repository instructions and an honest capability-parity backlog.
+
+## Detailed mobile design proposal
+
+- Added a synthetic 19-screen preview, 66 feature contracts and 12 chart specifications in the established emerald/slate theme.
+- Planned durable AI conversations and phone home-screen lifecycle, keyboard, accessibility and performance acceptance.
+- Added local demo conversation persistence, recovery-state controls and dark mobile screenshots. These are design artifacts; runtime feature gaps remain documented in the parity table.

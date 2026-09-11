@@ -14,8 +14,8 @@
     "setup": "node scripts/setup.mjs",
     "test": "node --test test/*.test.mjs",
     "check:release": "node scripts/check-release.mjs",
-    "format": "prettier --write \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\"",
-    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\""
+    "format": "prettier --write \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\"",
+    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\""
   },
   "dependencies": {
     "snaptrade-typescript-sdk": "12.2.7"

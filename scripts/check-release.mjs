@@ -86,6 +86,9 @@ function check(path, buffer, label) {
         "docs/mobile-transactions.jpg",
         "docs/mobile-assistant.jpg",
         "docs/mobile-connections.jpg",
+        "docs/design/mobile-concept.jpg",
+        "docs/design/mobile-chat.jpg",
+        "docs/design/mobile-charts.jpg",
       ].includes(path)
     )
       violations.push(`${path}: unapproved binary`);

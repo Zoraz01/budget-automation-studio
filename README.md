@@ -124,3 +124,7 @@ Describe live-provider operation, adoption and production performance only when 
 ## Maintaining the companion repositories
 
 Follow [AGENTS.md](AGENTS.md) for paired feature development and privacy review. [Feature parity](docs/FEATURE-PARITY.md) tracks generic adaptations and outstanding gaps.
+
+### Detailed mobile redesign preview
+
+See [the design package](docs/design/README.md) for every feature/chart contract, saved AI conversation design and home-screen mobile acceptance plan. The preview uses invented data and does not change the running application.

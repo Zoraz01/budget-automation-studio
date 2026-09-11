@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0a0d12" />
+    <title>Finance · Complete mobile design preview</title>
+    <link rel="stylesheet" href="preview.css" />
+    <script src="catalog.js" defer></script>
+    <script src="preview.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <aside class="design-bar">
+      <span
+        ><b>FINANCE / DESIGN LAB</b
+        ><small>Synthetic preview · no accounts connected</small></span
+      ><button data-action="coverage">Coverage map</button
+      ><label
+        >Preview state<select id="state">
+          <option value="ready">Ready</option>
+          <option value="loading">Loading</option>
+          <option value="empty">Empty</option>
+          <option value="error">Error</option>
+          <option value="stale">Stale</option>
+          <option value="offline">Offline</option>
+          <option value="locked">Session expired</option>
+        </select></label
+      >
+    </aside>
+    <div class="phone">
+      <header class="top">
+        <button class="brand quiet" data-page="home"><i></i>Finance</button>
+        <div class="row">
+          <button
+            class="icon-button"
+            data-action="privacy"
+            aria-label="Toggle amount privacy"
+          ></button
+          ><button
+            class="icon-button"
+            data-page="chat"
+            aria-label="Open saved AI conversations"
+          ></button>
+        </div>
+      </header>
+      <main id="main" tabindex="-1"></main>
+      <nav id="nav" aria-label="Primary navigation"></nav>
+    </div>
+    <dialog id="sheet" aria-labelledby="sheet-title">
+      <header class="sheet-head">
+        <h2 id="sheet-title"></h2>
+        <button
+          class="icon-button"
+          data-action="close"
+          aria-label="Close dialog"
+        >
+          ✕
+        </button>
+      </header>
+      <div id="sheet-body"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
