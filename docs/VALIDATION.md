@@ -52,3 +52,9 @@ No real Plaid item was connected, no SnapTrade financial account was accessed, a
 Screenshots use a browser viewport rather than a physical phone. There is no native app build, app-store submission, public live-data deployment, security certification, penetration test or multi-user acceptance claim. Cross-platform CI results are available in the repository's Actions tab after publication; this local record does not imply those jobs already ran.
 
 Advisory results are time-sensitive. Content pattern checks are partial evidence and do not prove the absence of every possible private datum or vulnerability. Review changes and rerun checks for each release.
+
+## Emerald/slate styling and paired development — 2026-09-11
+
+Matched dark background, surfaces, emerald accents, system typography, cards and tabular numbers to the companion design language. Refreshed five 390x844 mobile screenshots and the 1440x1150 desktop overview, all from the invented demo. Reviewed every screen visually; the mobile Connections document width equals its 390px viewport. Icons and manifest use the matching dark background.
+
+35 tests pass, including the HTTP manifest/icon checks. Formatting and release-content checks pass. HTTP tests require permission to bind ephemeral loopback ports in restricted environments. No real accounts, remote hosting or physical-phone installation was used in this validation.

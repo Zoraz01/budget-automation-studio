@@ -120,3 +120,7 @@ Describe live-provider operation, adoption and production performance only when 
 ## License
 
 [MIT](LICENSE). Provider accounts, APIs, SDKs and models remain subject to their own terms. This project is not affiliated with or endorsed by Plaid, SnapTrade or Ollama.
+
+## Maintaining the companion repositories
+
+Follow [AGENTS.md](AGENTS.md) for paired feature development and privacy review. [Feature parity](docs/FEATURE-PARITY.md) tracks generic adaptations and outstanding gaps.

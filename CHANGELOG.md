@@ -21,3 +21,9 @@ Initial public starter release:
 - Setup, API, architecture, contribution and security documentation.
 
 Live provider connections, OAuth institution support, physical-phone use and hosted multi-user deployments have not been validated for this release. See `docs/VALIDATION.md` for the evidence boundary.
+
+### Companion styling and development workflow
+
+- Match the emerald/slate dark palette, system font, card styling and app icons.
+- Refresh mobile and desktop demo screenshots; use 16px mobile form fields.
+- Add paired-repository instructions and an honest capability-parity backlog.

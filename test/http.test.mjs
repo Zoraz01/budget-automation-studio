@@ -229,7 +229,7 @@ test("home-screen manifest and exact public icon assets are served without cachi
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.start_url, "/");
   assert.equal(manifest.scope, "/");
-  assert.equal(manifest.theme_color, "#0b1215");
+  assert.equal(manifest.theme_color, "#0a0d12");
   for (const [url, size] of [
     ["/icons/apple-touch-icon.png", 180],
     ...manifest.icons.map((i) => [i.src, Number(i.sizes.split("x")[0])]),

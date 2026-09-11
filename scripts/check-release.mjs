@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 const roots = ["server", "web", "scripts", "test", "docs", ".github"];
 const rootFiles = new Set([
   "README.md",
+  "AGENTS.md",
   "LICENSE",
   "SECURITY.md",
   "CONTRIBUTING.md",

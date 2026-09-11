@@ -1,27 +1,29 @@
 :root {
   font-family:
-    Inter,
-    ui-sans-serif,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  color: #edf5f1;
-  background: #0b1215;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica,
+    Arial, sans-serif;
+  color: #eef2f7;
+  background: #0a0d12;
   font-synthesis: none;
   color-scheme: dark;
-  --green: #a5e6c3;
-  --muted: #a4b5ae;
-  --border: #2b3a3f;
-  --panel: #141f23;
-  --tint: #20362e;
-  --red: #ff9d96;
+  --green: #10b981;
+  --muted: #9aa6b6;
+  --border: #232a35;
+  --panel: #12161d;
+  --tint: rgba(16, 185, 129, 0.18);
+  --red: #fb7185;
 }
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
+  background: radial-gradient(
+      1200px 600px at 80% -10%,
+      rgba(16, 185, 129, 0.16),
+      transparent 60%
+    )
+    fixed;
 }
 button,
 input,
@@ -48,7 +50,7 @@ textarea {
 button {
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #141f23;
+  background: #12161d;
   color: var(--green);
   padding: 10px 16px;
   font-weight: 600;
@@ -64,10 +66,10 @@ button:disabled {
 button.primary {
   background: var(--green);
   border-color: var(--green);
-  color: #10241b;
+  color: #061b13;
 }
 button.primary:hover {
-  background: #b9efd1;
+  background: #34d399;
 }
 button.ghost {
   border-color: transparent;
@@ -87,11 +89,11 @@ a {
 input,
 select,
 textarea {
-  border: 1px solid #3b5053;
+  border: 1px solid #394454;
   border-radius: 9px;
   padding: 10px 12px;
   color: inherit;
-  background: #141f23;
+  background: #12161d;
   min-width: 0;
   width: 100%;
 }
@@ -144,7 +146,7 @@ p {
 .sidebar {
   border-right: 1px solid var(--border);
   padding: 34px 20px;
-  background: #10191d;
+  background: #12161d;
   display: flex;
   flex-direction: column;
   gap: 42px;
@@ -189,7 +191,7 @@ p {
   min-height: 48px;
 }
 .nav button.active {
-  background: #1d382e;
+  background: rgba(16, 185, 129, 0.18);
   color: var(--green);
   font-weight: 700;
 }
@@ -205,8 +207,8 @@ p {
 }
 .sidebar-foot {
   margin-top: auto;
-  background: #152720;
-  border: 1px solid #2e483b;
+  background: #161b23;
+  border: 1px solid #232a35;
   border-radius: 13px;
   padding: 18px;
   font-size: 12px;
@@ -248,10 +250,10 @@ p {
   align-items: center;
   gap: 7px;
   padding: 6px 10px;
-  border: 1px solid #36513f;
+  border: 1px solid #235344;
   border-radius: 99px;
-  background: #203729;
-  color: #c2e8b9;
+  background: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
   font-size: 12px;
   font-weight: 650;
   white-space: nowrap;
@@ -261,7 +263,7 @@ p {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #ade291;
+  background: #10b981;
 }
 .avatar {
   width: 35px;
@@ -270,7 +272,7 @@ p {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #141f23;
+  background: #12161d;
   font-size: 12px;
   font-weight: 700;
 }
@@ -294,7 +296,7 @@ p {
 .month-label input {
   font-size: 14px;
   min-height: 40px;
-  background: #141f23;
+  background: #12161d;
 }
 .dashboard-grid {
   display: grid;
@@ -302,9 +304,9 @@ p {
   gap: 22px;
 }
 .hero {
-  border: 1px solid #315b49;
+  border: 1px solid #235344;
   border-radius: 18px;
-  background: #173b30;
+  background: #12161d;
   padding: 27px 30px;
   position: relative;
   overflow: hidden;
@@ -315,7 +317,7 @@ p {
   gap: 14px;
 }
 .hero .eyebrow {
-  color: #b3d4c2;
+  color: #9aa6b6;
 }
 .hero .big {
   font-size: 43px;
@@ -325,7 +327,7 @@ p {
   line-height: 1.2;
 }
 .hero p {
-  color: #b1cbbd;
+  color: #9aa6b6;
   font-size: 12px;
   margin-bottom: 0;
 }
@@ -333,27 +335,27 @@ p {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #275340;
+  background: rgba(16, 185, 129, 0.18);
   display: grid;
   place-items: center;
-  color: #b8edce;
+  color: #6ee7b7;
 }
 .hero-symbol .icon {
   width: 27px;
   height: 27px;
 }
 .hero-bottom {
-  border-top: 1px solid #355848;
+  border-top: 1px solid #232a35;
   margin-top: 24px;
   padding-top: 17px;
   display: flex;
   justify-content: space-between;
   gap: 12px;
   font-size: 12px;
-  color: #b3ccbf;
+  color: #9aa6b6;
 }
 .hero-bottom strong {
-  color: #c8ebd5;
+  color: #eef2f7;
 }
 .stats {
   display: grid;
@@ -442,19 +444,19 @@ progress {
   appearance: none;
   border: 0;
   border-radius: 10px;
-  background: #293a38;
+  background: #232a35;
   overflow: hidden;
 }
 progress::-webkit-progress-bar {
-  background: #293a38;
+  background: #232a35;
   border-radius: 10px;
 }
 progress::-webkit-progress-value {
-  background: #a4dba2;
+  background: #10b981;
   border-radius: 10px;
 }
 progress::-moz-progress-bar {
-  background: #a4dba2;
+  background: #10b981;
 }
 .over progress::-webkit-progress-value {
   background: #e9b276;
@@ -474,7 +476,7 @@ progress::-moz-progress-bar {
   gap: 12px;
   align-items: center;
   padding: 14px 0;
-  border-bottom: 1px solid #293a38;
+  border-bottom: 1px solid #232a35;
 }
 .txn:last-child {
   border-bottom: 0;
@@ -482,11 +484,11 @@ progress::-moz-progress-bar {
 .txn-icon {
   width: 36px;
   height: 36px;
-  background: #1c3029;
+  background: #161b23;
   border-radius: 11px;
   display: grid;
   place-items: center;
-  color: #b7d2bc;
+  color: #9aa6b6;
 }
 .txn strong {
   font-size: 14px;
@@ -507,7 +509,7 @@ progress::-moz-progress-bar {
   font-weight: 650;
 }
 .txn .income {
-  color: #a4e2be;
+  color: #10b981;
 }
 .txn select {
   font-size: 12px;
@@ -520,7 +522,7 @@ progress::-moz-progress-bar {
   color: #e4c592;
 }
 .helper-card {
-  background: #17251f;
+  background: #161b23;
 }
 .helper-card h2 {
   margin-top: 13px;
@@ -539,17 +541,17 @@ progress::-moz-progress-bar {
   width: 36px;
   height: 36px;
   border-radius: 11px;
-  background: #141f23;
+  background: #12161d;
   display: grid;
   place-items: center;
-  color: #b6ddac;
+  color: #6ee7b7;
 }
 .note {
   font-size: 12px;
   line-height: 1.6;
   color: var(--muted);
   padding: 13px 16px;
-  background: #1a2b26;
+  background: #161b23;
   border-radius: 10px;
 }
 .footer-note {
@@ -617,7 +619,7 @@ dialog {
   color: inherit;
 }
 dialog::backdrop {
-  background: #18251fcc;
+  background: #00000099;
   backdrop-filter: blur(4px);
 }
 dialog h2 {
@@ -720,8 +722,8 @@ dialog h2 {
   margin-top: 24px;
 }
 .message {
-  background: #17251f;
-  border: 1px solid #304539;
+  background: #161b23;
+  border: 1px solid #232a35;
   border-radius: 14px;
   padding: 18px;
   font-size: 14px;
@@ -730,7 +732,7 @@ dialog h2 {
   overflow-wrap: anywhere;
 }
 .message.user {
-  background: #141f23;
+  background: #12161d;
   margin-left: 45px;
 }
 .message small {
@@ -775,7 +777,7 @@ dialog h2 {
 }
 .skip:focus {
   top: 10px;
-  background: #141f23;
+  background: #12161d;
   padding: 12px;
 }
 #notice:empty {
@@ -787,8 +789,8 @@ dialog h2 {
   left: 50%;
   transform: translateX(-50%);
   max-width: min(90vw, 600px);
-  background: #244d3b;
-  color: #edf5f1;
+  background: #164e3c;
+  color: #eef2f7;
   border-radius: 12px;
   padding: 14px 20px;
   box-shadow: 0 8px 35px #18251f33;
@@ -891,7 +893,7 @@ dialog h2 {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #101b1d;
+    background: #12161d;
     border-top: 1px solid var(--border);
     z-index: 50;
     display: flex;
@@ -1109,7 +1111,7 @@ dialog h2 {
 
 /* A phone-first, dark workspace; safe areas also cover standalone launches. */
 .hero {
-  background: linear-gradient(125deg, #173b30, #112723);
+  background: linear-gradient(125deg, #12161d, #12161d);
 }
 dialog {
   background: var(--panel);
@@ -1141,7 +1143,7 @@ dialog {
     padding-top: calc(18px + env(safe-area-inset-top));
   }
   .nav {
-    background: #101b1df5;
+    background: #12161df5;
     backdrop-filter: blur(18px);
   }
   input,
@@ -1226,5 +1228,52 @@ dialog {
   }
   .chat form {
     margin-top: 16px;
+  }
+}
+
+/* Shared emerald/slate visual language. See docs/FEATURE-PARITY.md. */
+.card,
+.stat,
+.hero {
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 16px 40px rgba(0, 0, 0, 0.45);
+}
+.hero {
+  background: var(--panel);
+}
+.hero .big {
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+}
+.stat .value,
+.amount {
+  font-variant-numeric: tabular-nums;
+}
+a,
+button:not(.primary),
+.nav button.active {
+  color: #6ee7b7;
+}
+.nav button:not(.active) {
+  color: var(--muted);
+}
+.card-head h2,
+.stat .label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+dialog {
+  background: var(--panel);
+}
+@media (max-width: 650px) {
+  input,
+  select,
+  textarea,
+  .month-label input,
+  .txn select {
+    font-size: 16px;
   }
 }
