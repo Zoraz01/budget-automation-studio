@@ -11,6 +11,7 @@ const rootFiles = new Set([
   "package.json",
   "package-lock.json",
   ".gitignore",
+  ".gitattributes",
   ".env.example",
   ".nvmrc",
 ]);
