@@ -63,8 +63,30 @@ const patterns = [
 ];
 function check(path, buffer, label) {
   if (buffer.length > 1500000) violations.push(`${path}: oversized artifact`);
+  if (path.endsWith(".png")) {
+    if (
+      ![
+        "web/icons/apple-touch-icon.png",
+        "web/icons/icon-192.png",
+        "web/icons/icon-512.png",
+      ].includes(path)
+    )
+      violations.push(`${path}: unapproved PNG`);
+    if (buffer.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a")
+      violations.push(`${path}: invalid PNG`);
+    return;
+  }
   if (path.endsWith(".jpg")) {
-    if (!["docs/dashboard.jpg", "docs/mobile.jpg"].includes(path))
+    if (
+      ![
+        "docs/dashboard.jpg",
+        "docs/mobile.jpg",
+        "docs/mobile-budgets.jpg",
+        "docs/mobile-transactions.jpg",
+        "docs/mobile-assistant.jpg",
+        "docs/mobile-connections.jpg",
+      ].includes(path)
+    )
       violations.push(`${path}: unapproved binary`);
     if (buffer.subarray(0, 3).toString("hex") !== "ffd8ff")
       violations.push(`${path}: invalid JPEG`);
@@ -94,7 +116,7 @@ for (const path of paths) {
     violations.push(`${path}: private/runtime file`);
   if (
     !rootFiles.has(path) &&
-    !/^.+\.(?:mjs|js|css|html|svg|md|yml|jpg)$/.test(path)
+    !/^.+\.(?:mjs|js|css|html|svg|md|yml|jpg|png|webmanifest)$/.test(path)
   )
     violations.push(`${path}: unapproved extension`);
   if (tracked)

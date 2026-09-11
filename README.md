@@ -6,7 +6,21 @@ A local-first personal finance starter with a mobile-responsive dashboard, custo
 
 Try it with synthetic data in minutes. Connect your own services when you are ready. This repository is an independently packaged, generic implementation: it includes no private deployment configuration, financial exports, production credentials, or inherited application history.
 
-![Budget dashboard with synthetic sample data](docs/dashboard.jpg)
+<p align="center">
+  <img src="docs/mobile.jpg" alt="Dark mobile budget dashboard with synthetic sample data" width="350">
+</p>
+
+Designed for your phone, with a dark interface and bottom navigation throughout. [Add your deployed web app to your iPhone or Android Home Screen](docs/SETUP.md#7-add-the-web-app-to-your-phone). The local computer-only demo needs a secure remote deployment before it can be reached from a phone.
+
+<details>
+<summary>More mobile screens</summary>
+<p>
+  <img src="docs/mobile-budgets.jpg" alt="Dark mobile budget editor" width="260">
+  <img src="docs/mobile-transactions.jpg" alt="Dark mobile transaction review" width="260">
+  <img src="docs/mobile-assistant.jpg" alt="Dark mobile budget assistant" width="260">
+  <img src="docs/mobile-connections.jpg" alt="Dark mobile connections and home-screen instructions" width="260">
+</p>
+</details>
 
 ## Quick start
 
@@ -39,7 +53,7 @@ Save the generated local login password. Personal mode creates an empty database
 | Plaid | Link flow, server-side public-token exchange, paginated cursor sync, additions/modifications/removals, atomic commits and mutation retry |
 | SnapTrade | Personal or Commercial auth, read-only connection portal, imported investment account values and stale/unavailable states |
 | Assistant | Deterministic summaries without AI; optional Ollama chat with an aggregate-only context |
-| Mobile UI | Responsive layout, bottom navigation, accessible forms, focus states and reduced-motion support |
+| Mobile UI | Dark theme, bottom navigation, accessible forms, safe areas and home-screen installation metadata |
 | Privacy | Loopback-only server, password sessions, encrypted provider tokens, no telemetry or remote fonts |
 | Engineering | SQLite persistence, isolated regression tests, dependency lockfile, CI, release-content checks and extension guides |
 

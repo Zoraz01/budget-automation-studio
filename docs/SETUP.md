@@ -120,9 +120,41 @@ To update, stop the server, back up your data, review release notes, pull the ne
 
 Reset a forgotten local login password by editing only `APP_PASSWORD` in `.env` to a new long random value and restarting. Do not change `VAULT_KEY` as part of a login-password reset. Restart invalidates all browser sessions. Provider-key rotation and vault-key migration are separate operations; there is no in-place vault re-encryption tool in this starter.
 
-## 7. Mobile use and hosting boundaries
+## 7. Add the web app to your phone
 
-The web interface adapts to phone and tablet viewport sizes; it is not an iOS/Android binary. The default loopback server is reachable on its own computer only. The screenshots demonstrate a mobile viewport, not a verified physical-phone deployment.
+The entire interface uses a dark, mobile-first layout with bottom navigation, touch-friendly controls and safe-area spacing. A web app manifest and app icons let supporting browsers launch it in a standalone window from your Home Screen. You do not need an App Store or Play Store download.
+
+### First, use a phone-accessible HTTPS address
+
+Installation starts from **your running web app**, not this GitHub repository. Open the HTTPS address of your own securely deployed instance on your phone. The default `127.0.0.1:4310` address works only on the computer running the starter; entering it on a phone points to the phone itself. This repository does not include a ready-made remote deployment. Complete the secure deployment work below before using personal data remotely.
+
+### iPhone or iPad — Safari
+
+1. Open your deployed web app in **Safari** and sign in.
+2. Tap **Share**. Depending on Safari's layout, Share may be inside the browser menu.
+3. Choose **Add to Home Screen**. If it is hidden, use **Edit Actions** to add it to the share sheet.
+4. Keep **Open as Web App** enabled when that option appears.
+5. Use the name **My Budget**, then tap **Add**.
+6. Launch the new budget icon from your Home Screen. Sign in again if prompted.
+
+These steps follow [Apple's Home Screen web app guide](https://support.apple.com/en-kw/guide/iphone/iphea86e5236/ios). Names and menu locations can vary by OS version.
+
+### Android — Chrome
+
+1. Open your deployed web app in **Chrome** and sign in.
+2. Tap the **three-dot menu** beside the address bar.
+3. Select **Install and create shortcut → Install**, or **Add to Home screen → Install**, depending on the Chrome version.
+4. Confirm the installation, then open **My Budget** from your Home Screen or app drawer.
+
+See [Google's web app installation guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). If only a shortcut is offered, verify HTTPS and the manifest/icon responses; browser install eligibility varies. A shortcut can open in a browser tab rather than a standalone window.
+
+### How the installed app behaves
+
+The app requests standalone display, includes 192px/512px maskable-compatible icons and a 180px Apple touch icon, and uses a dark launch background. It keeps the same login and server-backed data. Adding the icon does not move the backend onto your phone or keep it running when the host computer is off.
+
+**Online connection required:** this release has no service worker or offline cache. Financial pages and API responses remain `no-store`; no new financial-data cache is introduced for installation. No push notifications or background sync are added. The manifest and icon assets are verified by HTTP tests; physical-device installation has not been verified.
+
+### Secure deployment work before remote use
 
 For remote access, design a separate hardened deployment with TLS, managed authentication, secure cookies, explicit trusted proxy/origin handling, a secret manager, durable backups, rate limiting and monitoring. A service for multiple people additionally needs per-user ownership and authorization enforced on every database query, plus OAuth callback and verified-webhook handling. Sharing this local server as-is over a public tunnel is unsupported. Friends can each clone it and run an isolated personal instance with their own keys.
 

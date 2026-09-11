@@ -19,6 +19,13 @@ const staticFiles = new Map([
   ["/app.js", ["app.js", "text/javascript"]],
   ["/style.css", ["style.css", "text/css"]],
   ["/logo.svg", ["logo.svg", "image/svg+xml"]],
+  [
+    "/manifest.webmanifest",
+    ["manifest.webmanifest", "application/manifest+json"],
+  ],
+  ["/icons/apple-touch-icon.png", ["icons/apple-touch-icon.png", "image/png"]],
+  ["/icons/icon-192.png", ["icons/icon-192.png", "image/png"]],
+  ["/icons/icon-512.png", ["icons/icon-512.png", "image/png"]],
 ]);
 const digest = (s) => createHash("sha256").update(s).digest();
 export function createApp(config, store) {
@@ -73,7 +80,7 @@ export function createApp(config, store) {
       "X-Frame-Options": "DENY",
       "Cross-Origin-Resource-Policy": "same-origin",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-      "Content-Security-Policy": `default-src 'self'; script-src 'self' https://cdn.plaid.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.plaid.com; frame-src https://*.plaid.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
+      "Content-Security-Policy": `default-src 'self'; manifest-src 'self'; script-src 'self' https://cdn.plaid.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.plaid.com; frame-src https://*.plaid.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
     };
     for (const [key, value] of Object.entries(headers))
       res.setHeader(key, value);

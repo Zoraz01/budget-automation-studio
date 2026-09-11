@@ -215,3 +215,37 @@ test("private paths and unlisted files cannot be served", async (t) => {
     assert.equal((await f.call(path)).status, 404);
   assert.equal((await f.call("/")).status, 200);
 });
+
+test("home-screen manifest and exact public icon assets are served without caching", async (t) => {
+  const f = await fixture(t);
+  const response = await f.call("/manifest.webmanifest");
+  assert.equal(response.status, 200);
+  assert.match(
+    response.headers.get("content-type"),
+    /application\/manifest\+json/,
+  );
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  const manifest = await response.json();
+  assert.equal(manifest.display, "standalone");
+  assert.equal(manifest.start_url, "/");
+  assert.equal(manifest.scope, "/");
+  assert.equal(manifest.theme_color, "#0b1215");
+  for (const [url, size] of [
+    ["/icons/apple-touch-icon.png", 180],
+    ...manifest.icons.map((i) => [i.src, Number(i.sizes.split("x")[0])]),
+  ]) {
+    const icon = await f.call(url);
+    assert.equal(icon.status, 200);
+    assert.match(icon.headers.get("content-type"), /image\/png/);
+    const bytes = Buffer.from(await icon.arrayBuffer());
+    assert.equal(bytes.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
+    assert.equal(bytes.readUInt32BE(16), size);
+    assert.equal(bytes.readUInt32BE(20), size);
+  }
+  const html = await (await f.call("/")).text();
+  assert.match(html, /rel="manifest"/);
+  assert.match(html, /rel="apple-touch-icon"/);
+  assert.match(html, /apple-mobile-web-app-capable/);
+  await f.login();
+  assert.equal((await f.call("/icons/other.png")).status, 404);
+});

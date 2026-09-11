@@ -36,7 +36,7 @@ scripts/
 | `connections` | Encrypted provider credentials, Plaid cursor and last import status |
 | `investments` | Independent account value observations, currency and freshness labels |
 
-All SQL parameterizes user values. Transaction IDs are namespaced per Plaid connection. The client-facing state query omits encrypted credentials and cursors. The server exposes only four explicit static asset paths; its source, `.env` and database directory cannot be downloaded as static files.
+All SQL parameterizes user values. Transaction IDs are namespaced per Plaid connection. The client-facing state query omits encrypted credentials and cursors. The server exposes only explicit static asset paths; its source, `.env` and database directory cannot be downloaded as static files.
 
 ## Financial semantics
 
@@ -68,7 +68,7 @@ To add a hosted AI service, implement another provider inside `answer()` and add
 
 ## Design decisions
 
-The interface uses a muted green palette, high-contrast primary actions, local system fonts and no image/font CDN. Desktop navigation becomes a five-item bottom bar below 850px. Budget progress includes explicit numbers and text, rather than relying on color alone. Dialogs use native focus trapping; controls have visible focus and touch-friendly target heights. Motion respects `prefers-reduced-motion`.
+The interface uses a dark ink-and-emerald palette, high-contrast mint actions, local system fonts and no image/font CDN. Desktop navigation becomes a five-item bottom bar below 850px. All five views use the same mobile-first theme. The manifest, Apple touch icon and standalone metadata support home-screen launches on eligible browsers; no service worker, offline cache or public listener is added. Budget progress includes explicit numbers and text, rather than relying on color alone. Dialogs use native focus trapping; controls have visible focus and touch-friendly target heights. Motion respects `prefers-reduced-motion`.
 
 Framework-free ES modules reduce setup and dependency surface for this starter. The route code and UI are deliberately compact, but should be split into dedicated route/view modules as features grow. Native synchronous SQLite is appropriate for a small personal instance, not an unbounded API workload.
 

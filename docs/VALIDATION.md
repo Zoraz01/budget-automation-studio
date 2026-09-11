@@ -1,6 +1,14 @@
 # Release verification
 
-## v0.1.0 — 2026-09-11
+## Dark mobile update — 2026-09-11
+
+- All 35 regression tests pass locally, including a new manifest/icon HTTP test.
+- Manifest uses standalone display, scoped local routes, dark launch colors and 192/512px icons; the Apple touch icon is 180px. HTTP tests verify PNG signatures/dimensions and no-store responses.
+- Dark screenshots cover Overview, Budgets, Transactions, Assistant and Connections at 390px phone width. All five views were also checked at 375px with no horizontal overflow. The README leads with the mobile view.
+- Installation instructions are available on the login and Connections screens, with matching iPhone/Android steps and official-source links in SETUP.md.
+- No service worker, offline financial cache, public listener or change to authentication was introduced. Physical-phone installation still requires a secure remote deployment and has not been tested.
+
+## Initial v0.1.0 verification — 2026-09-11
 
 Validation used a new standalone source tree, a synthetic demo database and mocked provider responses. The private application's source history, configuration, databases, exports and deployment scripts are not part of this release.
 
@@ -20,9 +28,9 @@ Validation used a new standalone source tree, a synthetic demo database and mock
 | Overflow | Document width matched viewport at 375, 768, 1024 and 1440px |
 | Browser diagnostics | No captured console errors or warnings after final dashboard reload |
 
-![Desktop synthetic demo](dashboard.jpg)
+![Dark mobile synthetic demo](mobile.jpg)
 
-[Mobile synthetic demo screenshot](mobile.jpg)
+[Dark desktop reference](dashboard.jpg)
 
 ## Regression coverage
 

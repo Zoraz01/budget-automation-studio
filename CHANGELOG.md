@@ -1,5 +1,13 @@
 # Changelog
 
+## Mobile presentation update — 2026-09-11
+
+- Dark theme throughout the dashboard, transactions, budgets, connections and assistant.
+- Mobile screenshots now lead the README, with a gallery of every main view.
+- Home-screen manifest, Android icons, Apple touch icon and standalone metadata.
+- iPhone/Android installation instructions in the app and setup guide, including the HTTPS deployment prerequisite.
+- No offline financial caching or network-access changes.
+
 ## 0.1.0 — 2026-09-11
 
 Initial public starter release:
