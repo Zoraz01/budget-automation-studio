@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 — Bring your own AI provider
+
+- Add server-side OpenAI, Anthropic and Google Gemini adapters with default models; retain local Ollama and no-AI summaries.
+- Add `npm run setup:ai` with hidden key entry and preservation of existing settings.
+- Show provider/model status and saved reply attribution, with sanitized access, quota, model and connectivity errors.
+- Document API access/billing, aggregate-only cloud context and provider retention boundaries. Tests use mocked providers; no live account acceptance is claimed.
+
 ## Mobile presentation update — 2026-09-11
 
 - Dark theme throughout the dashboard, transactions, budgets, connections and assistant.

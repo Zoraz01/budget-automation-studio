@@ -5,11 +5,11 @@ import { request as httpRequest } from "node:http";
 import { createApp } from "../server/app.mjs";
 import { configuration } from "../server/config.mjs";
 import { openStore } from "../server/store.mjs";
-async function fixture(t) {
-  const config = configuration({});
+async function fixture(t, env = {}, options = {}) {
+  const config = configuration(env);
   const store = openStore(":memory:", config.vaultKey, "USD");
   store.seed("2026-05");
-  const server = createApp(config, store);
+  const server = createApp(config, store, options);
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   config.port = server.address().port;
@@ -33,7 +33,7 @@ async function fixture(t) {
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
   const login = async () => {
-    const r = await call("/api/login", "POST", { password: "demo" });
+    const r = await call("/api/login", "POST", { password: config.password });
     cookie = r.headers.get("set-cookie").split(";")[0];
     return r;
   };
@@ -290,3 +290,70 @@ test("saved chat is authenticated, origin protected and survives fresh login", a
     1,
   );
 });
+
+for (const outcome of ["success", "rejected", "missing-key"]) {
+  test(`cloud chat ${outcome}: authenticated config and durable sanitized result`, async (t) => {
+    let calls = 0;
+    const syntheticKey = "synthetic-http-api-key";
+    const f = await fixture(
+      t,
+      {
+        APP_MODE: "personal",
+        APP_PASSWORD: "p".repeat(24),
+        VAULT_KEY: "a".repeat(64),
+        AI_PROVIDER: "openai",
+        AI_API_KEY: outcome === "missing-key" ? "" : syntheticKey,
+      },
+      {
+        aiFetch: async () => {
+          calls++;
+          return outcome === "success"
+            ? Response.json({
+                output: [
+                  {
+                    type: "message",
+                    content: [
+                      { type: "output_text", text: "Invented cloud answer" },
+                    ],
+                  },
+                ],
+              })
+            : new Response(syntheticKey, { status: 401 });
+        },
+      },
+    );
+    await f.login();
+    const state = await (await f.call("/api/state?month=2026-05")).text();
+    assert.ok(!state.includes(syntheticKey));
+    assert.equal(JSON.parse(state).providers.assistant.provider, "openai");
+    const id = `synthetic-cloud-${outcome}`;
+    await f.call("/api/conversations", "POST", { id });
+    const send = await f.call(`/api/conversations/${id}/messages`, "POST", {
+      requestId: `synthetic-request-${outcome}`,
+      revision: 0,
+      question: "Explain my budget",
+      month: "2026-05",
+    });
+    assert.equal(send.status, outcome === "missing-key" ? 503 : 202);
+    assert.equal(calls, outcome === "missing-key" ? 0 : 1);
+    await new Promise((resolve) => setImmediate(resolve));
+    const saved = await (await f.call(`/api/conversations/${id}`)).json();
+    assert.ok(!JSON.stringify(saved).includes(syntheticKey));
+    if (outcome !== "missing-key") {
+      assert.equal(
+        saved.turns[0].state,
+        outcome === "success" ? "completed" : "failed",
+      );
+      assert.match(
+        saved.turns[0].reply.answer,
+        outcome === "success" ? /Invented cloud/ : /rejected access/,
+      );
+      await f.call("/api/logout", "POST", {});
+      await f.login();
+      assert.deepEqual(
+        (await (await f.call(`/api/conversations/${id}`)).json()).turns,
+        saved.turns,
+      );
+    }
+  });
+}

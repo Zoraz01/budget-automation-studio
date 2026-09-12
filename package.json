@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "A local-first budget dashboard with Plaid, SnapTrade and optional local AI.",
+  "description": "A local-first budget dashboard with Plaid, SnapTrade and your choice of cloud or local AI.",
   "license": "MIT",
   "engines": {
     "node": ">=24.10.0 <25"
@@ -15,7 +15,8 @@
     "test": "node --test test/*.test.mjs",
     "check:release": "node scripts/check-release.mjs",
     "format": "prettier --write \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\"",
-    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\""
+    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\"",
+    "setup:ai": "node scripts/setup-ai.mjs"
   },
   "dependencies": {
     "snaptrade-typescript-sdk": "12.2.7"

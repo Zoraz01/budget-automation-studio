@@ -1,3 +1,4 @@
+import { aiConfiguration } from "./providers/ai-config.mjs";
 import { resolve } from "node:path";
 import { randomBytes } from "node:crypto";
 export function configuration(env = process.env) {
@@ -30,9 +31,7 @@ export function configuration(env = process.env) {
     env.ALLOW_LIVE_PLAID !== "true"
   )
     throw new Error("Production Plaid requires ALLOW_LIVE_PLAID=true");
-  const aiProvider = env.AI_PROVIDER || "disabled";
-  if (!["disabled", "ollama"].includes(aiProvider))
-    throw new Error("AI_PROVIDER must be disabled or ollama");
+  const assistant = aiConfiguration(env, mode);
   const snapMode = env.SNAPTRADE_AUTH_MODE || "personal";
   if (!["personal", "commercial"].includes(snapMode))
     throw new Error("Invalid SNAPTRADE_AUTH_MODE");
@@ -49,7 +48,8 @@ export function configuration(env = process.env) {
     snaptrade:
       mode === "personal" &&
       !!(env.SNAPTRADE_CLIENT_ID && env.SNAPTRADE_CONSUMER_KEY),
-    ai: mode === "personal" && aiProvider === "ollama" && !!env.OLLAMA_MODEL,
+    ai: assistant.configured,
+    assistant,
     snapMode,
     env,
   };

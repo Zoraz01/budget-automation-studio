@@ -6,7 +6,7 @@
 
 BAS (pronounced “bass,” like the fish) is your open-source budget studio. Your budget. Your connections. Your code.
 
-A local-first personal finance starter with a mobile-responsive dashboard, customizable monthly budgets, Plaid transaction ingestion, read-only SnapTrade account values, and an optional local AI assistant.
+A local-first personal finance starter with a mobile-responsive dashboard, customizable monthly budgets, Plaid transaction ingestion, read-only SnapTrade account values, and an optional cloud or local AI assistant.
 
 Try it with synthetic data in minutes. Connect your own services when you are ready. This repository is an independently packaged, generic implementation: it includes no private deployment configuration, financial exports, production credentials, or inherited application history.
 
@@ -43,10 +43,13 @@ For a fresh personal workspace, stop the server and run:
 
 ```sh
 npm run setup
+npm run setup:ai   # Optional: choose a provider and enter its API key
 npm start
 ```
 
 Save the generated local login password. Personal mode creates an empty database with starter categories. It never imports the demo records. Add transactions manually, customize budgets, or follow the [complete setup guide](docs/SETUP.md) to connect your own provider accounts.
+
+**Bring your own AI key:** run `npm run setup:ai`, choose OpenAI, Anthropic or Google Gemini, paste the key into the hidden prompt, and press Enter for the default model. Restart BAS and open **Ask BAS**. Keys stay on the server; your question and budget aggregates go to the chosen provider. API access/billing must be enabled on your provider account. [AI setup and local Ollama](docs/SETUP.md#5-connect-your-ai-provider).
 
 ## What you can do
 
@@ -56,7 +59,7 @@ Save the generated local login password. Personal mode creates an empty database
 | Transactions | Manual entry, search, category review, refunds, income and transfer classification |
 | Plaid | Link flow, server-side public-token exchange, paginated cursor sync, additions/modifications/removals, atomic commits and mutation retry |
 | SnapTrade | Personal or Commercial auth, read-only connection portal, imported investment account values and stale/unavailable states |
-| Assistant | Deterministic summaries, optional local Ollama, encrypted saved conversations and a history library |
+| Assistant | OpenAI, Anthropic or Google Gemini with your API key; local Ollama or no-AI summaries; encrypted saved conversations |
 | Mobile UI | Dark theme, bottom navigation, accessible forms, safe areas and home-screen installation metadata |
 | Privacy | Loopback-only server, password sessions, encrypted provider tokens, no telemetry or remote fonts |
 | Engineering | SQLite persistence, isolated regression tests, dependency lockfile, CI, release-content checks and extension guides |
@@ -75,7 +78,7 @@ flowchart LR
   API --> Snap[SnapTrade adapter]
   Snap -->|Read-only access| Broker[SnapTrade API]
   API --> Chat[Chat adapter]
-  Chat -->|Approved aggregates only| Local[Optional local Ollama]
+  Chat -->|Question and approved aggregates| AI[OpenAI / Anthropic / Gemini / local Ollama]
   API --> Vault[AES-256-GCM token vault]
   Vault --> DB
 ```
@@ -119,13 +122,13 @@ Node 24 currently labels `node:sqlite` experimental. The project pins its suppor
 
 ## Portfolio description
 
-> Built an open-source personal finance starter with mobile-responsive budgeting, atomic Plaid transaction synchronization, read-only SnapTrade integration, encrypted token storage, and an optional local AI assistant constrained to budget aggregates.
+> Built an open-source personal finance starter with mobile-responsive budgeting, atomic Plaid transaction synchronization, read-only SnapTrade integration, encrypted token storage, and an optional cloud or local AI assistant constrained to budget aggregates.
 
 Describe live-provider operation, adoption and production performance only when you have evidence from your own deployment. This starter demonstrates the implementation and architecture; its demo data is not a record of real financial results.
 
 ## License
 
-[MIT](LICENSE). Provider accounts, APIs, SDKs and models remain subject to their own terms. This project is not affiliated with or endorsed by Plaid, SnapTrade or Ollama.
+[MIT](LICENSE). Provider accounts, APIs, SDKs and models remain subject to their own terms. This project is not affiliated with or endorsed by Plaid, SnapTrade, OpenAI, Anthropic, Google or Ollama.
 
 ## Maintaining the companion repositories
 

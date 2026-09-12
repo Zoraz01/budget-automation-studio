@@ -89,20 +89,52 @@ SnapTrade access and cost depend on your account plan. Do not assume its develop
 
 If Commercial user registration times out after the provider created the user, the application retains the generated registration ID to avoid creating duplicates. The user secret might not have reached local storage. Recover or remove that specific test registration through SnapTrade support/dashboard before deliberately resetting it locally. Do not repeatedly replace the registration ID.
 
-## 5. Optional local AI
+## 5. Connect your AI provider
 
-The assistant works without AI by producing deterministic monthly summaries. For open-ended questions, install [Ollama](https://docs.ollama.com/) and download a model suitable for your hardware. Select a **locally running** model, not a cloud model. Disable Ollama cloud features with `OLLAMA_NO_CLOUD=1` in the Ollama service's environment and restart Ollama. Setting it only in this application's `.env` does not configure the separate Ollama process.
+After creating your personal workspace, run:
 
-Set in this application's `.env`:
-
-```dotenv
-AI_PROVIDER=ollama
-OLLAMA_MODEL=
+```sh
+npm run setup:ai
+npm start
 ```
 
-Fill in the exact downloaded model name shown by `ollama list`, restart the app, then use **Assistant**. The application sends the question, selected month, currency, category names and integer-cent totals to `http://127.0.0.1:11434/api/chat`. It sends no raw transactions, merchant names, account identifiers or provider credentials. Cloud-labeled model names are rejected, but the operator is responsible for how the local Ollama service routes model execution.
+The wizard asks for a provider, an API key in a hidden prompt, and an optional model override. Press Enter at the model prompt to use the default below. It updates only AI settings in your existing `.env`, preserves the login password/encryption key and other connections, and writes owner-only permissions on Unix. Restart an already-running BAS process after changing settings. Open **Connect** to see the selected provider, then **Ask BAS** to chat. "Configured" means settings are present, not that an API request has verified your account.
 
-Model answers are text, may be inaccurate, and cannot write to the application. No SQL, shell, trading, budget-write or arbitrary network tools are granted. There is no automatic background analysis or saved chat history. Questions are independent requests; prior chat messages are displayed in the tab but not sent as model context.
+| Provider | Default model | Get your own API key |
+| --- | --- | --- |
+| OpenAI | `gpt-4.1-mini` | [OpenAI API keys](https://platform.openai.com/api-keys) |
+| Anthropic | `claude-haiku-4-5` | [Claude Console](https://platform.claude.com/) |
+| Google Gemini | `gemini-3.8-flash` | [Google AI Studio](https://aistudio.google.com/apikey) |
+| Local Ollama | Enter a downloaded model name | No API key |
+| Budget summaries | No model | No API key or network request |
+
+Enable API access, model permissions and any required billing/credits with the selected provider. A consumer chat subscription is not a substitute for API access. Setup itself makes no provider request and incurs no model usage; asking a cloud question can incur charges. Model availability and prices depend on the provider and your account. Defaults can be overridden without code changes.
+
+For manual configuration, edit these settings locally (fill `AI_API_KEY` with your own key; do not publish it):
+
+```dotenv
+AI_PROVIDER=openai
+AI_API_KEY=
+AI_MODEL=
+```
+
+Allowed providers are `openai`, `anthropic`, `gemini`, `ollama`, and `disabled`. Leaving `AI_MODEL` blank uses the selected cloud default. As an alternative to `AI_API_KEY`, the selected adapter accepts `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `GEMINI_API_KEY`; `AI_API_KEY` takes precedence. Do not mix a provider with another provider's key. Shell environment variables override `.env` in Node: remove conflicting exported AI settings if the wizard's settings appear not to apply. Never put keys in the browser, command-line arguments, screenshots or issues. Switching providers does not delete saved history or revoke old keys at the provider.
+
+### What the model receives
+
+BAS sends your question, selected month, currency, category names, counts and integer-cent totals. It does not supply raw transaction rows, merchant records, account identifiers or banking credentials. Category names and whatever you type can still contain sensitive information. Cloud chat sends this context to the selected provider; its data policies apply. OpenAI requests use `store: false`, which is not a promise of zero provider retention. See [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data), [Anthropic privacy](https://privacy.claude.com/) and [Gemini API terms](https://ai.google.dev/gemini-api/terms).
+
+Adapters use fixed provider endpoints and do not follow redirects. Requests have a 45-second deadline and are never automatically retried. Replies may be inaccurate and cannot write to the application: no SQL, shell, trading, budget-write or arbitrary network tools are granted. There is no automatic background analysis. Questions are independent requests; earlier messages are saved in encrypted server history for reading but are not sent as model context. [History setup and recovery](CHAT-HISTORY.md).
+
+API request formats follow the official [OpenAI Responses guide](https://developers.openai.com/api/docs/guides/text), [Anthropic Messages API](https://platform.claude.com/docs/en/api/http/messages/create) and [Gemini generateContent guide](https://ai.google.dev/gemini-api/docs/generate-content/get-started). Tests use synthetic mocked responses; live provider-account acceptance is not established by these tests.
+
+### Local Ollama or no AI
+
+For local execution, install [Ollama](https://docs.ollama.com/) and download a model suited to your hardware. Run `npm run setup:ai`, choose Ollama and enter the exact model name from `ollama list`. Existing `AI_PROVIDER=ollama` plus `OLLAMA_MODEL` settings also work; `AI_MODEL` takes precedence. The adapter calls only `http://127.0.0.1:11434/api/chat`.
+
+Choose a locally running model, not a cloud model. Disable cloud features with `OLLAMA_NO_CLOUD=1` in the **Ollama service's** environment and restart Ollama. Setting it only in BAS's `.env` does not configure that separate process. Cloud-labeled model names are rejected, but the operator controls how Ollama executes requests.
+
+Choose **Budget summaries** in the wizard, or set `AI_PROVIDER=disabled`, to use deterministic summaries without AI. Demo mode always uses this mode, even when API keys exist in the environment.
 
 ## 6. Back up, restore, and update
 
@@ -171,5 +203,9 @@ For remote access, design a separate hardened deployment with TLS, managed authe
 | Origin rejected | Open the exact `http://127.0.0.1:PORT` URL, not an alias or public proxy |
 | Provider operation cannot finish | Check correct account type, key environment, provider availability and whether connection authorization expired |
 | Currency mismatch | Use a matching-currency workspace; the entire Plaid batch remains uncommitted |
-| AI cannot answer | Ensure Ollama is running locally, the named model is downloaded, and your machine can complete the request within 45 seconds |
+| AI setup incomplete | Run `npm run setup:ai`, choose the matching provider/key and restart; check for conflicting shell variables |
+| AI access rejected | Check key validity, provider selection and API model permissions; restart after rotating the key |
+| AI limit reached | Check provider API billing, credits and rate limits before explicitly retrying |
+| AI model unavailable | Check `AI_MODEL` against models available to your API account |
+| AI cannot be reached | Check server connectivity/provider status; for Ollama, check that it is running and the model is downloaded. Deadline: 45 seconds |
 | Too many login attempts | Wait ten minutes before retrying |

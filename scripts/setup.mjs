@@ -13,5 +13,5 @@ writeFileSync(
 console.log("Created a private .env. Your new local login password is:");
 console.log(password);
 console.log(
-  "Save it in your password manager, then run npm start. Keep .env backed up securely.",
+  "Save it in your password manager. For cloud or local AI, run npm run setup:ai, then npm start. Keep .env backed up securely.",
 );

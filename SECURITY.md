@@ -12,6 +12,7 @@ This is a local, single-workspace starter. It has deliberate protective defaults
 - Parameterized SQLite queries and a fixed static-file allowlist. `.env`, databases, logs and source files are never served.
 - Request size validation, finite provider deadlines, serial provider/AI operations and cooldowns.
 - No caching of application responses, restrictive CSP, frame embedding denied, no analytics, no telemetry or remote fonts. The Plaid script is loaded only when the user explicitly begins connection.
+- Cloud AI keys stay in server configuration and are sent only in authentication headers to fixed HTTPS provider endpoints. Redirects are rejected; raw provider failures are not returned or logged. No browser key-entry or secret-storage UI is shipped.
 - Chat receives allowlisted aggregates and has no SQL, shell, file, credential, transaction-write or trading tools. Model output is escaped text.
 - Release allowlist, secret-pattern checks, pinned direct SDK version, lockfile, tests and CI dependency auditing.
 
@@ -21,7 +22,7 @@ The SQLite database stores readable transaction descriptions and amounts. It is 
 
 Loopback is not an isolation boundary against malicious local software, browser extensions or a stolen session. Auth and rate limits are process-local and designed for one trusted operator. A public tunnel or proxy is outside the supported deployment model. Do not expose the starter unchanged to the internet.
 
-A local Ollama endpoint is controlled by its operator. This app rejects cloud-labeled model names, but the Ollama service must separately be configured for local-only execution. Category names, totals and the question are financial data; keep this in mind when adding any AI provider.
+A local Ollama endpoint is controlled by its operator. This app rejects cloud-labeled model names, but the Ollama service must separately be configured for local-only execution. Category names, totals and the question are financial data. Cloud adapters explicitly transmit them to the selected provider, whose retention and usage policies apply. OpenAI requests disable response storage with `store: false`; this does not establish zero retention. Text entered by the user can itself contain personal information. API key configuration and mocked tests do not verify live account permissions or billing.
 
 A read-only connection request does not reduce permissions of a separate, previously created provider key. Keep your provider account scoped appropriately. Sync tests are mocked, and no live financial provider was used to validate this release.
 

@@ -1,3 +1,4 @@
+import { aiStatus } from "./providers/ai-config.mjs";
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import {
@@ -13,7 +14,7 @@ import {
   connectSnaptrade,
   syncSnaptrade,
 } from "./providers/snaptrade.mjs";
-import { answer } from "./providers/ai.mjs";
+import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
   ["/", ["index.html", "text/html"]],
@@ -30,13 +31,25 @@ const staticFiles = new Map([
   ["/icons/icon-512.png", ["icons/icon-512.png", "image/png"]],
 ]);
 const digest = (s) => createHash("sha256").update(s).digest();
-export function createApp(config, store) {
+export function createApp(config, store, { aiFetch = fetch } = {}) {
   const history = historyStore(store.db, config.vaultKey);
   history.recover();
-  const chatWorker = historyWorker(history, (messages, context) =>
-    exclusive(() =>
-      answer(messages.at(-1).content, store.summary(context.month), config),
-    ),
+  const chatWorker = historyWorker(
+    history,
+    (messages, context) =>
+      exclusive(() =>
+        answer(
+          messages.at(-1).content,
+          store.summary(context.month),
+          config,
+          aiFetch,
+        ),
+      ),
+    () => config.assistant.provider === "disabled" || config.ai,
+    (error) =>
+      error instanceof AIError
+        ? { mode: "error", answer: error.message }
+        : null,
   );
   const sessions = new Map();
   let loginFailures = 0,
@@ -179,6 +192,7 @@ export function createApp(config, store) {
             plaidEnvironment: config.plaidEnv,
             snaptrade: config.snaptrade,
             ai: config.ai,
+            assistant: aiStatus(config),
           },
         });
       }

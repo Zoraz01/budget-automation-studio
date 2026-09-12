@@ -58,6 +58,7 @@ const patterns = [
     /\baccess-(?:sandbox|production|development)-[0-9a-f-]{30,}\b/,
   ],
   ["API token", /\bsk-(?:ant-)?[A-Za-z0-9_-]{28,}\b/],
+  ["Google API key", /\bAIza[0-9A-Za-z_-]{35}\b/],
   ["AWS access key", /\bAKIA[A-Z0-9]{16}\b/],
   ["machine-specific path", /\/(?:Users|Volumes|home)\/[A-Za-z0-9_.-]+\//],
   ["credential in URL", /https?:\/\/[^\s/:]+:[^\s/@]+@/],
@@ -103,7 +104,7 @@ function check(path, buffer, label) {
   if (path === ".env.example")
     for (const line of content.split("\n"))
       if (
-        /^(?:APP_PASSWORD|VAULT_KEY|PLAID_CLIENT_ID|PLAID_SECRET|SNAPTRADE_CLIENT_ID|SNAPTRADE_CONSUMER_KEY)=.+/.test(
+        /^(?:APP_PASSWORD|VAULT_KEY|PLAID_CLIENT_ID|PLAID_SECRET|SNAPTRADE_CLIENT_ID|SNAPTRADE_CONSUMER_KEY|AI_API_KEY|OPENAI_API_KEY|ANTHROPIC_API_KEY|GEMINI_API_KEY)=.+/.test(
           line,
         )
       )

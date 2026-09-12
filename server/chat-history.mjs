@@ -317,7 +317,12 @@ export function historyStore(db, key) {
   };
 }
 // One worker per application process. Transport disconnects do not replay work.
-export function historyWorker(store, generate, configured = () => true) {
+export function historyWorker(
+  store,
+  generate,
+  configured = () => true,
+  failureReply = () => null,
+) {
   let active = false;
   async function send(owner, id, input) {
     const gate = active
@@ -338,9 +343,15 @@ export function historyWorker(store, generate, configured = () => true) {
           accepted.turn.context,
         );
         store.finish(owner, id, accepted.turn.id, reply);
-      } catch {
+      } catch (error) {
         try {
-          store.finish(owner, id, accepted.turn.id, null, "failed");
+          store.finish(
+            owner,
+            id,
+            accepted.turn.id,
+            failureReply(error),
+            "failed",
+          );
         } catch {
           console.error(
             "Chat result could not be saved; request will not be replayed.",
