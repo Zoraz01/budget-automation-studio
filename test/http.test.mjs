@@ -241,7 +241,11 @@ test("home-screen manifest and exact public icon assets are served without cachi
     assert.equal(bytes.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
     assert.equal(bytes.readUInt32BE(16), size);
     assert.equal(bytes.readUInt32BE(20), size);
+    assert.equal(bytes[25], 2, "Home-screen icons must be opaque RGB PNGs");
   }
+  const svg = await f.call("/icons/icon.svg?v=fish-2");
+  assert.equal(svg.status, 200);
+  assert.match(svg.headers.get("content-type"), /image\/svg\+xml/);
   const html = await (await f.call("/")).text();
   assert.match(html, /rel="manifest"/);
   assert.match(html, /rel="apple-touch-icon"/);

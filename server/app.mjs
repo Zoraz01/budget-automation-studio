@@ -20,6 +20,7 @@ const staticFiles = new Map([
   ["/app.js", ["app.js", "text/javascript"]],
   ["/style.css", ["style.css", "text/css"]],
   ["/logo.svg", ["logo.svg", "image/svg+xml"]],
+  ["/icons/icon.svg", ["icons/icon.svg", "image/svg+xml"]],
   [
     "/manifest.webmanifest",
     ["manifest.webmanifest", "application/manifest+json"],

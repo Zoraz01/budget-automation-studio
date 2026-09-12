@@ -51,3 +51,7 @@ This closes basic durable-history parity, not all of M2: search, scheduled reten
 ## Fish bookmark and home-screen icon — 2026-09-12
 
 Both apps now use the existing BAS fish artwork for browser bookmarks and installed home-screen shortcuts, with SVG/PNG favicons, a 180px Apple touch icon, and 192px/512px manifest icons. The personal app retains its Finance display name. Private icon URLs are versioned so the new artwork is fetched; BAS already used these fish assets and gains a PNG favicon fallback. Only approved public artwork was reused. Validation covers the production build, icon dimensions/byte identity and served HTML/manifest/icon references. Actual phone icon refresh still depends on the device; recreate an existing shortcut if it retains the old artwork.
+
+## Opaque home-screen icon correction — 2026-09-12
+
+Both apps now render home-screen PNGs from a square fish SVG with an opaque dark background. The former transparent rounded corners could appear white when the phone applied its own icon mask. The phone now supplies the corner shape; versioned icon and manifest URLs request fresh artwork. Validation checks exact sizes, absence of PNG alpha, dark edge pixels, public asset routes and deployed private icon bytes. Existing iPhone shortcuts may need to be recreated to replace their cached icon.
