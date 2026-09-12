@@ -138,3 +138,5 @@ See [the design package](docs/design/README.md) for every feature/chart contract
 ### Saved conversations
 
 Use **Conversations** in Ask BAS to resume saved threads. History survives reload and server restart. See [history setup, encryption keys and recovery](docs/CHAT-HISTORY.md); earlier tab-only messages cannot be recovered automatically.
+
+The fish artwork is also the bookmark and Home Screen icon. If an existing shortcut retains an older icon, remove that shortcut and add it again from the app’s HTTPS address.
