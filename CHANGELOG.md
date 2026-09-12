@@ -40,3 +40,7 @@ Live provider connections, OAuth institution support, physical-phone use and hos
 - Added an original emerald fish logo, favicon and phone installation icons.
 - Updated the real public mobile UI with a compact BAS header, five labeled tabs, clearer page hierarchy and a unified cash-flow card.
 - Refreshed dark mobile screenshots and setup/clone instructions. The complete overhaul and durable server chat history remain planned.
+
+## Mobile keyboard handling
+
+The dedicated assistant page responds to visual-viewport keyboard changes, keeps the focused composer in view and temporarily hides bottom tabs during composition. It never autofocuses or disables pinch zoom. Physical-device keyboard acceptance remains open.

@@ -64,3 +64,7 @@ Matched dark background, surfaces, emerald accents, system typography, cards and
 Updated the real app name, original vector fish mark, install icons, login, navigation, page hierarchy and cash-flow card. All five runtime destinations fit 360px and 390px viewports without document overflow. Captured new dark 390×844 mobile screenshots and a 1440×1000 desktop reference from an isolated synthetic database with providers disabled. Rebranded the design preview and its three screenshots separately. Browser diagnostics returned no warnings or errors.
 
 The 35 regression tests and formatting checks passed after the runtime changes. Existing accounting/provider behavior is unchanged. Home-screen icons were rendered from the original SVG at 180, 192 and 512px. These are browser checks; physical-phone installation and the larger overhaul/history plan remain separate work.
+
+## Paired private UI release
+
+Added a public chat keyboard enhancement using feature-detected VisualViewport and focus events. Formatting and all 35 regression tests pass. The private companion now uses the shared mobile presentation with its own navigation and native modal. Its live application verification is recorded privately; no personal data, deployment paths or screenshots are included here. Physical-phone keyboard testing remains pending.

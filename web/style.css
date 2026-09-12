@@ -1473,3 +1473,15 @@ a {
     margin-bottom: 34px;
   }
 }
+
+@media (max-width: 850px) {
+  .keyboard-open .nav {
+    visibility: hidden;
+  }
+  .keyboard-open .workspace {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .chat textarea {
+    scroll-margin-block: 20px;
+  }
+}

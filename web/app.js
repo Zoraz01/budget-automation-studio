@@ -358,3 +358,20 @@ load().catch(async (e) => {
     notice(e.message);
   }
 });
+
+// Keep the active chat composer reachable when a mobile keyboard changes the
+// visual viewport. Never focus the input automatically or disable page zoom.
+function fitChatViewport() {
+  const vv = window.visualViewport;
+  const input = document.activeElement;
+  const composing = page === "chat" && input?.tagName === "TEXTAREA";
+  const keyboardOpen =
+    composing && vv && vv.scale === 1 && window.innerHeight - vv.height > 120;
+  document.body.classList.toggle("keyboard-open", Boolean(keyboardOpen));
+  if (keyboardOpen) input.scrollIntoView({ block: "nearest" });
+}
+window.visualViewport?.addEventListener("resize", fitChatViewport);
+document.addEventListener("focusin", fitChatViewport);
+document.addEventListener("focusout", () =>
+  requestAnimationFrame(fitChatViewport),
+);

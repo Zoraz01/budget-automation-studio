@@ -29,3 +29,9 @@ The [implementation plan](design/IMPLEMENTATION-PLAN.md) schedules M0–M6 with 
 ## BAS public identity and mobile presentation
 
 Public project renamed **BAS — Budget Automation Studio**, with an original fish mark, matching home-screen icons, updated mobile runtime typography/navigation/summary cards and refreshed synthetic screenshots. The personal app keeps its Finance name and the shared emerald/slate design direction. Product naming is intentionally different; advanced overhaul/history milestones remain planned.
+
+## Private mobile UI release — 2026-09-11
+
+Private runtime now implements the five-destination shell, More directory, analytics tab links, the updated real-data cash-flow card and a native modal AI panel with visual-viewport sizing, focus return and no automatic keyboard opening. Existing financial pages/charts and backend calculations remain in place. This is the first UI release, not completion of all 66 overhaul contracts or durable server history.
+
+BAS already has the matching card/typography/five-tab mobile presentation for its smaller feature set. Its dedicated chat page now responds to keyboard viewport changes without stealing focus. Private analytics shortcuts have no BAS counterpart until the documented analytics backlog is implemented. Native modal versus dedicated chat page is an intentional architectural difference. Physical-phone keyboard acceptance and server history remain open in both projects.
