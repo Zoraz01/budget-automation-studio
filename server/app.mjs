@@ -14,6 +14,7 @@ import {
   syncSnaptrade,
 } from "./providers/snaptrade.mjs";
 import { answer } from "./providers/ai.mjs";
+import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
   ["/", ["index.html", "text/html"]],
   ["/app.js", ["app.js", "text/javascript"]],
@@ -29,6 +30,13 @@ const staticFiles = new Map([
 ]);
 const digest = (s) => createHash("sha256").update(s).digest();
 export function createApp(config, store) {
+  const history = historyStore(store.db, config.vaultKey);
+  history.recover();
+  const chatWorker = historyWorker(history, (messages, context) =>
+    exclusive(() =>
+      answer(messages.at(-1).content, store.summary(context.month), config),
+    ),
+  );
   const sessions = new Map();
   let loginFailures = 0,
     loginWindow = Date.now(),
@@ -235,6 +243,60 @@ export function createApp(config, store) {
         if (!result.changes) throw new InputError("Unknown transaction");
         return json(res, 200, { ok: true });
       }
+      if (path === "/api/conversations" && req.method === "GET")
+        return json(
+          res,
+          200,
+          history.list("workspace", {
+            archived: url.searchParams.get("archived") === "1",
+            offset: url.searchParams.get("offset") || 0,
+          }),
+        );
+      if (path === "/api/conversations" && req.method === "POST")
+        return json(
+          res,
+          201,
+          history.create("workspace", (await body(req)).id),
+        );
+      const conversation = path.match(
+        /^\/api\/conversations\/([a-zA-Z0-9-]{16,80})(\/messages|\/delete)?$/,
+      );
+      if (conversation) {
+        const [, id, action] = conversation;
+        if (req.method === "GET" && !action)
+          return json(
+            res,
+            200,
+            history.read(
+              "workspace",
+              id,
+              url.searchParams.get("before") || undefined,
+            ),
+          );
+        if (req.method === "PATCH" && !action)
+          return json(
+            res,
+            200,
+            history.update("workspace", id, await body(req)),
+          );
+        if (req.method === "POST" && action === "/delete") {
+          history.remove("workspace", id);
+          return json(res, 200, { ok: true });
+        }
+        if (req.method === "POST" && action === "/messages") {
+          const input = await body(req);
+          return json(
+            res,
+            202,
+            await chatWorker.send("workspace", id, {
+              requestId: input.requestId,
+              revision: input.revision,
+              question: text(input.question, 1200),
+              context: { month: month(input.month) },
+            }),
+          );
+        }
+      }
       if (path === "/api/chat" && req.method === "POST") {
         const input = await body(req),
           question = text(input.question, 1200),
@@ -321,6 +383,8 @@ export function createApp(config, store) {
       return json(res, 404, { error: "Not found" });
     } catch (e) {
       // Never serialize SDK errors: request configs may contain provider secrets.
+      if (e instanceof HistoryError)
+        return json(res, e.status, { error: e.message });
       if (e instanceof InputError) return json(res, 400, { error: e.message });
       return json(res, 502, {
         error:

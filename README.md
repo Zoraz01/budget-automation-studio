@@ -56,7 +56,7 @@ Save the generated local login password. Personal mode creates an empty database
 | Transactions | Manual entry, search, category review, refunds, income and transfer classification |
 | Plaid | Link flow, server-side public-token exchange, paginated cursor sync, additions/modifications/removals, atomic commits and mutation retry |
 | SnapTrade | Personal or Commercial auth, read-only connection portal, imported investment account values and stale/unavailable states |
-| Assistant | Deterministic summaries without AI; optional Ollama chat with an aggregate-only context |
+| Assistant | Deterministic summaries, optional local Ollama, encrypted saved conversations and a history library |
 | Mobile UI | Dark theme, bottom navigation, accessible forms, safe areas and home-screen installation metadata |
 | Privacy | Loopback-only server, password sessions, encrypted provider tokens, no telemetry or remote fonts |
 | Engineering | SQLite persistence, isolated regression tests, dependency lockfile, CI, release-content checks and extension guides |
@@ -134,3 +134,7 @@ Follow [AGENTS.md](AGENTS.md) for paired feature development and privacy review.
 ### Detailed mobile redesign preview
 
 See [the design package](docs/design/README.md) for every feature/chart contract, saved AI conversation design and home-screen mobile acceptance plan. The preview uses invented data and does not change the running application.
+
+### Saved conversations
+
+Use **Conversations** in Ask BAS to resume saved threads. History survives reload and server restart. See [history setup, encryption keys and recovery](docs/CHAT-HISTORY.md); earlier tab-only messages cannot be recovered automatically.

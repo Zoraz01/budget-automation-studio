@@ -32,6 +32,14 @@ let selectedMonth = localMonth(),
   page = "overview",
   state = null,
   messages = [],
+  conversations = [],
+  activeConversation = null,
+  conversationBefore = null,
+  conversationNext = null,
+  historyArchived = false,
+  historyOpen = false,
+  chatDrafts = {},
+  historyTimer,
   noticeTimer,
   chatBusy = false,
   chatEpoch = 0;
@@ -62,6 +70,7 @@ async function api(path, method = "GET", data) {
   if (!response.ok) {
     if (response.status === 401 && path != "/api/login") {
       state = null;
+      clearChat();
       await loginScreen();
     }
     throw new Error(result.error || "Something went wrong");
@@ -90,8 +99,21 @@ const nav = [
   ["chat", "Ask BAS"],
 ];
 function render() {
+  const focused = document.activeElement;
+  const restoreComposer = focused?.matches("#chat-form textarea");
+  const selection = restoreComposer
+    ? [focused.selectionStart, focused.selectionEnd]
+    : null;
+
   if (!state) return;
   app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "overview" ? '<h1 class="sr-only">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month">YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${{ overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat }[page]()}<p class="footer-note">${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
+  if (restoreComposer) {
+    const composer = document.querySelector("#chat-form textarea");
+    if (composer && !composer.disabled) {
+      composer.focus({ preventScroll: true });
+      composer.setSelectionRange(...selection);
+    }
+  }
 }
 function budgetRows() {
   const categories = state.summary.categories.filter((c) => c.limit_cents > 0);
@@ -135,8 +157,64 @@ function budgets() {
 function connections() {
   return `${installGuide()}<div class="provider-grid section-gap"><section class="card"><div class="provider-mark">Plaid</div><h2>Everyday banking</h2><p>Import bank and card transactions. Review categories after syncing.</p><p class="note">${state.providers.plaid ? `Configured · ${escape(state.providers.plaidEnvironment)}` : "Add your own keys in personal mode. Sandbox is the default."}</p><button data-action="plaid-connect" ${!state.providers.plaid ? "disabled" : ""}>Connect a bank</button></section><section class="card"><div class="provider-mark">SnapTrade</div><h2>Your investments</h2><p>Read investment account values through the connection portal.</p><p class="note">${state.providers.snaptrade ? "Configured · read-only portal" : "Personal or Commercial keys supported. No trading routes."}</p><button data-action="snaptrade-connect" ${!state.providers.snaptrade ? "disabled" : ""}>Connect investments</button></section><section class="card"><div class="provider-mark">Ollama</div><h2>Optional local AI</h2><p>Ask open-ended questions using a locally downloaded model.</p><p class="note">${state.providers.ai ? "Enabled · sends your question and category totals to local Ollama." : "Off by default. The assistant can still show deterministic summaries."}</p><button data-page="chat">Open assistant →</button></section></div><section class="card section-gap"><div class="card-head"><h2>Connection status</h2><button class="small" data-action="refresh">Refresh view</button></div>${state.connections.length ? state.connections.map((c) => `<div class="connection-row"><div><strong>${escape(c.provider === "plaid" ? "Bank connection" : "Investment connection")}</strong><small>Status: ${escape(c.status)} · Last successful import: ${escape(c.synced_at ? new Date(c.synced_at).toLocaleString() : "Not yet synced")}</small></div><button class="small" data-sync="${escape(c.id)}" data-provider="${escape(c.provider)}">Sync data</button></div>`).join("") : '<p class="empty">No live connections yet. Your manual budget works on its own.</p>'}<p class="footer-note">Sync imports provider-cached data. It does not force a paid institution refresh. Reconnect using the provider portal if authorization expires.</p></section><section class="card section-gap"><h2>Investment accounts</h2>${state.investments.length ? state.investments.map((a) => `<div class="connection-row"><div><strong>${escape(a.name)}</strong><small>${escape(a.status)} · Last import ${escape(new Date(a.synced_at).toLocaleString())}</small></div><strong>${a.value_cents === null ? "Unavailable" : money(a.value_cents)}</strong></div>`).join("") : '<p class="empty">Investment values will appear after a successful sync.</p>'}<p class="footer-note">Investment account values are shown separately from budget cash flow. Missing data is unavailable; previously imported values can be stale. No currency conversion or total net-worth calculation is performed.</p></section>`;
 }
+function clearChat() {
+  clearTimeout(historyTimer);
+  messages = [];
+  conversations = [];
+  activeConversation = null;
+  chatDrafts = {};
+  chatEpoch++;
+  chatBusy = false;
+  historyOpen = false;
+  historyArchived = false;
+  conversationBefore = null;
+  conversationNext = null;
+}
+async function loadConversations(offset = 0) {
+  const epoch = chatEpoch;
+  const r = await api(
+    `/api/conversations?archived=${historyArchived ? 1 : 0}&offset=${offset}`,
+  );
+  if (epoch !== chatEpoch || !state) return;
+  conversations = offset ? [...conversations, ...r.threads] : r.threads;
+  conversationNext = r.next;
+}
+async function readConversation(id, older = false) {
+  const epoch = chatEpoch;
+  const r = await api(
+    `/api/conversations/${id}${older ? `?before=${conversationBefore}` : ""}`,
+  );
+  if (epoch !== chatEpoch || !state) return;
+  activeConversation = r.thread;
+  messages = older ? [...r.turns, ...messages] : r.turns;
+  conversationBefore = r.before;
+  chatBusy = messages.some((t) => t.state === "running");
+  scheduleHistory();
+}
+function scheduleHistory() {
+  clearTimeout(historyTimer);
+  if (!chatBusy || !activeConversation || !state) return;
+  const id = activeConversation.id;
+  historyTimer = setTimeout(async () => {
+    if (!state || activeConversation?.id !== id) return;
+    if (document.hidden) {
+      scheduleHistory();
+      return;
+    }
+    try {
+      await readConversation(id);
+      if (page === "chat") render();
+    } catch (e) {
+      notice(e.message);
+      if (state) scheduleHistory();
+    }
+  }, 1800);
+}
 function chat() {
-  return `<section class="card chat"><div class="chat-intro"><div class="helper-icon">${icon("spark")}</div><h2>Let’s look at ${escape(monthTitle())}.</h2><p>${state.providers.ai ? "Your question and category totals go to your local Ollama instance." : "Start with a budget or cash-flow summary. No AI service is needed."}</p><div class="suggestions"><button data-question="How much budget do I have left?">How much budget is left?</button><button data-question="Summarize my cash flow this month.">Summarize my cash flow</button></div></div><div class="messages" role="log" aria-live="polite">${messages.map((m) => `<div class="message ${m.role === "You" ? "user" : ""}"><small>${escape(m.role)}</small>${escape(m.text)}</div>`).join("")}${chatBusy ? '<p class="muted" role="status">Preparing your answer…</p>' : ""}</div><form id="chat-form"><label><span class="sr-only">Ask about your budget</span><textarea name="question" placeholder="Ask about your budget…" maxlength="1200" required ${chatBusy ? "disabled" : ""}></textarea></label><button class="primary" type="submit" ${chatBusy ? "disabled" : ""}>Ask →</button></form><p class="note">Read-only answers. No account credentials, bank transactions, or merchant names are sent to the assistant. Replies never change your budget. Model-generated answers may be inaccurate; check the displayed totals. Chat is held in this tab’s memory only.</p></section>`;
+  const controls = `<div class="chat-tools"><button data-action="chat-history">Conversations</button><button data-action="chat-new" ${chatBusy ? "disabled" : ""}>New chat</button></div>`;
+  if (historyOpen)
+    return `<section class="card chat">${controls}<h2>Conversations</h2><button data-action="chat-archived">${historyArchived ? "Show active" : "Show archived"}</button>${conversations.map((t) => `<button class="history-row" data-conversation="${escape(t.id)}"><strong>${t.pinned ? "★ " : ""}${escape(t.title)}</strong><small>${escape(new Date(t.updated_at).toLocaleString())}</small></button>`).join("") || "<p>No saved conversations yet.</p>"}${conversationNext !== null ? '<button data-action="chat-more">More conversations</button>' : ""}</section>`;
+  return `<section class="card chat">${controls}${activeConversation ? `<h2>${escape(activeConversation.title)}</h2><details><summary>Manage conversation</summary><div class="chat-tools"><button data-action="chat-rename" ${chatBusy ? "disabled" : ""}>Rename</button><button data-action="chat-pin" ${chatBusy ? "disabled" : ""}>${activeConversation.pinned ? "Unpin" : "Pin"}</button><button data-action="chat-archive" ${chatBusy ? "disabled" : ""}>${activeConversation.archived ? "Restore" : "Archive"}</button><button data-action="chat-delete">Delete</button></div></details>` : "<h2>Ask about your budget</h2>"}<p class="note">Saved on your server until deleted. Each answer reflects its original budget month. ${state.providers.ai ? "Your question and category totals go to local Ollama." : "No AI service is needed for a budget summary."}</p>${!messages.length ? '<div class="suggestions"><button data-question="How much budget do I have left?">How much budget is left?</button><button data-question="Summarize my cash flow this month.">Summarize my cash flow</button></div>' : ""}<div class="messages" role="log" aria-live="polite">${conversationBefore ? '<button data-action="chat-older">Earlier messages</button>' : ""}${messages.map((t) => `<div class="chat-turn"><small>${escape(new Date(t.created_at).toLocaleString())} · Budget month ${escape(t.context.month)}</small><div class="message user"><small>You</small>${escape(t.question)}</div>${t.reply ? `<div class="message"><small>${t.reply.mode === "ollama" ? "Local AI" : "Budget summary"}</small>${escape(t.reply.answer)}</div>` : ""}${t.state === "running" ? '<p role="status">Preparing your answer. You can return later.</p>' : ""}${["failed", "interrupted"].includes(t.state) ? `<p>${t.state === "interrupted" ? "This reply was interrupted by a restart and was not automatically retried." : "This reply could not finish. Your question is saved."}</p><button data-retry="${escape(t.id)}" ${chatBusy ? "disabled" : ""}>Ask again</button>` : ""}</div>`).join("")}</div><form id="chat-form"><label><span class="sr-only">Ask about your budget</span><textarea name="question" placeholder="Ask about your budget…" maxlength="1200" required ${activeConversation?.archived ? "disabled" : ""}>${escape(chatDrafts[activeConversation?.id || "new"] || "")}</textarea></label><button class="primary" type="submit" ${chatBusy || activeConversation?.archived ? "disabled" : ""}>Ask →</button></form><p class="note">Read-only answers. No account credentials, bank transactions, or merchant names are supplied by the app to the assistant. Each question uses that month’s aggregates; previous messages are saved for reading, not sent to Ollama. Replies never change your budget.</p></section>`;
 }
 function openDialog(title, content) {
   dialog.innerHTML = `<div class="dialog-head"><h2 id="editor-title">${escape(title)}</h2><button class="ghost" type="button" data-action="close-dialog" aria-label="Close dialog">${icon("close")}</button></div>${content}<p id="dialog-error" role="alert" class="dialog-error"></p>`;
@@ -145,25 +223,41 @@ function openDialog(title, content) {
 async function ask(question) {
   if (chatBusy) return;
   const epoch = chatEpoch;
-  messages.push({ role: "You", text: question });
   chatBusy = true;
-  render();
   try {
-    const reply = await api("/api/chat", "POST", {
+    if (!activeConversation)
+      activeConversation = await api("/api/conversations", "POST", {
+        id: crypto.randomUUID(),
+      });
+    const id = activeConversation.id;
+    const payload = {
       question,
       month: selectedMonth,
-    });
-    if (epoch === chatEpoch)
-      messages.push({
-        role: reply.mode === "ollama" ? "Local AI" : "Budget summary",
-        text: reply.answer,
-      });
+      revision: activeConversation.revision,
+      requestId: crypto.randomUUID(),
+    };
+    try {
+      await api(`/api/conversations/${id}/messages`, "POST", payload);
+    } catch (e) {
+      if (!(e instanceof TypeError)) throw e;
+      await api(`/api/conversations/${id}/messages`, "POST", payload);
+    }
+    if (epoch !== chatEpoch || !state) return;
+    chatDrafts[id] = "";
+    chatDrafts.new = "";
+    await readConversation(id);
+    await loadConversations();
   } catch (e) {
-    if (epoch === chatEpoch)
-      messages.push({ role: "Assistant", text: e.message });
+    notice(e.message);
+    if (epoch === chatEpoch && state) {
+      chatBusy = false;
+      if (activeConversation)
+        try {
+          await readConversation(activeConversation.id);
+        } catch {}
+    }
   } finally {
-    chatBusy = false;
-    render();
+    if (epoch === chatEpoch && state && page === "chat") render();
   }
 }
 async function plaidConnect() {
@@ -211,7 +305,15 @@ document.addEventListener("click", async (event) => {
   if (!button) return;
   if (button.dataset.page) {
     page = button.dataset.page;
-    render();
+    if (page === "chat")
+      try {
+        await loadConversations();
+        if (!activeConversation && conversations.length)
+          await readConversation(conversations[0].id);
+      } catch (e) {
+        notice(e.message);
+      }
+    if (state) render();
     document.querySelector("#main")?.focus({ preventScroll: true });
     return;
   }
@@ -219,14 +321,91 @@ document.addEventListener("click", async (event) => {
     await ask(button.dataset.question);
     return;
   }
+  if (button.dataset.conversation) {
+    chatEpoch++;
+    historyOpen = false;
+    try {
+      await readConversation(button.dataset.conversation);
+      render();
+    } catch (e) {
+      notice(e.message);
+    }
+    return;
+  }
+  if (button.dataset.retry) {
+    const t = messages.find((t) => t.id === button.dataset.retry);
+    if (t && confirm("Send this question again as a new assistant request?"))
+      await ask(t.question);
+    return;
+  }
   const action = button.dataset.action;
   button.disabled = true;
   try {
+    if (action?.startsWith("chat-")) {
+      if (action === "chat-history") {
+        historyOpen = !historyOpen;
+        await loadConversations();
+      }
+      if (action === "chat-archived") {
+        historyArchived = !historyArchived;
+        await loadConversations();
+      }
+      if (action === "chat-more") await loadConversations(conversationNext);
+      if (action === "chat-older")
+        await readConversation(activeConversation.id, true);
+      if (action === "chat-new") {
+        activeConversation = await api("/api/conversations", "POST", {
+          id: crypto.randomUUID(),
+        });
+        messages = [];
+        conversationBefore = null;
+        historyOpen = false;
+        chatBusy = false;
+        await loadConversations();
+      }
+      if (action === "chat-rename") {
+        openDialog(
+          "Rename conversation",
+          `<form id="chat-name-form"><label>Conversation title<input name="title" maxlength="100" value="${escape(activeConversation.title)}" required></label><button class="primary">Save name</button></form>`,
+        );
+        return;
+      }
+      if (action === "chat-pin" || action === "chat-archive")
+        activeConversation = await api(
+          `/api/conversations/${activeConversation.id}`,
+          "PATCH",
+          {
+            revision: activeConversation.revision,
+            ...(action === "chat-pin"
+              ? { pinned: !activeConversation.pinned }
+              : { archived: !activeConversation.archived }),
+          },
+        );
+      if (
+        action === "chat-delete" &&
+        confirm(
+          `Delete “${activeConversation.title}” and all its messages? This cannot be undone.`,
+        )
+      ) {
+        await api(
+          `/api/conversations/${activeConversation.id}/delete`,
+          "POST",
+          {},
+        );
+        delete chatDrafts[activeConversation.id];
+        activeConversation = null;
+        messages = [];
+        chatBusy = false;
+        historyOpen = true;
+        await loadConversations();
+      }
+      if (state) render();
+      return;
+    }
     if (action === "logout") {
       await api("/api/logout", "POST", {});
       state = null;
-      messages = [];
-      chatEpoch++;
+      clearChat();
       await loginScreen();
     }
     if (action === "close-dialog") dialog.close();
@@ -303,6 +482,16 @@ document.addEventListener("submit", async (event) => {
       await load();
       notice("Monthly budget saved.");
     }
+    if (form.id === "chat-name-form") {
+      activeConversation = await api(
+        `/api/conversations/${activeConversation.id}`,
+        "PATCH",
+        { revision: activeConversation.revision, title: data.title },
+      );
+      dialog.close();
+      await loadConversations();
+      render();
+    }
     if (form.id === "chat-form") await ask(data.question);
   } catch (e) {
     const error =
@@ -323,8 +512,6 @@ document.addEventListener("change", async (event) => {
     if (target.id === "month") {
       if (!target.value) return;
       selectedMonth = target.value;
-      messages = [];
-      chatEpoch++;
       await load();
     }
     if (target.dataset.transaction) {
@@ -340,6 +527,8 @@ document.addEventListener("change", async (event) => {
   }
 });
 document.addEventListener("input", (event) => {
+  if (event.target.matches("#chat-form textarea"))
+    chatDrafts[activeConversation?.id || "new"] = event.target.value;
   if (event.target.id === "search") {
     const q = event.target.value.toLowerCase();
     document.querySelector("#transaction-list").innerHTML = txnList(

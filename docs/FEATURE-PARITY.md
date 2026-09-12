@@ -39,3 +39,11 @@ BAS already has the matching card/typography/five-tab mobile presentation for it
 ## Compact Home header — 2026-09-12
 
 Both runtime Home screens omit the introductory marketing text and start with period selection and the financial summary. A visually hidden Home heading preserves accessibility. Other pages and financial calculations are unchanged. This presentation-only change needs no setup changes or data migration. Validation: production frontend build, mobile browser layout checks, and the public formatting, test and release checks.
+
+## Saved assistant history — 2026-09-12
+
+Both runtimes now save encrypted server conversations, show a paginated history library and support New chat, rename, pin, archive/restore and confirmed deletion. Accepted questions and generation status survive navigation; restarts mark unfinished work interrupted without automatic replay. Idempotency, revision conflicts, ownership, failed generation and late results after deletion have isolated regression coverage. Browser checks cover saved replies after reload and a 390px mobile layout.
+
+The private app uses a separate chat database and verified owner identity with bounded recent model context. BAS uses its local workspace database and password session, with its existing aggregate-only adapter: saved older messages are not model context. Synthetic demo startup retains its encryption key across restarts. No provider integrations or financial calculations are copied between projects. See [setup and recovery](CHAT-HISTORY.md).
+
+This closes basic durable-history parity, not all of M2: search, scheduled retention, legacy browser-history import, conversation URLs, multi-process leases and key rotation tooling remain planned. Existing browser-only conversations are not retroactively recovered. Physical-phone acceptance remains open. Validation: private regression suite and isolated frontend build; public tests, formatting, release allowlist, secret scan and manual public-source review. Private production activation is recorded separately; public publication is a source release.

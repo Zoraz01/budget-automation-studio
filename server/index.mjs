@@ -1,8 +1,22 @@
 import { configuration } from "./config.mjs";
 import { openStore } from "./store.mjs";
 import { createApp } from "./app.mjs";
+import { randomBytes } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 process.umask(0o077);
 const config = configuration();
+// Demo conversations need a stable encryption key across process restarts too.
+if (config.mode === "demo") {
+  const keyFile = `${config.database}.chat-key`;
+  mkdirSync(dirname(keyFile), { recursive: true, mode: 0o700 });
+  if (!existsSync(keyFile))
+    writeFileSync(keyFile, randomBytes(32).toString("hex"), {
+      flag: "wx",
+      mode: 0o600,
+    });
+  config.vaultKey = readFileSync(keyFile, "utf8").trim();
+}
 const store = openStore(config.database, config.vaultKey, config.currency);
 if (config.mode === "demo") store.seed(new Date().toISOString().slice(0, 7));
 const server = createApp(config, store);

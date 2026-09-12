@@ -1,6 +1,6 @@
 # Persistent AI conversations
 
-Status: production implementation specification; the design preview implements only browser-local demo history and deterministic replies. No live model, chat database or server endpoint has been changed.
+Status: broader implementation specification. Basic encrypted server history, conversation management and durable request status are now implemented; see [current behavior and remaining gaps](../CHAT-HISTORY.md). The design preview remains a synthetic prototype. The proposed features below are not all released.
 
 ## Current gap and intended behavior
 

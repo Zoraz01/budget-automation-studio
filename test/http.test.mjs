@@ -249,3 +249,40 @@ test("home-screen manifest and exact public icon assets are served without cachi
   await f.login();
   assert.equal((await f.call("/icons/other.png")).status, 404);
 });
+
+test("saved chat is authenticated, origin protected and survives fresh login", async (t) => {
+  const f = await fixture(t);
+  assert.equal((await f.call("/api/conversations")).status, 401);
+  await f.login();
+  const id = "synthetic-conversation-test";
+  const create = await f.call("/api/conversations", "POST", { id });
+  assert.equal(create.status, 201);
+  const send = await f.call(`/api/conversations/${id}/messages`, "POST", {
+    requestId: "synthetic-request-one",
+    revision: 0,
+    question: "Summarize my budget",
+    month: "2026-05",
+  });
+  assert.equal(send.status, 202);
+  const read = await f.call(`/api/conversations/${id}`);
+  assert.equal(read.headers.get("cache-control"), "no-store");
+  assert.equal((await read.json()).turns[0].state, "completed");
+  assert.equal(
+    (
+      await f.call(
+        `/api/conversations/${id}/delete`,
+        "POST",
+        {},
+        { Origin: "https://example.org" },
+      )
+    ).status,
+    403,
+  );
+  await f.call("/api/logout", "POST", {});
+  assert.equal((await f.call(`/api/conversations/${id}`)).status, 401);
+  await f.login();
+  assert.equal(
+    (await (await f.call(`/api/conversations/${id}`)).json()).turns.length,
+    1,
+  );
+});
