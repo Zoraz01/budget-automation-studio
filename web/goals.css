@@ -1,0 +1,523 @@
+.goal-app {
+  --gl-bg: #0a0d12;
+  --gl-surface: #12161d;
+  --gl-raised: #161b23;
+  --gl-border: #232a35;
+  --gl-text: #eef2f7;
+  --gl-muted: #9aa6b6;
+  --gl-accent: #10b981;
+  --gl-mint: #6ee7b7;
+  --gl-soft: #12392d;
+  --gl-warning: #f5ce8c;
+  color: var(--gl-text);
+  font:
+    16px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+}
+[data-theme="light"] .goal-app {
+  --gl-bg: #f6f7f9;
+  --gl-surface: #fff;
+  --gl-raised: #f1f4f6;
+  --gl-border: #dce2e7;
+  --gl-text: #0f1419;
+  --gl-muted: #5b6472;
+  --gl-mint: #047857;
+  --gl-soft: #e0f4ea;
+  --gl-warning: #854d0e;
+}
+.goal-app * {
+  box-sizing: border-box;
+}
+.goal-app h1,
+.goal-app h2,
+.goal-app p {
+  margin: 0;
+}
+.goal-app h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+.goal-app h2 {
+  font-size: 17px;
+  font-weight: 650;
+}
+.goal-app small {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.goal-app button,
+.goal-app input,
+.goal-app select,
+.goal-app textarea {
+  font: inherit;
+}
+.goal-app button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.goal-app button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.goal-app button:focus-visible,
+.goal-app a:focus-visible,
+.goal-app input:focus-visible,
+.goal-app select:focus-visible,
+.goal-app textarea:focus-visible {
+  outline: 3px solid var(--gl-mint);
+  outline-offset: 3px;
+}
+.goal-app svg {
+  flex-shrink: 0;
+}
+.goal-app .gl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.goal-app .gl-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.goal-app .gl-grow {
+  flex: 1;
+  min-width: 0;
+}
+.goal-app .gl-muted {
+  color: var(--gl-muted);
+}
+.goal-app .gl-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--gl-border);
+  border-radius: 10px;
+  background: var(--gl-raised);
+  color: var(--gl-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.goal-app .gl-button:hover {
+  filter: brightness(1.12);
+}
+.goal-app .gl-primary {
+  background: var(--gl-accent);
+  border-color: var(--gl-accent);
+  color: #062319;
+}
+.goal-app .gl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  color: var(--gl-mint);
+  padding: 6px 0;
+  min-height: 44px;
+  font-size: 14px;
+  text-decoration: none;
+}
+.goal-app .gl-back {
+  color: var(--gl-muted);
+  margin-bottom: 12px;
+}
+.goal-app .gl-hero {
+  padding: 24px 0 20px;
+}
+.goal-app .gl-hero > .gl-muted {
+  font-size: 13px;
+}
+.goal-app .gl-big {
+  font-size: 42px;
+  line-height: 1.25;
+  letter-spacing: -0.05em;
+  font-weight: 650;
+  margin: 4px 0;
+}
+.goal-app .gl-number {
+  font-size: 30px;
+  font-weight: 650;
+  margin: 12px 0;
+}
+.goal-app .gl-plan {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid var(--gl-border);
+  border-radius: 16px;
+  background: var(--gl-surface);
+  color: var(--gl-text);
+  text-align: left;
+}
+.goal-app .gl-plan strong {
+  font-size: 16px;
+}
+.goal-app .gl-plan small {
+  display: block;
+  color: var(--gl-muted);
+  margin-top: 4px;
+}
+.goal-app .gl-holdlink {
+  margin-top: 10px;
+}
+.goal-app .gl-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--gl-raised);
+  border-radius: 12px;
+  color: var(--gl-muted);
+  flex-shrink: 0;
+}
+.goal-app .gl-accent {
+  background: var(--gl-soft);
+  color: var(--gl-mint);
+}
+.goal-app .gl-funding {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.goal-app .gl-funding > span {
+  color: var(--gl-muted);
+  font-size: 12px;
+}
+.goal-app .gl-tabs {
+  display: flex;
+  gap: 24px;
+  margin: 20px 0;
+  border-bottom: 1px solid var(--gl-border);
+}
+.goal-app .gl-tabs button {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--gl-muted);
+  min-height: 44px;
+  padding: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.goal-app .gl-tabs button[aria-pressed="true"] {
+  color: var(--gl-text);
+  border-bottom-color: var(--gl-accent);
+}
+.goal-app .gl-tabs small {
+  margin-left: 4px;
+}
+.goal-app .gl-section {
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.goal-app .gl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  gap: 12px;
+}
+.goal-app .gl-card {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--gl-border);
+  border-radius: 16px;
+  background: var(--gl-surface);
+  color: var(--gl-text);
+  text-align: left;
+}
+.goal-app .gl-card:hover {
+  border-color: var(--gl-mint);
+}
+.goal-app .gl-name {
+  font-weight: 650;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.goal-app .gl-badge {
+  font-size: 11px;
+  color: var(--gl-mint);
+  background: var(--gl-soft);
+  padding: 3px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.goal-app .gl-values {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 17px;
+  flex-wrap: wrap;
+}
+.goal-app .gl-values strong {
+  font-size: 23px;
+  font-weight: 650;
+}
+.goal-app .gl-values > span {
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+.goal-app progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--gl-raised);
+  color: var(--gl-accent);
+  margin: 10px 0 12px;
+}
+.goal-app progress::-webkit-progress-bar {
+  background: var(--gl-raised);
+}
+.goal-app progress::-webkit-progress-value {
+  background: var(--gl-accent);
+}
+.goal-app progress::-moz-progress-bar {
+  background: var(--gl-accent);
+}
+.goal-app .gl-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  flex-wrap: wrap;
+  color: var(--gl-muted);
+  font-size: 12px;
+  margin-top: 10px;
+}
+.goal-app .gl-foot > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--gl-mint);
+}
+.goal-app .gl-foot svg {
+  width: 15px;
+  height: 15px;
+}
+.goal-app .gl-wish {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--gl-border);
+  color: var(--gl-text);
+  padding: 13px 0;
+  width: 100%;
+  text-align: left;
+  min-height: 64px;
+}
+.goal-app .gl-wish > .gl-name {
+  flex: 1;
+}
+.goal-app .gl-wish small {
+  color: var(--gl-muted);
+  white-space: nowrap;
+}
+.goal-app .gl-panel {
+  background: var(--gl-surface);
+  border: 1px solid var(--gl-border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 20px;
+}
+.goal-app .gl-kv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.goal-app .gl-kv > span {
+  color: var(--gl-muted);
+}
+.goal-app .gl-kv strong {
+  font-weight: 550;
+  text-align: right;
+}
+.goal-app .gl-kv small {
+  display: block;
+}
+.goal-app .gl-actions {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.goal-app .gl-actions > * {
+  flex: 1;
+}
+.goal-app .gl-field {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 550;
+}
+.goal-app input:not([type="checkbox"]),
+.goal-app select,
+.goal-app textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  background: var(--gl-raised);
+  border: 1px solid var(--gl-border);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--gl-text);
+  font-size: 16px;
+  min-height: 48px;
+}
+.goal-app textarea {
+  resize: vertical;
+}
+.goal-app .gl-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.goal-app .gl-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  min-height: 44px;
+  font-size: 14px;
+}
+.goal-app .gl-check input {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  accent-color: var(--gl-accent);
+  flex-shrink: 0;
+}
+.goal-app .gl-help {
+  color: var(--gl-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+.goal-app .gl-planrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gl-border);
+}
+.goal-app .gl-planrow > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.goal-app .gl-planrow small {
+  display: block;
+}
+.goal-app .gl-planrow input {
+  width: 110px;
+  text-align: right;
+}
+.goal-app .gl-error {
+  color: #fb7185;
+  font-size: 14px;
+  margin-top: 14px;
+}
+.goal-app .gl-success {
+  color: var(--gl-mint);
+  margin-bottom: 16px;
+}
+.goal-app .gl-notice {
+  padding: 13px;
+  border: 1px solid var(--gl-border);
+  border-radius: 10px;
+  background: var(--gl-raised);
+  color: var(--gl-warning);
+  font-size: 13px;
+  margin: 10px 0;
+}
+.goal-app .gl-warning {
+  color: var(--gl-warning);
+}
+.goal-app .gl-block {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+}
+.goal-app .gl-disclosure {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--gl-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  border-top: 1px solid var(--gl-border);
+  padding-top: 18px;
+  margin-top: 24px;
+}
+.goal-app .gl-disclosure svg {
+  width: 16px;
+  height: 16px;
+}
+.goal-app .gl-empty {
+  color: var(--gl-muted);
+  padding: 20px 0;
+  font-size: 14px;
+}
+.goal-app .gl-notes {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 16px;
+  font-size: 14px;
+}
+@media (max-width: 520px) {
+  .goal-app .gl-columns {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .goal-app .gl-big {
+    font-size: 38px;
+  }
+  .goal-app .gl-section > .gl-button {
+    padding: 10px;
+    font-size: 13px;
+  }
+  .goal-app .gl-panel {
+    padding: 15px;
+  }
+}
+
+[data-theme="light"] .goal-app .gl-error {
+  color: #be123c;
+}
+
+.goal-app .gl-tabs button,
+.goal-app .gl-wish {
+  border-radius: 0;
+}

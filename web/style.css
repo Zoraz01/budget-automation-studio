@@ -1519,3 +1519,16 @@ a {
   min-height: 44px;
   cursor: pointer;
 }
+
+@media (max-width: 850px) {
+  .nav button[data-page="goals"] {
+    display: none;
+  }
+}
+.month-label[hidden] {
+  display: none;
+}
+
+.goals-main > .page-head {
+  display: none;
+}

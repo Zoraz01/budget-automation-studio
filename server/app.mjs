@@ -1,3 +1,5 @@
+import { workspaceGoals } from "./goals-adapter.mjs";
+import { GoalError } from "./goals.mjs";
 import { aiStatus } from "./providers/ai-config.mjs";
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
@@ -17,6 +19,8 @@ import {
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
+  ["/goals.js", ["goals.js", "text/javascript"]],
+  ["/goals.css", ["goals.css", "text/css"]],
   ["/", ["index.html", "text/html"]],
   ["/app.js", ["app.js", "text/javascript"]],
   ["/style.css", ["style.css", "text/css"]],
@@ -32,6 +36,7 @@ const staticFiles = new Map([
 ]);
 const digest = (s) => createHash("sha256").update(s).digest();
 export function createApp(config, store, { aiFetch = fetch } = {}) {
+  const goals = workspaceGoals(store, config.currency);
   const history = historyStore(store.db, config.vaultKey);
   history.recover();
   const chatWorker = historyWorker(
@@ -63,14 +68,14 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
     });
     res.end(JSON.stringify(value));
   }
-  async function body(req) {
+  async function body(req, limit = 8192) {
     if (req.headers["content-type"]?.split(";")[0] !== "application/json")
       throw new InputError("Expected application/json");
     const parts = [];
     let bytes = 0;
     for await (const chunk of req) {
       bytes += chunk.length;
-      if (bytes > 8192) throw new InputError("Request too large");
+      if (bytes > limit) throw new InputError("Request too large");
       parts.push(chunk);
     }
     try {
@@ -167,6 +172,16 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
         );
         return json(res, 200, { ok: true });
       }
+      if (path === "/api/goals" && req.method === "GET")
+        return json(res, 200, goals.state());
+      if (path === "/api/goals/transactions" && req.method === "GET")
+        return json(
+          res,
+          200,
+          goals.transactions(url.searchParams.get("q") || ""),
+        );
+      if (path === "/api/goals/actions" && req.method === "POST")
+        return json(res, 200, goals.execute(await body(req, 20000)));
       if (path === "/api/state" && req.method === "GET") {
         const selectedMonth = month(
           url.searchParams.get("month") || new Date().toISOString().slice(0, 7),
@@ -398,6 +413,8 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
       return json(res, 404, { error: "Not found" });
     } catch (e) {
       // Never serialize SDK errors: request configs may contain provider secrets.
+      if (e instanceof GoalError)
+        return json(res, e.status, { error: e.message });
       if (e instanceof HistoryError)
         return json(res, e.status, { error: e.message });
       if (e instanceof InputError) return json(res, 400, { error: e.message });

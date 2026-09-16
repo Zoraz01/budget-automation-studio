@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-16 — Purchase goals and long-term funds
+
+- Add separate purchase wishlists and long-term funds, progress, product links, notes and desired dates.
+- Reserve existing cash with individual monthly contributions, a combined limit, protected bills/buffer and opt-in scheduled allocation.
+- Track purchases and payment holds without creating duplicate expenses or moving bank money.
+- Add idempotent commands, revision conflicts, cash freshness checks, invented demo goals and setup/recovery documentation.
+- Cash balances are confirmed manually in BAS; this release does not add a bank-balance provider, paycheck forecasting or automatic refund matching.
+
 ## 2026-09-12 — Bring your own AI provider
 
 - Add server-side OpenAI, Anthropic and Google Gemini adapters with default models; retain local Ollama and no-AI summaries.

@@ -1,3 +1,4 @@
+import { initGoals } from "./goals.mjs";
 import { DatabaseSync } from "node:sqlite";
 import { mkdirSync, chmodSync } from "node:fs";
 import { dirname } from "node:path";
@@ -17,6 +18,7 @@ export function openStore(path, key, currency) {
     CREATE TABLE IF NOT EXISTS transactions (id TEXT PRIMARY KEY, source TEXT NOT NULL, connection_id TEXT REFERENCES connections(id), date TEXT NOT NULL, description TEXT NOT NULL, amount_cents INTEGER NOT NULL, currency TEXT NOT NULL, category_id TEXT NOT NULL REFERENCES categories(id), pending INTEGER NOT NULL DEFAULT 0, removed INTEGER NOT NULL DEFAULT 0, reviewed INTEGER NOT NULL DEFAULT 0);
     CREATE INDEX IF NOT EXISTS transaction_dates ON transactions(date);
     CREATE TABLE IF NOT EXISTS investments (id TEXT PRIMARY KEY, name TEXT NOT NULL, value_cents INTEGER, currency TEXT, status TEXT NOT NULL, synced_at TEXT NOT NULL);`);
+  initGoals(db);
   const schema = db
     .prepare("SELECT value FROM meta WHERE key='schema_version'")
     .get();

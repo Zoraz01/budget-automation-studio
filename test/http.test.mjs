@@ -357,3 +357,40 @@ for (const outcome of ["success", "rejected", "missing-key"]) {
     }
   });
 }
+
+test("Goals APIs require a session and enforce revision checks without changing spending", async (t) => {
+  const f = await fixture(t);
+  assert.equal((await f.call("/api/goals")).status, 401);
+  await f.login();
+  const before = await (await f.call("/api/state?month=2026-05")).json();
+  const state = await (await f.call("/api/goals")).json();
+  const action = {
+    action: "create",
+    name: "Example purchase",
+    kind: "purchase",
+    target: "100",
+    monthly: "0",
+    revision: state.settings.revision,
+    request_id: "test-goal-create-unique",
+  };
+  const first = await f.call("/api/goals/actions", "POST", action);
+  assert.equal(first.status, 200);
+  const id = (await first.json()).id;
+  assert.equal(
+    (await (await f.call("/api/goals/actions", "POST", action)).json()).id,
+    id,
+  );
+  assert.equal(
+    (
+      await f.call("/api/goals/actions", "POST", {
+        ...action,
+        request_id: "test-goal-stale-unique",
+      })
+    ).status,
+    409,
+  );
+  const after = await (await f.call("/api/state?month=2026-05")).json();
+  assert.deepEqual(after.summary, before.summary);
+  assert.equal((await f.call("/goals.js")).status, 200);
+  assert.equal((await f.call("/goals.css")).status, 200);
+});

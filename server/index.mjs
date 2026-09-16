@@ -1,3 +1,5 @@
+import { seedGoalDemo } from "./goals-demo.mjs";
+import { workspaceGoals } from "./goals-adapter.mjs";
 import { configuration } from "./config.mjs";
 import { openStore } from "./store.mjs";
 import { createApp } from "./app.mjs";
@@ -19,7 +21,21 @@ if (config.mode === "demo") {
 }
 const store = openStore(config.database, config.vaultKey, config.currency);
 if (config.mode === "demo") store.seed(new Date().toISOString().slice(0, 7));
+if (config.mode === "demo") seedGoalDemo(store, config.currency);
 const server = createApp(config, store);
+const goals = workspaceGoals(store, config.currency);
+const goalTick = () => {
+  try {
+    goals.runDue();
+  } catch {
+    console.error(
+      "Scheduled Goals check failed; allocations retained for retry.",
+    );
+  }
+};
+const goalTimer = setInterval(goalTick, 60_000);
+goalTimer.unref();
+goalTick();
 server.requestTimeout = 60000;
 server.headersTimeout = 10000;
 server.listen(config.port, "127.0.0.1", () =>
@@ -36,6 +52,7 @@ server.on("error", () => {
 });
 for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => {
+    clearInterval(goalTimer);
     server.close(() => {
       store.close();
       process.exit(0);

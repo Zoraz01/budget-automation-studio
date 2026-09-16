@@ -11,6 +11,9 @@ server/
   app.mjs             Session, origin, rate, request and route boundaries
   domain.mjs          Integer-cent arithmetic, input validation, budget summaries
   store.mjs           SQLite schema, atomic writes, connection persistence
+  goals.mjs           Cash reservations, monthly allocation and payment holds
+  goals-adapter.mjs   Existing transaction contract; manually confirmed cash
+  goals-demo.mjs      Invented, demo-only starting goals
   vault.mjs           AES-256-GCM with per-connection associated data
   providers/
     plaid.mjs         Paginated transaction sync with staged commit
@@ -20,6 +23,7 @@ web/
   index.html          Semantic shell and restrictive script loading
   app.js              Views, forms, escaped output and API interaction
   style.css           Design tokens, responsive layout, focus and touch targets
+  goals.js/goals.css  Dedicated responsive Goals interface
 scripts/
   setup.mjs           Fresh instance credentials; refuses overwrite
   check-release.mjs   Publication allowlist and content patterns
@@ -35,6 +39,10 @@ scripts/
 | `transactions` | Stable source ID, date, signed cents, currency, category and review flags |
 | `connections` | Encrypted provider credentials, Plaid cursor and last import status |
 | `investments` | Independent account value observations, currency and freshness labels |
+| `goals_meta`, `goal_settings` | Goals schema version, command revision, funding protection and opt-in schedule |
+| `goal_cash`, `goals` | Manual cash observations and individual purchase/long-term reservations |
+| `goal_entries`, `goal_runs` | Reservation history, unique monthly allocations and waiting reasons |
+| `goal_purchases`, `goal_commands` | Cash payment holds, transaction links and durable idempotency results |
 
 All SQL parameterizes user values. Transaction IDs are namespaced per Plaid connection. The client-facing state query omits encrypted credentials and cursors. The server exposes only explicit static asset paths; its source, `.env` and database directory cannot be downloaded as static files.
 
@@ -51,6 +59,9 @@ All SQL parameterizes user values. Transaction IDs are namespaced per Plaid conn
 - Investment values are presented separately. The app never treats an investment account's total value as spendable cash or adds it to the month's cash flow.
 - Refunds are recognized in the month posted, including refunds for earlier purchases. There is no accrual/amortization or refund-to-original-purchase matching.
 - Manual entries cannot be automatically deduplicated against later provider imports. Do not manually recreate transactions you intend to sync.
+- Goals earmarks existing cash without altering those accounting totals. Recording a purchase moves its reservation to a payment hold, not to a second expense. Cash availability uses a separately confirmed balance, protected bills/buffer, reservations and holds. It never uses monthly net cash flow as the backing balance. See [Goals](GOALS.md).
+
+The Goals component has its own versioned additive schema in the workspace database. Commands and scheduled allocations use SQLite transactions and one global revision. A minute timer checks opt-in monthly allocations while the process is running; it does not call providers or move money. Both new and resumed schedules start at the next due date. An exact goal/month identity prevents duplicate allocations across retries and restarts.
 
 ## Provider synchronization
 

@@ -36,6 +36,8 @@ Then run `npm start` and sign in with the generated password. Your empty persona
 
 Do not classify payments to other people or businesses as transfers simply because a provider used that label. Transfers are excluded from income and spending. Mistaken classification will affect totals.
 
+For planned purchases and long-term funds, open **Goals** from Home. Start with an unfunded wishlist, then set a combined monthly limit, individual contributions, and Funding setup. Confirm the backing cash balance and protected bills/buffer before reserving money. Automatic allocation starts off and requires your explicit choice; it operates only while the server runs. Follow [Goals setup and recovery](GOALS.md), including payment holds and cash freshness. This feature does not move money at your bank.
+
 ## 3. Optional Plaid integration
 
 Start with [Plaid Sandbox](https://plaid.com/docs/sandbox/). Use your own application credentials from the Plaid developer dashboard. The starter does not ship shared credentials.
