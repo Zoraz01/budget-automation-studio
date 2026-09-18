@@ -19,7 +19,7 @@
     "setup:ai": "node scripts/setup-ai.mjs"
   },
   "dependencies": {
-    "snaptrade-typescript-sdk": "12.2.7"
+    "snaptrade-typescript-sdk": "12.2.8"
   },
   "devDependencies": {
     "prettier": "3.9.6"
