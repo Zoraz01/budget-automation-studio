@@ -18,6 +18,10 @@ import {
 } from "./providers/snaptrade.mjs";
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
+
+// The browser opens its local month; UTC would already be next month in a US evening.
+const localMonth = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 const staticFiles = new Map([
   ["/goals.js", ["goals.js", "text/javascript"]],
   ["/goals.css", ["goals.css", "text/css"]],
@@ -184,7 +188,7 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
         return json(res, 200, goals.execute(await body(req, 20000)));
       if (path === "/api/state" && req.method === "GET") {
         const selectedMonth = month(
-          url.searchParams.get("month") || new Date().toISOString().slice(0, 7),
+          url.searchParams.get("month") || localMonth(),
         );
         return json(res, 200, {
           mode: config.mode,
@@ -259,17 +263,18 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
       }
       if (path === "/api/transactions/category" && req.method === "PATCH") {
         const input = await body(req);
+        const categoryId = text(input.category_id);
         if (
           !store.db
             .prepare("SELECT id FROM categories WHERE id=?")
-            .get(text(input.category_id))
+            .get(categoryId)
         )
           throw new InputError("Unknown category");
         const result = store.db
           .prepare(
             "UPDATE transactions SET category_id=?,reviewed=1 WHERE id=? AND removed=0",
           )
-          .run(input.category_id, text(input.id, 300));
+          .run(categoryId, text(input.id, 300));
         if (!result.changes) throw new InputError("Unknown transaction");
         return json(res, 200, { ok: true });
       }

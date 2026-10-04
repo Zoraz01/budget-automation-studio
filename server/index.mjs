@@ -20,7 +20,10 @@ if (config.mode === "demo") {
   config.vaultKey = readFileSync(keyFile, "utf8").trim();
 }
 const store = openStore(config.database, config.vaultKey, config.currency);
-if (config.mode === "demo") store.seed(new Date().toISOString().slice(0, 7));
+if (config.mode === "demo")
+  store.seed(
+    `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`,
+  );
 if (config.mode === "demo") seedGoalDemo(store, config.currency);
 const server = createApp(config, store);
 const goals = workspaceGoals(store, config.currency);

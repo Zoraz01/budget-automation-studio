@@ -204,3 +204,33 @@ test("provider failures are actionable, sanitized and never automatically retrie
   );
   assert.match(partial.answer, /shortened/);
 });
+test("summary-mode remaining budget ignores spending in unbudgeted categories", async () => {
+  const config = configuration({ ...env, APP_MODE: "demo" });
+  const reply = await answer(
+    "how much budget is left",
+    {
+      ...summary,
+      spent_cents: 50000,
+      budget_cents: 50000,
+      categories: [
+        {
+          name: "Groceries",
+          spent_cents: 30000,
+          limit_cents: 50000,
+          remaining_cents: 20000,
+        },
+        {
+          name: "Uncategorized",
+          spent_cents: 20000,
+          limit_cents: 0,
+          remaining_cents: -20000,
+        },
+      ],
+    },
+    config,
+    () => {
+      throw Error("Network forbidden");
+    },
+  );
+  assert.match(reply.answer, /have \$200\.00 remaining/);
+});
