@@ -149,6 +149,16 @@ test("manual transactions, budget editing and category review persist correctly"
     s.summary.categories.find((c) => c.id === newCat.id).remaining_cents,
     9776,
   );
+  const txn = s.transactions.find((t) => t.description === "Fixture journey");
+  assert.equal(
+    (
+      await f.call("/api/transactions/category", "PATCH", {
+        id: txn.id,
+        category_id: ` ${newCat.id} `,
+      })
+    ).status,
+    200,
+  );
   assert.equal(
     (
       await f.call("/api/budgets", "PUT", {

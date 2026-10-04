@@ -76,7 +76,9 @@ export function mountGoals(element, request) {
       (g.target_cents - g.saved_cents) / g.monthly_cents,
     );
     if (months > 1200) return "More than 100 years at this pace";
-    const first = g.next_due || data.today;
+    // With automatic saving off, next_due is not advanced and can be in the past.
+    const first =
+      g.next_due && g.next_due > data.today ? g.next_due : data.today;
     const d = new Date(first + "T12:00:00Z");
     d.setUTCMonth(d.getUTCMonth() + months - 1);
     return `Est. ${d.toLocaleDateString(undefined, { month: "short", year: "numeric", timeZone: "UTC" })}`;

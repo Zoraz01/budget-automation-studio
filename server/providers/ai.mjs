@@ -38,10 +38,15 @@ export async function answer(question, summary, config, fetcher = fetch) {
         currency: config.currency,
       }).format(v / 100);
     const budgets = /budget|categor|left|remaining/i.test(question);
+    // Spending in unbudgeted categories (e.g. Uncategorized imports) must not
+    // reduce what is left of the budget.
+    const budgetedSpent = summary.categories
+      .filter((c) => c.limit_cents > 0)
+      .reduce((sum, c) => sum + c.spent_cents, 0);
     return {
       mode: "summary",
       answer: budgets
-        ? `For ${summary.month}, you budgeted ${money(summary.budget_cents)} and have ${money(summary.budget_cents - summary.spent_cents)} remaining against recorded spending. ${summary.categories
+        ? `For ${summary.month}, you budgeted ${money(summary.budget_cents)} and have ${money(summary.budget_cents - budgetedSpent)} remaining across budgeted categories. ${summary.categories
             .filter((c) => c.limit_cents > 0)
             .map((c) => `${c.name}: ${money(c.remaining_cents)} remaining.`)
             .join(" ")} This is a budget comparison, not a bank balance.`
