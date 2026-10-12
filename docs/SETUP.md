@@ -194,6 +194,10 @@ For remote access, design a separate hardened deployment with TLS, managed authe
 
 ## Troubleshooting
 
+Changing the budget month cancels the older read and shows a loading state until the selected period is ready. If loading fails, use **Retry**; previous-period totals are hidden. Retry reads the local workspace and does not sync a provider or call an AI model.
+
+Investment balances distinguish a real zero from unavailable data. If a later sync omits a value or returns another currency, BAS retains the last valid value, original currency and successful-sync timestamp as **stale**. With no prior valid value, the account remains **unavailable**. Check the provider connection and explicitly sync again when ready; no automatic retry or currency conversion is performed. This release needs no new settings or database migration.
+
 | Symptom | Next step |
 | --- | --- |
 | `node:sqlite` unavailable | Check `node --version`; use the supported Node 24 line |

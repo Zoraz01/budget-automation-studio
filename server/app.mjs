@@ -19,6 +19,7 @@ import {
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
+  ["/latest-request.js", ["latest-request.js", "text/javascript"]],
   ["/goals.js", ["goals.js", "text/javascript"]],
   ["/goals.css", ["goals.css", "text/css"]],
   ["/", ["index.html", "text/html"]],

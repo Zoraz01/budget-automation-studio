@@ -1,3 +1,6 @@
+import { latestRequest } from "./latest-request.js";
+const stateRequests = latestRequest();
+let stateError = null;
 import { mountGoals } from "./goals.js";
 let disposeGoals = null;
 const app = document.querySelector("#app"),
@@ -62,13 +65,15 @@ function notice(value) {
     document.querySelector("#notice").textContent = "";
   }, 6500);
 }
-async function api(path, method = "GET", data) {
+async function api(path, method = "GET", data, { signal } = {}) {
   const response = await fetch(path, {
     method,
+    signal,
     headers: method === "GET" ? {} : { "Content-Type": "application/json" },
     ...(data ? { body: JSON.stringify(data) } : {}),
   });
   const result = await response.json();
+  signal?.throwIfAborted();
   if (!response.ok) {
     if (response.status === 401 && path != "/api/login") {
       state = null;
@@ -82,9 +87,33 @@ async function api(path, method = "GET", data) {
   return result;
 }
 async function load() {
-  state = await api(`/api/state?month=${encodeURIComponent(selectedMonth)}`);
-  render();
+  const request = stateRequests.begin();
+  const month = selectedMonth;
+  stateError = null;
+  if (state) render();
+  try {
+    const next = await api(
+      `/api/state?month=${encodeURIComponent(month)}`,
+      "GET",
+      undefined,
+      { signal: request.signal },
+    );
+    if (!request.current()) return;
+    state = next;
+    render();
+  } catch (error) {
+    if (!request.current()) return;
+    stateError = error.message;
+    if (state) render();
+    else throw error;
+  }
 }
+function stateStatus() {
+  if (stateError)
+    return `<section class="card" role="alert"><p>Budget data could not be loaded. ${escape(stateError)}</p><button data-action="refresh">Retry</button></section>`;
+  return `<section class="card" role="status">Loading ${escape(monthTitle())}…</section>`;
+}
+
 function brand() {
   return '<div class="brand"><img src="/logo.svg" alt=""/><span>BAS<small>BUDGET AUTOMATION STUDIO</small></span></div>';
 }
@@ -92,6 +121,7 @@ function installGuide() {
   return `<details class="install-guide card"><summary>Add to your phone’s Home Screen</summary><p>Open your own secure, phone-accessible app address first. The computer-only demo address cannot open this workspace on a phone.</p><h3>iPhone · Safari</h3><ol><li>Open the app in Safari and tap Share.</li><li>Choose Add to Home Screen.</li><li>Keep Open as Web App on, name it BAS, then tap Add.</li></ol><h3>Android · Chrome</h3><ol><li>Open the app in Chrome and tap the three-dot menu.</li><li>Choose Install and create shortcut → Install, or Add to Home screen → Install.</li><li>Confirm, then open BAS from your Home Screen.</li></ol><p>You may need to sign in again. The app needs a connection to its server; adding an icon does not make it work offline.</p></details>`;
 }
 async function loginScreen() {
+  stateRequests.cancel();
   disposeGoals?.();
   disposeGoals = null;
   const session = await api("/api/session");
@@ -115,10 +145,11 @@ function render() {
     : null;
 
   if (!state) return;
-  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="sr-only">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${{ overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note">${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
+  const ready = !stateError && state.summary.month === selectedMonth;
+  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="sr-only">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${!ready ? stateStatus() : { overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note" ${ready ? "" : "hidden"}>${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
   if (page === "goals")
     document.querySelector("#main").classList.add("goals-main");
-  if (page === "goals")
+  if (page === "goals" && ready)
     disposeGoals = mountGoals(
       document.querySelector("#goals-content"),
       (path, method = "GET", body) => api("/api" + path, method, body),
@@ -419,6 +450,7 @@ document.addEventListener("click", async (event) => {
       return;
     }
     if (action === "logout") {
+      stateRequests.cancel();
       await api("/api/logout", "POST", {});
       state = null;
       clearChat();

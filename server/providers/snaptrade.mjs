@@ -64,7 +64,7 @@ export async function connectSnaptrade(store, config, client) {
   return { url: url.href };
 }
 export function normalizeAccount(a, currency) {
-  if (typeof a.id !== "string" || !a.id) throw new ProviderError();
+  if (!a || typeof a.id !== "string" || !a.id) throw new ProviderError();
   const total = a.balance?.total;
   const amount = total?.amount;
   const code = total?.currency;
@@ -86,13 +86,20 @@ export async function syncSnaptrade(store, config, client) {
       await client.accountInformation.listUserAccounts(credentials);
     if (!Array.isArray(data)) throw new ProviderError();
     const accounts = data.map((a) => normalizeAccount(a, config.currency));
+    if (new Set(accounts.map((a) => a.id)).size !== accounts.length)
+      throw new ProviderError();
     const now = new Date().toISOString();
     store.atomic(() => {
       store.db.prepare("UPDATE investments SET status='stale'").run();
       for (const a of accounts)
         store.db
           .prepare(
-            `INSERT INTO investments VALUES (?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,value_cents=excluded.value_cents,currency=excluded.currency,status=excluded.status,synced_at=excluded.synced_at`,
+            `INSERT INTO investments VALUES (?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
+              name=excluded.name,
+              value_cents=CASE WHEN excluded.status='current' THEN excluded.value_cents ELSE investments.value_cents END,
+              currency=CASE WHEN excluded.status='current' OR investments.value_cents IS NULL THEN excluded.currency ELSE investments.currency END,
+              status=CASE WHEN excluded.status!='current' AND investments.value_cents IS NOT NULL THEN 'stale' ELSE excluded.status END,
+              synced_at=CASE WHEN excluded.status='current' OR investments.value_cents IS NULL THEN excluded.synced_at ELSE investments.synced_at END`,
           )
           .run(a.id, a.name, a.value, a.currency, a.status, now);
       store.db

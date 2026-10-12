@@ -309,3 +309,71 @@ test("provider transfer labels alone never prove a movement is between owned acc
     "uncategorized",
   );
 });
+
+test("identical Plaid content with distinct provider IDs survives replay", async () => {
+  const s = setup();
+  try {
+    for (let i = 0; i < 2; i++)
+      await syncPlaid(s, id, "USD", async () => page([row("one"), row("two")]));
+    assert.equal(
+      s.db.prepare("SELECT count(*) n FROM transactions").get().n,
+      2,
+    );
+    assert.equal(
+      s.db.prepare("SELECT sum(amount_cents) n FROM transactions").get().n,
+      2468,
+    );
+  } finally {
+    s.close();
+  }
+});
+
+test("SnapTrade preserves last-known values and timestamps when balances disappear", async () => {
+  const s = setup();
+  s.saveConnection("snaptrade", "snaptrade", {});
+  const config = { snapMode: "personal", currency: "USD" };
+  const client = (data) => ({
+    accountInformation: { listUserAccounts: async () => ({ data }) },
+  });
+  const account = (amount, currency = "USD") => ({
+    id: "invented-investment",
+    name: "Sample investment",
+    balance: { total: { amount, currency } },
+  });
+  try {
+    await syncSnaptrade(s, config, client([account(125)]));
+    s.db
+      .prepare("UPDATE investments SET synced_at='2026-01-02T00:00:00.000Z'")
+      .run();
+    for (const data of [
+      [account(null)],
+      [account(99, "EUR")],
+      [{ id: "invented-investment" }],
+    ]) {
+      await syncSnaptrade(s, config, client(data));
+      const actual = s.db.prepare("SELECT * FROM investments").get();
+      assert.equal(actual.value_cents, 12500);
+      assert.equal(actual.currency, "USD");
+      assert.equal(actual.status, "stale");
+      assert.equal(actual.synced_at, "2026-01-02T00:00:00.000Z");
+    }
+    for (const data of [null, {}, [account(90), account(80)]]) {
+      await assert.rejects(syncSnaptrade(s, config, client(data)));
+      assert.equal(
+        s.db.prepare("SELECT value_cents FROM investments").get().value_cents,
+        12500,
+      );
+    }
+    await syncSnaptrade(s, config, client([account(0)]));
+    assert.equal(
+      s.db.prepare("SELECT value_cents FROM investments").get().value_cents,
+      0,
+    );
+    assert.equal(
+      s.db.prepare("SELECT status FROM investments").get().status,
+      "current",
+    );
+  } finally {
+    s.close();
+  }
+});

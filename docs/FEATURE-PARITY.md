@@ -1,5 +1,21 @@
 # Feature parity and safe adaptations
 
+## Reliability and evidence preservation — 2026-10-12
+
+| Capability | Companion assessment | BAS implementation and remaining gap |
+| --- | --- | --- |
+| Latest selected period | Both interfaces need cancellation and protection from old results | Independent request guard, period loading/error panels, explicit retry, stale authorization protection and logout cancellation |
+| Preserve provider evidence | Both adapters must distinguish missing data from valid zero | Preserve last-known investment value, currency and successful timestamp; mark it stale and reject malformed/duplicate account lists. BAS exposes account values, not position/activity analytics |
+| Distinct provider transactions | Provider identity must take priority over content similarity | Existing provider-ID upserts retained; identical-content/replay regression added |
+| Credential boundaries | Credentials and internal settings must stay outside assistant context | Existing aggregate-only assistant has no SQL tool or settings access; secret-exclusion tests retained. The companion hardens its separate tool architecture independently |
+| Dependency maintenance | Each dependency tree needs its own compatible security repair | SDK pinned to 12.2.22 with Axios 1.20.0; zero known dependency vulnerabilities after the update. Companion dependencies are patched independently |
+| Spending presentation | Complete category totals and period bounds are shared requirements | BAS uses complete budget/category lists and has no donut or mover widget requiring the companion's visualization repair |
+| External split concurrency | Uncertain external actions must retain their original identity | Existing shared-expense adapter gap remains open. BAS has no corresponding external split state machine; a future adapter must use adopter-owned credentials, explicit confirmation and retry-safe identity |
+
+Validation: 85 BAS tests pass, including provider replay, missing/foreign balances, valid zeroes and request cancellation. A separate synthetic browser process verifies delayed periods, stale authorization, logout cancellation, failure/retry and 20 page/viewport combinations at 320, 390, 768 and 1280px without page errors or document overflow. The companion independently validates its affected code with 83 tests and an isolated build. Public release checks cover formatting, allowed files, secret scanning and manual review; see [verification](VALIDATION.md) for commands and limits.
+
+No private data, configuration, deployment artifacts or Git history is included. No new settings or schema migration is needed in BAS; demo remains credential-free. Existing Goals and encrypted assistant history remain available. The companion's broader accounting changes and populated-editor work are separate backlog, not synchronized features. BAS bank-balance/forecast, shared-expense and advanced analytics gaps remain open. Publication does not imply hosted deployment, live-provider acceptance or physical-phone validation.
+
 Reviewed 2026-09-11. These repositories share a product direction, not identical code. “Available” describes source capability; it does not prove live-provider or device acceptance.
 
 | Capability | Personal app | Public starter | Status / next action |

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-12 — Reliable period selection and provider evidence
+
+- Cancel outdated reads, hide totals while a different month loads, and show explicit failure/retry states.
+- Prevent old authorization errors or delayed state reads from disrupting a newer view or completed sign-out.
+- Preserve last-known investment values and successful timestamps when provider values are missing or use another currency; valid zeroes still update normally.
+- Reject duplicate investment identities and add regression coverage for distinct transactions with identical content.
+- Update the pinned SnapTrade SDK to 12.2.22 and Axios to 1.20.0 to address dependency advisories.
+- Add an isolated synthetic browser check and document evidence boundaries. No new setup, accounting definitions, provider calls or public deployment are introduced.
+
 ## 2026-09-16 — Purchase goals and long-term funds
 
 - Add separate purchase wishlists and long-term funds, progress, product links, notes and desired dates.

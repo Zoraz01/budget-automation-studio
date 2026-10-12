@@ -1,5 +1,23 @@
 # Release verification
 
+## Reliability repair — 2026-10-12
+
+- `npm test`: 85 passing tests. New coverage verifies distinct identical-content provider transactions, replay, malformed/duplicate investment responses, missing/foreign values, last-successful timestamps, valid zero balances and cancellation of obsolete reads.
+- Synthetic Chrome acceptance: delayed month results cannot replace the selected month; old authorization failures cannot sign out a newer view; logout cancels pending state reads; failures hide outdated totals and expose a working Retry button.
+- Five main destinations at 320, 390, 768 and 1280px: 20 page/viewport checks, no document overflow or captured page errors. Dark Home and failure-state screenshots were manually reviewed and remain temporary test artifacts.
+- Release gates: `npm run check:format`, `npm run check:release`, dependency advisory check, Gitleaks and manual review of every changed public file. CI results are recorded separately in GitHub Actions.
+- SDK 12.2.22 updates Axios to 1.20.0; `npm audit --omit=dev --audit-level=high` reports zero known vulnerabilities. Mocked transport checks exercise the real SDK in both personal and commercial authentication modes, preserving the timeout and redirect policy. This does not establish live-provider acceptance.
+
+Run the standard setup commands in [SETUP](SETUP.md), then the regression and release commands above. The optional browser check requires an existing Playwright installation and Google Chrome:
+
+```sh
+node test/browser-acceptance.mjs
+```
+
+Set `PLAYWRIGHT_MODULE` to an existing Playwright module if it is not resolvable from the checkout. `BAS_TEST_OUTPUT` optionally selects the temporary screenshot directory. The script uses an in-memory database, explicit demo-only configuration, invented fixtures and an ephemeral loopback port. It does not load `.env`, connect a provider or use personal account data. It blocks external browser requests. Restricted runners must permit local loopback binding and launching Chrome. Playwright is optional validation tooling, not an added runtime dependency.
+
+No new environment variables or schema changes are required by this release. A valid zero investment value replaces the previous value; a missing/foreign-currency value preserves it as stale, including its original currency and successful-sync timestamp. An account with no prior valid value remains unavailable. UI Retry reloads local application state; it does not trigger a provider sync or AI call. These checks do not validate live bank/broker eligibility, hosted deployment, populated legacy editor workflows or physical phones.
+
 ## Dark mobile update — 2026-09-11
 
 - All 35 regression tests pass locally, including a new manifest/icon HTTP test.
