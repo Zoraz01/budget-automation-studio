@@ -78,6 +78,11 @@ export async function syncPlaid(store, connectionId, currency, request) {
         if (page === 99) throw new ProviderError("PAGINATION_LIMIT");
       }
       store.atomic(() => {
+        const current = store.db
+          .prepare("SELECT cursor FROM connections WHERE id=?")
+          .get(connectionId);
+        if (!current || (current.cursor || undefined) !== originalCursor)
+          throw new ProviderError("CURSOR_CHANGED");
         for (const page of pages) {
           for (const t of page.rows) store.upsertPlaid(t, connectionId);
           for (const t of page.removed)
@@ -106,9 +111,10 @@ export async function syncPlaid(store, connectionId, currency, request) {
         attempt < 2
       )
         continue;
-      store.db
-        .prepare("UPDATE connections SET status='error' WHERE id=?")
-        .run(connectionId);
+      if (e.code !== "CURSOR_CHANGED")
+        store.db
+          .prepare("UPDATE connections SET status='error' WHERE id=?")
+          .run(connectionId);
       throw e;
     }
   }

@@ -147,3 +147,7 @@ The fish artwork is also the bookmark and Home Screen icon. If an existing short
 ## Purchase and long-term goals
 
 Use Goals to keep a wishlist, reserve existing cash, plan individual monthly contributions, and track house, wedding, car, or other long-term funds. Automatic reservations are off until Funding setup is confirmed. No money moves between bank accounts. See [setup, semantics, scheduler, purchase payment holds, and recovery](docs/GOALS.md).
+
+### Cash planning and daily checks
+
+Home includes a read-only 30-day cash preview for uncertain income. Use verified cash, dated obligations and confirmed one-off receipts. [Cash planning](docs/CASH-PLANNING.md) documents the API, freshness limits, daily read-only checks and explicit opt-in cached Plaid ingestion.

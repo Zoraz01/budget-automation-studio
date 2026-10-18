@@ -215,3 +215,7 @@ Investment balances distinguish a real zero from unavailable data. If a later sy
 | AI model unavailable | Check `AI_MODEL` against models available to your API account |
 | AI cannot be reached | Check server connectivity/provider status; for Ollama, check that it is running and the model is downloaded. Deadline: 45 seconds |
 | Too many login attempts | Wait ten minutes before retrying |
+
+## Optional daily monitoring
+
+After setup and a successful manual sync, follow [Cash planning and daily checks](CASH-PLANNING.md). Start with the read-only command. Only opt into `--sync` and an operating-system schedule after checking your own provider configuration. No scheduler, paid refresh or AI request is enabled by default.

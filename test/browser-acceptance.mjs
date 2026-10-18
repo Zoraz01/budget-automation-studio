@@ -66,6 +66,34 @@ try {
   await page.goto(config.origin);
   await page.getByRole("button", { name: "Explore the demo" }).click();
   await page.locator(".big").waitFor();
+  await page.getByText("Build a 30-day cash plan", { exact: true }).click();
+  const plan = page.locator("#cash-plan-form");
+  await plan.locator("[name=cash]").fill("2000");
+  const n = new Date();
+  const local = new Date(n.getTime() - n.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+  await plan.locator("[name=observed]").fill(local);
+  await plan.locator("[name=buffer]").fill("200");
+  await plan.locator("[name=reserve]").fill("100");
+  await plan.locator("[name=daily]").fill("10");
+  await plan.getByRole("button", { name: "Preview cash plan" }).click();
+  await page
+    .getByText(/Lowest projected headroom after reserves and buffer:.*1,400/)
+    .waitFor();
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      `cash plan overflow at ${width}`,
+    );
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await plan.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(output, "cash-plan.png") });
+
   for (const unauthorized of [false, true]) {
     oldUnauthorized = unauthorized;
     const oldStarted = new Promise((resolve) => {

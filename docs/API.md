@@ -72,3 +72,5 @@ A transaction returned by `/api/state`:
 ```
 
 The selected-month response currently returns all matching transactions without pagination. Add server pagination, indexes and bounded query plans before supporting large histories or a shared hosted deployment. Do not expose this API directly to untrusted network clients.
+
+`POST /api/cash-plan` provides a session-protected, same-origin, read-only cash preview. See [input shape and limits](CASH-PLANNING.md). Amounts are integer cents; unconfirmed income is excluded and incomplete coverage never recommends allocation.

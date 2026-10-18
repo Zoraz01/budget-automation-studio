@@ -1,3 +1,4 @@
+import { cashPlanCard, previewCashPlan } from "./cash-plan.js";
 import { latestRequest } from "./latest-request.js";
 const stateRequests = latestRequest();
 let stateError = null;
@@ -185,7 +186,7 @@ function txnList(rows, editable = false) {
 }
 function overview() {
   const s = state.summary;
-  return `<div class="dashboard-grid"><div><section class="hero" aria-labelledby="net-heading"><div class="hero-top"><div><h2 class="eyebrow" id="net-heading">NET CASH FLOW · ${escape(monthTitle())}</h2><div class="big">${money(s.net_cents)}</div><p>Income minus spending, after refunds.</p></div></div><div class="flow-metrics"><div><span>Money in</span><strong>${money(s.income_cents)}</strong></div><div><span>Money out</span><strong>${money(s.spent_cents)}</strong></div></div><div class="hero-bottom"><span><strong>${money(s.budget_cents)}</strong> planned</span><span>${s.pending_count} pending · excluded</span></div></section>${s.unreviewed_count ? `<button class="review-callout" data-page="transactions"><span class="review-count">${s.unreviewed_count}</span><span><strong>A little review. A clearer picture.</strong><small>Confirm categories to keep your totals useful.</small></span>${icon("arrow")}</button>` : ""}<section class="card section-gap activity-card"><div class="card-head"><h2>Recent activity</h2><button class="small ghost" data-page="transactions">View all →</button></div>${txnList(state.transactions.slice(0, 5))}</section></div><div class="stack"><section class="card"><div class="card-head"><h2>Your monthly plan</h2><button class="small ghost" data-page="budgets">Edit →</button></div>${budgetRows()}</section><section class="card"><div class="card-head"><h2>Goals</h2></div><p>Plan purchases and build long-term funds with monthly contributions.</p><button data-page="goals">Open goals →</button></section><section class="card helper-card"><div class="helper-icon">${icon("spark")}</div><h2>A clearer view<br>starts with a question.</h2><p>Explore the numbers behind your month with your own budget assistant.</p><button data-page="chat">Ask BAS →</button></section></div></div>`;
+  return `<div class="dashboard-grid"><div><section class="hero" aria-labelledby="net-heading"><div class="hero-top"><div><h2 class="eyebrow" id="net-heading">NET CASH FLOW · ${escape(monthTitle())}</h2><div class="big">${money(s.net_cents)}</div><p>Income minus spending, after refunds.</p></div></div><div class="flow-metrics"><div><span>Money in</span><strong>${money(s.income_cents)}</strong></div><div><span>Money out</span><strong>${money(s.spent_cents)}</strong></div></div><div class="hero-bottom"><span><strong>${money(s.budget_cents)}</strong> planned</span><span>${s.pending_count} pending · excluded</span></div></section>${s.unreviewed_count ? `<button class="review-callout" data-page="transactions"><span class="review-count">${s.unreviewed_count}</span><span><strong>A little review. A clearer picture.</strong><small>Confirm categories to keep your totals useful.</small></span>${icon("arrow")}</button>` : ""}<section class="card section-gap activity-card"><div class="card-head"><h2>Recent activity</h2><button class="small ghost" data-page="transactions">View all →</button></div>${txnList(state.transactions.slice(0, 5))}</section></div><div class="stack">${cashPlanCard()}<section class="card"><div class="card-head"><h2>Your monthly plan</h2><button class="small ghost" data-page="budgets">Edit →</button></div>${budgetRows()}</section><section class="card"><div class="card-head"><h2>Goals</h2></div><p>Plan purchases and build long-term funds with monthly contributions.</p><button data-page="goals">Open goals →</button></section><section class="card helper-card"><div class="helper-icon">${icon("spark")}</div><h2>A clearer view<br>starts with a question.</h2><p>Explore the numbers behind your month with your own budget assistant.</p><button data-page="chat">Ask BAS →</button></section></div></div>`;
 }
 function categoryOptions(selected = "uncategorized") {
   return state.categories
@@ -541,6 +542,7 @@ document.addEventListener("submit", async (event) => {
       render();
     }
     if (form.id === "chat-form") await ask(data.question);
+    if (form.id === "cash-plan-form") await previewCashPlan(form, api, money);
   } catch (e) {
     const error =
       form.id === "login-form"

@@ -68,3 +68,9 @@ Live provider connections, OAuth institution support, physical-phone use and hos
 ## Mobile keyboard handling
 
 The dedicated assistant page responds to visual-viewport keyboard changes, keeps the focused composer in view and temporarily hides bottom tabs during composition. It never autofocuses or disables pinch zoom. Physical-device keyboard acceptance remains open.
+
+## 2026-10-17
+
+- Added a cash-plan preview for uncertain income, with verified cash observations, finite confirmed receipts, bill timing, reserves and freshness warnings.
+- Added a read-only daily financial check and explicit opt-in cached Plaid ingestion. Concurrent syncs cannot overwrite a newer committed cursor.
+- Documented setup, privacy, scheduling ownership and incomplete-coverage limits.

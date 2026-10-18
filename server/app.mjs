@@ -1,3 +1,4 @@
+import { planCash } from "./cash-plan.mjs";
 import { workspaceGoals } from "./goals-adapter.mjs";
 import { GoalError } from "./goals.mjs";
 import { aiStatus } from "./providers/ai-config.mjs";
@@ -19,6 +20,7 @@ import {
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
+  ["/cash-plan.js", ["cash-plan.js", "text/javascript"]],
   ["/latest-request.js", ["latest-request.js", "text/javascript"]],
   ["/goals.js", ["goals.js", "text/javascript"]],
   ["/goals.css", ["goals.css", "text/css"]],
@@ -183,6 +185,18 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
         );
       if (path === "/api/goals/actions" && req.method === "POST")
         return json(res, 200, goals.execute(await body(req, 20000)));
+      if (path === "/api/cash-plan" && req.method === "POST") {
+        const input = await body(req, 30000);
+        try {
+          return json(
+            res,
+            200,
+            planCash({ ...input, coverageComplete: false }),
+          );
+        } catch (error) {
+          throw new InputError(error.message);
+        }
+      }
       if (path === "/api/state" && req.method === "GET") {
         const selectedMonth = month(
           url.searchParams.get("month") || new Date().toISOString().slice(0, 7),

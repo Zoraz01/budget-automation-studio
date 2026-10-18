@@ -394,3 +394,40 @@ test("Goals APIs require a session and enforce revision checks without changing 
   assert.equal((await f.call("/goals.js")).status, 200);
   assert.equal((await f.call("/goals.css")).status, 200);
 });
+
+test("cash preview requires auth, validates inputs, and never writes records", async (t) => {
+  const f = await fixture(t);
+  const input = {
+    today: "2027-01-10",
+    cashCents: 200000,
+    observedAt: new Date().toISOString(),
+    days: 30,
+    dailySpendCents: 1000,
+    events: [],
+  };
+  assert.equal((await f.call("/api/cash-plan", "POST", input)).status, 401);
+  await f.login();
+  const before = f.store.db
+    .prepare("SELECT COUNT(*) n FROM transactions")
+    .get().n;
+  const r = await f.call("/api/cash-plan", "POST", input);
+  assert.equal(r.status, 200);
+  assert.equal((await r.json()).availableToAllocateCents, null);
+  assert.equal(
+    f.store.db.prepare("SELECT COUNT(*) n FROM transactions").get().n,
+    before,
+  );
+  assert.equal(
+    (await f.call("/api/cash-plan", "POST", { ...input, cashCents: 1.5 }))
+      .status,
+    400,
+  );
+  assert.equal(
+    (
+      await f.call("/api/cash-plan", "POST", input, {
+        Origin: "https://example.org",
+      })
+    ).status,
+    403,
+  );
+});

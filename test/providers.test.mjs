@@ -377,3 +377,59 @@ test("SnapTrade preserves last-known values and timestamps when balances disappe
     s.close();
   }
 });
+
+test("scheduled cached sync cannot overwrite a concurrently committed cursor", async () => {
+  const s = setup();
+  try {
+    await assert.rejects(
+      syncPlaid(s, id, "USD", async () => {
+        s.db
+          .prepare(
+            "UPDATE connections SET cursor='newer',status='current' WHERE id=?",
+          )
+          .run(id);
+        return page([row("stale")], false, "older");
+      }),
+      (e) => e.code === "CURSOR_CHANGED",
+    );
+    assert.equal(s.connection(id).cursor, "newer");
+    assert.equal(s.connection(id).status, "current");
+    assert.equal(
+      s.db.prepare("SELECT COUNT(*) n FROM transactions").get().n,
+      0,
+    );
+  } finally {
+    s.close();
+  }
+});
+
+test("daily sync uses cached transactions only and reports partial failures", async () => {
+  const { syncConnections } =
+    await import("../scripts/daily-financial-check.mjs");
+  const s = setup();
+  s.saveConnection("plaid:second", "plaid", { access_token: "second-fixture" });
+  try {
+    const result = await syncConnections(
+      s,
+      { mode: "personal", plaid: true, currency: "USD" },
+      async (path, body) => {
+        assert.equal(path, "/transactions/sync");
+        if (body.access_token === "second-fixture") throw new ProviderError();
+        return page([row("fresh")]);
+      },
+    );
+    assert.deepEqual(
+      result.map((r) => r.status),
+      ["current", "failed"],
+    );
+    assert.equal(
+      s.db.prepare("SELECT COUNT(*) n FROM transactions").get().n,
+      1,
+    );
+    await assert.rejects(
+      syncConnections(s, { mode: "demo", plaid: false }, () => assert.fail()),
+    );
+  } finally {
+    s.close();
+  }
+});
