@@ -1,6 +1,6 @@
 # BAS · Budget Automation Studio
 
-<img src="web/logo.svg" alt="BAS emerald fish logo" width="88">
+<img src="docs/site/assets/social.svg" alt="BAS — Find your financial flow. Your budget. Your connections. Your code." width="100%">
 
 **Find your financial flow.**
 
@@ -25,6 +25,14 @@ Designed for your phone, with a dark interface and bottom navigation throughout.
   <img src="docs/mobile-connections.jpg" alt="Dark mobile connections and home-screen instructions" width="260">
 </p>
 </details>
+
+[Explore BAS](https://budget-automation-studio.zorazhaseeb1.workers.dev/) · [Visual brand guide](https://budget-automation-studio.zorazhaseeb1.workers.dev/brand)
+
+## Product page and brand
+
+A portable product page and visual brand guide live in `docs/site/`. Run `npm run preview:site` and open `http://127.0.0.1:4311`. This static page uses an illustrative dashboard with invented figures; it is separate from the real local demo below. [Brand system and publishing notes](docs/BRAND.md). The product page includes real synthetic-demo screens; it is not a hosted finance account.
+
+Built by [Vitality Labs](https://vitality-labs-website.zorazhaseeb1.workers.dev/) (company review preview). Also explore [Vital](https://vital-analysis.com/) and [Zorofin](https://zorofin.app/).
 
 ## Quick start
 

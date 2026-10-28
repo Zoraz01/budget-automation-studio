@@ -1552,3 +1552,287 @@ a {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
+
+/* BAS identity: a compact wordmark with a readable full-name descriptor. */
+.brand {
+  gap: 12px;
+}
+.brand > span {
+  font-size: 27px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.brand small {
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 500;
+  margin-top: 5px;
+}
+.login .brand img {
+  width: 48px;
+  height: 48px;
+}
+.login h1 {
+  font-size: clamp(39px, 7vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+.login .brand {
+  margin-bottom: 45px;
+}
+.login {
+  max-width: 480px;
+}
+@media (max-width: 420px) {
+  .brand > span {
+    font-size: 24px;
+  }
+  .brand small {
+    font-size: 9px;
+  }
+}
+
+/* BAS studio: identity, hierarchy and component polish; financial behavior unchanged. */
+.login-studio {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  max-width: 1080px;
+  padding: 0;
+  margin: 7vh auto;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--panel);
+  min-height: 690px;
+}
+.login-studio .login-story {
+  padding: 44px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(155deg, #112b25 0%, #101a1a 60%, #12161d 100%);
+}
+.login-studio .brand {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+.login-studio .brand > span {
+  font-size: 32px;
+}
+.login-studio .brand small {
+  font-size: 11px;
+}
+.login-story-copy {
+  margin-block: auto;
+  position: relative;
+  z-index: 1;
+  padding-block: 65px;
+}
+.login-studio .login-story h1 {
+  font-size: clamp(42px, 4.8vw, 61px);
+  line-height: 1.03;
+  letter-spacing: -2.8px;
+  margin: 24px 0;
+}
+.login-studio .login-story .eyebrow {
+  color: #6ee7b7;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+}
+.login-studio .login-story p {
+  color: #c0d1c9;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.login-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  font-size: 10px;
+  color: #6ee7b7;
+  margin-top: 35px;
+}
+.login-watermark {
+  position: absolute;
+  width: 290px;
+  height: 290px;
+  right: -70px;
+  bottom: -70px;
+  opacity: 0.08;
+  pointer-events: none;
+}
+.login-panel {
+  padding: 52px 42px 36px;
+  align-self: center;
+  min-width: 0;
+}
+.login-panel h2 {
+  font-size: 30px;
+  letter-spacing: -1px;
+  margin: 25px 0 15px;
+}
+.login-studio .login-panel p {
+  font-size: 14px;
+}
+.login-studio .login-panel .note {
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0a0d12;
+}
+.login-studio .install-guide {
+  margin-top: 26px;
+  padding: 16px;
+}
+.login-studio .install-guide summary {
+  font-size: 12px;
+}
+.login-source {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 11px;
+  color: #9aa6b6;
+  margin-top: 18px;
+  text-underline-offset: 4px;
+}
+.login-source:hover {
+  color: #6ee7b7;
+}
+.brand small {
+  color: #aebbc6;
+}
+.topbar {
+  background: #0a0d12;
+}
+.nav button.active {
+  box-shadow: inset 3px 0 #10b981;
+}
+.card {
+  border-color: #29313c;
+}
+.card-head h2 {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.hero {
+  border-color: #335047;
+}
+.hero .big {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2.1px;
+}
+.flow-metrics strong,
+.budget-meta span,
+.amount {
+  font-variant-numeric: tabular-nums;
+}
+.txn {
+  padding-block: 18px;
+}
+.txn-icon {
+  background: #1a2426;
+  border: 1px solid #2a3738;
+}
+.budget-row {
+  padding-block: 16px;
+}
+.budget-meta strong {
+  font-weight: 600;
+}
+.budget-row progress {
+  height: 7px;
+}
+.filter-row .search input {
+  background: #0a0d12;
+}
+.page-eyebrow {
+  color: #6ee7b7;
+}
+.sidebar-foot {
+  border-top: 1px solid #29313c;
+  padding-top: 24px;
+}
+@media (max-width: 1150px) {
+  .login-studio {
+    margin: 5vh 30px;
+  }
+}
+@media (max-width: 700px) {
+  .login-studio {
+    display: block;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    min-height: 100dvh;
+  }
+  .login-studio .login-story {
+    padding: 30px 24px 32px;
+  }
+  .login-story-copy {
+    padding: 0;
+    margin: 30px 0 0;
+  }
+  .login-studio .login-story h1 {
+    font-size: 43px;
+    margin: 18px 0;
+  }
+  .login-studio .login-story .eyebrow {
+    font-size: 9px;
+    margin: 0;
+  }
+  .login-studio .login-story p {
+    font-size: 14px;
+  }
+  .login-studio .brand > span {
+    font-size: 27px;
+  }
+  .login-studio .brand small {
+    font-size: 10px;
+  }
+  .login-pillars {
+    margin-top: 22px;
+    gap: 22px;
+  }
+  .login-panel {
+    padding: 30px 24px 36px;
+  }
+  .login-panel h2 {
+    font-size: 27px;
+    margin: 18px 0 12px;
+  }
+  .login-studio .login-panel label {
+    margin-top: 18px;
+  }
+  .login-studio .login-panel .note {
+    margin-top: 20px;
+  }
+  .login-studio .login-panel .badge {
+    font-size: 11px;
+  }
+  .nav button.active {
+    box-shadow: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-studio * {
+    transition: none !important;
+  }
+}
+
+.filter-row .search {
+  flex: 1;
+  min-width: 0;
+  max-width: 520px;
+}
+@media (max-width: 650px) {
+  .filter-row .search {
+    max-width: none;
+  }
+}

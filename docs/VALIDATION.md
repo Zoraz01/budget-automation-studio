@@ -86,3 +86,21 @@ The 35 regression tests and formatting checks passed after the runtime changes. 
 ## Paired private UI release
 
 Added a public chat keyboard enhancement using feature-detected VisualViewport and focus events. Formatting and all 35 regression tests pass. The private companion now uses the shared mobile presentation with its own navigation and native modal. Its live application verification is recorded privately; no personal data, deployment paths or screenshots are included here. Physical-phone keyboard testing remains pending.
+
+## Brand foundation — 2026-10-27
+
+- Node 24.10.0: all 95 regression tests pass. Formatting passes, including the new static site. `npm run check:site` verifies 23 local references, one page heading per document, no scripts/frames/forms and exact original-fish preservation. `npm ci --ignore-scripts` reported zero known dependency vulnerabilities.
+- The static product page was inspected at 320, 375, 768, 1024 and 1440px with no document overflow. Its illustrative financial panel uses invented figures and is explicitly labeled. Both site SVG images loaded in the browser. The local-demo action reaches the setup section and exposes a complete copyable clone command.
+- The visual brand guide and horizontal lockup were inspected at desktop width. The app entrance and logged-in synthetic Home were inspected at 375 and 1440px; the compact brand fits its sidebar and no document overflow was observed. This is browser review, not physical-phone acceptance.
+- The real app review used a separate demo process with an empty inherited environment except the executable path and explicit demo mode/port. No provider credentials, personal settings or financial data were loaded.
+- Release-content and credential-pattern scanning cover the staged source and working tree; manual review covers all new copy, SVG assets and invented figures. No public screenshot, database, secret, private endpoint or private history is included. Source publication is for review; BAS hosting and a public hostname remain unconfigured.
+
+Reproduce: `npm ci --ignore-scripts`, `npm test`, `npm run check:format`, `npm run check:site`, `npm run check:release`. Preview with `npm run preview:site`; run the separate synthetic application with `npm start`. Stop owned preview processes after review.
+
+## Applied branding and static release — 2026-10-27
+
+The owner requested applying the prepared changes. The branded app entrance, consistent dashboard/Activity/Budgets hierarchy and wider transaction search are implemented without changing calculations or provider behavior. All 98 tests pass, including marketing-artifact privacy, explicit deployment opt-in/account checks and rejection of unexpected domain routes. Formatting, 36 local site references and a 12-file static build pass.
+
+Home, Activity and Budgets were checked at actual 320/390/768/1280px browser widths without document overflow. The desktop app entrance and the real-screen product tour were visually inspected. Four public JPEGs are unmodified native browser captures of a separate synthetic demo: Home, Activity, Budgets and phone Home. All amounts, dates and transaction descriptions in them are invented demo fixtures. No personal environment was loaded; no provider was connected.
+
+Release-content/credential-pattern scanning and manual review include the exact four approved JPEG paths. The static artifact contains no app server, database, environment file, provider key or authenticated API. Source publication, static marketing hosting and an adopter’s self-hosted finance runtime are separate release states. Cloudflare publishing and HTTP evidence are recorded in the brand guide after verification.

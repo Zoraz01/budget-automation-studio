@@ -10,3 +10,6 @@ coverage/
 .DS_Store
 playwright-report/
 test-results/
+.private/
+.site-dist/
+.wrangler/

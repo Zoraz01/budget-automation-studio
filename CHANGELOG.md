@@ -74,3 +74,12 @@ The dedicated assistant page responds to visual-viewport keyboard changes, keeps
 - Added a cash-plan preview for uncertain income, with verified cash observations, finite confirmed receipts, bill timing, reserves and freshness warnings.
 - Added a read-only daily financial check and explicit opt-in cached Plaid ingestion. Concurrent syncs cannot overwrite a newer committed cursor.
 - Documented setup, privacy, scheduling ownership and incomplete-coverage limits.
+
+## 2026-10-27 — BAS brand foundation
+
+- Added a portable product page, visual brand guide, original-fish lockup and social SVG master.
+- Refined the local app entrance and compact wordmark without changing financial behavior.
+- Added public product/company links, honest illustrative-preview labels and reproducible static preview instructions.
+
+- Applied the BAS studio identity to the app entrance, strengthened component hierarchy and transaction-search sizing, and added a real synthetic-demo product tour.
+- Added a guarded static-only Cloudflare build/deploy/health workflow; the finance application remains self-hosted.
