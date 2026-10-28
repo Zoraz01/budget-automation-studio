@@ -80,3 +80,6 @@ The dedicated assistant page responds to visual-viewport keyboard changes, keeps
 - Added a portable product page, visual brand guide, original-fish lockup and social SVG master.
 - Refined the local app entrance and compact wordmark without changing financial behavior.
 - Added public product/company links, honest illustrative-preview labels and reproducible static preview instructions.
+
+- Applied the BAS studio identity to the app entrance, strengthened component hierarchy and transaction-search sizing, and added a real synthetic-demo product tour.
+- Added a guarded static-only Cloudflare build/deploy/health workflow; the finance application remains self-hosted.

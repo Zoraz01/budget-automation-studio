@@ -96,3 +96,11 @@ Added a public chat keyboard enhancement using feature-detected VisualViewport a
 - Release-content and credential-pattern scanning cover the staged source and working tree; manual review covers all new copy, SVG assets and invented figures. No public screenshot, database, secret, private endpoint or private history is included. Source publication is for review; BAS hosting and a public hostname remain unconfigured.
 
 Reproduce: `npm ci --ignore-scripts`, `npm test`, `npm run check:format`, `npm run check:site`, `npm run check:release`. Preview with `npm run preview:site`; run the separate synthetic application with `npm start`. Stop owned preview processes after review.
+
+## Applied branding and static release — 2026-10-27
+
+The owner requested applying the prepared changes. The branded app entrance, consistent dashboard/Activity/Budgets hierarchy and wider transaction search are implemented without changing calculations or provider behavior. All 98 tests pass, including marketing-artifact privacy, explicit deployment opt-in/account checks and rejection of unexpected domain routes. Formatting, 36 local site references and a 12-file static build pass.
+
+Home, Activity and Budgets were checked at actual 320/390/768/1280px browser widths without document overflow. The desktop app entrance and the real-screen product tour were visually inspected. Four public JPEGs are unmodified native browser captures of a separate synthetic demo: Home, Activity, Budgets and phone Home. All amounts, dates and transaction descriptions in them are invented demo fixtures. No personal environment was loaded; no provider was connected.
+
+Release-content/credential-pattern scanning and manual review include the exact four approved JPEG paths. The static artifact contains no app server, database, environment file, provider key or authenticated API. Source publication, static marketing hosting and an adopter’s self-hosted finance runtime are separate release states. Cloudflare publishing and HTTP evidence are recorded in the brand guide after verification.

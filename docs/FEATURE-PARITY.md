@@ -113,3 +113,9 @@ The public project now has a portable static product page, visual brand guide, S
 Counterpart assessment: the personal companion retains its Finance identity. This is a public-only naming, marketing and brand-asset change; no private runtime, database, financial behavior or live service is changed. Existing shared visual conventions already match. No functional feature is marked synchronized by this work. Broader analytics/integration gaps remain as recorded above.
 
 Validation and publication evidence are recorded in `VALIDATION.md`. Publishing a feature branch is source review, not a hosted BAS launch, live-provider acceptance or physical-phone validation.
+
+## Applied BAS presentation — 2026-10-27
+
+The BAS identity is now applied to the app entrance and component hierarchy, with a wider Activity search control and a real-screen product tour captured from a separate synthetic demo. A portable, exact-file static build and guarded Cloudflare preview workflow serve only marketing assets, never the finance runtime or data.
+
+Counterpart assessment: the private companion keeps its own identity and already uses its separate responsive shell and search experience. This is a BAS-specific presentation/release workflow, not a new accounting or provider capability. No private runtime or service changes are needed; the counterpart record is updated separately. Broader feature gaps remain open. See VALIDATION for source, browser and publishing evidence.

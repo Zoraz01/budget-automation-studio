@@ -17,11 +17,11 @@ for (const file of (await readdir(root)).filter((name) =>
       throw new Error(`${file}: unexpected URL scheme`);
     const [relative, fragment] = value.split("#");
     const target = resolve(
-      dirname(resolve(root, file)),
+      relative.startsWith("/") ? root : dirname(resolve(root, file)),
       relative
         ? relative.endsWith("/")
-          ? relative + "index.html"
-          : relative
+          ? relative.replace(/^\//, "") + "index.html"
+          : relative.replace(/^\//, "")
         : file,
     );
     if (!target.startsWith(root.endsWith(sep) ? root : root + sep))

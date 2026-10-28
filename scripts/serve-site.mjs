@@ -7,6 +7,8 @@ const types = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
 };
 const port = Number(process.env.SITE_PORT || 4311);
 if (!Number.isInteger(port) || port < 1024 || port > 65535)

@@ -11,6 +11,7 @@ const rootFiles = new Set([
   "CHANGELOG.md",
   "package.json",
   "package-lock.json",
+  "wrangler.jsonc",
   ".gitignore",
   ".gitattributes",
   ".env.example",
@@ -83,6 +84,10 @@ function check(path, buffer, label) {
       ![
         "docs/dashboard.jpg",
         "docs/mobile.jpg",
+        "docs/site/assets/bas-home.jpg",
+        "docs/site/assets/bas-activity.jpg",
+        "docs/site/assets/bas-budgets.jpg",
+        "docs/site/assets/bas-mobile.jpg",
         "docs/mobile-budgets.jpg",
         "docs/mobile-transactions.jpg",
         "docs/mobile-assistant.jpg",
@@ -121,6 +126,7 @@ for (const path of paths) {
     violations.push(`${path}: private/runtime file`);
   if (
     !rootFiles.has(path) &&
+    path !== "docs/site/_headers" &&
     !/^.+\.(?:mjs|js|css|html|svg|md|yml|jpg|png|webmanifest)$/.test(path)
   )
     violations.push(`${path}: unapproved extension`);
