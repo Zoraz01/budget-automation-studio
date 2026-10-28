@@ -38,7 +38,7 @@ The portable static artifact is built with `npm run build:site` into ignored `.s
 
 Cloudflare preview publishing uses pinned Wrangler 4.154.0: sign into the intended existing account with `npx wrangler login`, verify it with `npx wrangler whoami`, export its `CLOUDFLARE_ACCOUNT_ID` without committing the value, then run `npm run deploy:site -- --approved-preview`. The guard rejects domain routes and extra bindings. This publishes the static product site, not the finance app. Validate the returned HTTPS URL with `npm run health:site -- <url>`. The preview has noindex/security headers and a branded 404. A final custom BAS domain remains a separate choice.
 
-Before updating, save `npx wrangler deployments list --json` privately and record the source revision and new version from deployment output. Restore a recorded version with `npx wrangler rollback <version-id>` in the same verified account, then rerun health checks. Keep logs and account IDs in ignored `.private/` or secure operator storage. Company links currently target the working company preview until its domain is launched.
+Before updating, save `npx wrangler deployments list --json` privately and record the source revision and new version from deployment output. Restore a recorded version with `npx wrangler rollback <version-id>` in the same verified account, then rerun health checks. Keep logs and account IDs in ignored `.private/` or secure operator storage. Company links now use the published https://vitalitylabssolutions.com/ domain.
 
 The app entrance and compact wordmark use the same voice and type hierarchy. This identity work adds no financial features. The personal companion retains its own name; see `FEATURE-PARITY.md` for the assessment.
 
@@ -51,3 +51,5 @@ The app entrance now has an identity/story panel and a clearly labeled demo or p
 The static product site is at <https://budget-automation-studio.zorazhaseeb1.workers.dev/>. Its initial source is `0e7b18c`, Cloudflare version `b75663a9-af96-4221-bf5d-60bafdec1e42`. HTTPS health checks pass for the page, guide, fish and all four screenshots; private environment, app API and unknown paths return 404. Security/noindex headers are verified. Cloudflare canonicalizes flat `.html` URLs to their extensionless equivalents; the health command checks that redirect remains on the same origin.
 
 The owner requested applying this brand release. The source release is delivered through the public PR/main workflow; no adopter’s finance instance or private companion runtime is deployed by it.
+
+Company-domain follow-up: the company website is published on its existing business domain. Product-page, guide and README links now point there; no provider, app runtime or financial behavior changed. The static-preview source can be rebuilt and deployed with the same commands above.
