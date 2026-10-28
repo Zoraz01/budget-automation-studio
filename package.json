@@ -14,9 +14,11 @@
     "setup": "node scripts/setup.mjs",
     "test": "node --test test/*.test.mjs",
     "check:release": "node scripts/check-release.mjs",
-    "format": "prettier --write \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\"",
-    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\"",
-    "setup:ai": "node scripts/setup-ai.mjs"
+    "format": "prettier --write \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\" \"docs/site/*.{css,html}\"",
+    "check:format": "prettier --check \"server/**/*.mjs\" \"web/*.{js,css,html}\" \"scripts/*.mjs\" \"test/*.mjs\" \"docs/design/*.{js,css,html}\" \"docs/site/*.{css,html}\"",
+    "setup:ai": "node scripts/setup-ai.mjs",
+    "preview:site": "node scripts/serve-site.mjs",
+    "check:site": "node scripts/check-site.mjs"
   },
   "dependencies": {
     "snaptrade-typescript-sdk": "12.2.22"

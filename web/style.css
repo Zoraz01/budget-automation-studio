@@ -1552,3 +1552,44 @@ a {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
+
+/* BAS identity: a compact wordmark with a readable full-name descriptor. */
+.brand {
+  gap: 12px;
+}
+.brand > span {
+  font-size: 27px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.brand small {
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 500;
+  margin-top: 5px;
+}
+.login .brand img {
+  width: 48px;
+  height: 48px;
+}
+.login h1 {
+  font-size: clamp(39px, 7vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+.login .brand {
+  margin-bottom: 45px;
+}
+.login {
+  max-width: 480px;
+}
+@media (max-width: 420px) {
+  .brand > span {
+    font-size: 24px;
+  }
+  .brand small {
+    font-size: 9px;
+  }
+}

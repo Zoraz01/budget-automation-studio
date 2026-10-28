@@ -105,3 +105,11 @@ Remaining adaptation gap: BAS has no automatic bank-balance feed or recurring-bi
 Validation: private 94 tests, isolated frontend build, read-only live monitor receipt verification and synthetic mobile browser checks; public 95 tests including daily CLI setup, cached provider sync, cursor concurrency, authentication/origin checks and no-write preview behavior. Both browser suites cover 320/390/768/1280px widths. Public formatting, release allowlist, credential-pattern scan and manual source review passed. No private financial screenshot is included. Production activation, source publication and physical-phone acceptance remain separate.
 
 Publication: the cash-planning and daily-check implementation is released in BAS source with successful CI, formatting, allowlist/credential checks and manual review of every changed public file. No private data or screenshots were included. The companion runtime's deployment is tracked separately; this BAS release does not activate hosting or install a scheduler for adopters.
+
+## BAS brand foundation — 2026-10-27
+
+The public project now has a portable static product page, visual brand guide, SVG lockup/social master and refreshed login/compact wordmark. The original fish, install icons, system fonts and emerald/slate tokens are retained. All illustrative figures are newly invented. The static page explains optional provider/AI boundaries and links to the public source, Vital, Zorofin and the company review preview.
+
+Counterpart assessment: the personal companion retains its Finance identity. This is a public-only naming, marketing and brand-asset change; no private runtime, database, financial behavior or live service is changed. Existing shared visual conventions already match. No functional feature is marked synchronized by this work. Broader analytics/integration gaps remain as recorded above.
+
+Validation and publication evidence are recorded in `VALIDATION.md`. Publishing a feature branch is source review, not a hosted BAS launch, live-provider acceptance or physical-phone validation.

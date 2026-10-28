@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0a0d12" />
+    <meta
+      name="description"
+      content="BAS is an open-source budget studio. Build a clearer financial workflow with monthly budgets, transaction review, optional connections and AI."
+    />
+    <title>BAS — Find your financial flow.</title>
+    <link rel="icon" href="assets/fish.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <div class="wrap nav">
+        <a class="brand" href="./" aria-label="BAS home"
+          ><img src="assets/fish.svg" alt="" width="46" height="46" /><span
+            ><strong>BAS</strong><small>BUDGET AUTOMATION STUDIO</small></span
+          ></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="#studio">The studio</a><a href="#start">Get started</a
+          ><a
+            class="nav-source"
+            href="https://github.com/Zoraz01/budget-automation-studio"
+            >View on GitHub ↗</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="wrap hero">
+        <div>
+          <p class="eyebrow">Open source. In your element.</p>
+          <h1>Find your<br /><em>financial flow.</em></h1>
+          <p class="lead">
+            Your budget. Your connections. Your code. A local-first studio for
+            making sense of your money—and making the workflow your own.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#start"
+              >Explore the local demo <span aria-hidden="true">↗</span></a
+            ><a
+              class="button"
+              href="https://github.com/Zoraz01/budget-automation-studio"
+              >Browse the source</a
+            >
+          </div>
+          <p class="micro">
+            No bank connection needed to try it.
+            <a href="#questions">A few things to know</a>
+          </p>
+        </div>
+        <div
+          class="product-frame"
+          role="img"
+          aria-label="Illustrative BAS dashboard with invented figures: income 4,800 dollars, expenses 2,640 dollars, net cash flow 2,160 dollars; 560 dollars left in a 3,200 dollar budget. Not an interactive app."
+        >
+          <div class="frame-top">
+            <span class="frame-brand"
+              ><img src="assets/fish.svg" alt="" width="24" height="24" /> BAS /
+              Your studio</span
+            ><span class="sample-label">Illustrative preview</span>
+          </div>
+          <div class="preview-content">
+            <div class="preview-head">
+              <h2>A little more clarity.</h2>
+              <span class="period">Example month · USD</span>
+            </div>
+            <div class="cash">
+              <span class="label">Net cash flow</span>
+              <div class="amount">
+                $2,160<span style="font-size: 0.5em; color: var(--muted)"
+                  >.00</span
+                >
+              </div>
+              <div class="cash-split">
+                <div>
+                  <span>Income</span
+                  ><strong class="positive">+$4,800.00</strong>
+                </div>
+                <div><span>Expenses</span><strong>−$2,640.00</strong></div>
+              </div>
+            </div>
+            <div class="budget-box">
+              <div class="budget-title">
+                <strong>Your monthly plan</strong><span>$2,640 / $3,200</span>
+              </div>
+              <div class="progress"><span></span></div>
+              <p>$560 left in your plan · 82.5% used</p>
+            </div>
+            <div class="review">
+              <span>Transaction review</span
+              ><span>3 ready for a closer look →</span>
+            </div>
+          </div>
+          <p class="preview-note">
+            Invented sample figures · See the real app in the local demo
+          </p>
+        </div>
+      </section>
+      <div class="wrap principles" aria-label="Product principles">
+        <span>Local-first workspace</span><span>Open-source foundation</span
+        ><span>Optional integrations</span><span>Built to make your own</span>
+      </div>
+      <section class="wrap section" id="studio">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">A workspace, with room to grow.</p>
+            <h2>Bring the moving<br />parts into view.</h2>
+          </div>
+          <p>
+            Start with a monthly plan. Review the details. Add the connections
+            that make sense for you. BAS keeps the workflow understandable and
+            the code available to change.
+          </p>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <span class="number">01 / PLAN</span>
+            <h3>A budget that fits.</h3>
+            <p>
+              Set monthly category limits, see what remains, and adjust your
+              plan as priorities change.
+            </p>
+            <p class="detail">Monthly budgets / Custom categories</p>
+          </article>
+          <article class="feature">
+            <span class="number">02 / REVIEW</span>
+            <h3>The details, organized.</h3>
+            <p>
+              Bring transactions into one place. Review categories, distinguish
+              transfers, and keep refunds in context.
+            </p>
+            <p class="detail">Manual entry / Transaction review</p>
+          </article>
+          <article class="feature">
+            <span class="number">03 / CONNECT</span>
+            <h3>Your chosen connections.</h3>
+            <p>
+              Add Plaid transaction sync, read-only SnapTrade account values, or
+              optional cloud or local AI assistance.
+            </p>
+            <p class="detail">Your accounts / Your configuration</p>
+          </article>
+        </div>
+      </section>
+      <section class="wrap section getting-started" id="start">
+        <div>
+          <p class="eyebrow">Start with the sample studio.</p>
+          <h2>Take it for<br />a local spin.</h2>
+          <p>
+            Run BAS on your computer with invented data. Explore the dashboard
+            before deciding whether to set up a personal workspace.
+          </p>
+          <p>
+            Node.js 24.10+ in the 24.x line and Git are required. The demo runs
+            on your computer’s loopback address.
+          </p>
+          <a
+            class="button"
+            href="https://github.com/Zoraz01/budget-automation-studio/blob/main/docs/SETUP.md"
+            >Read the setup guide ↗</a
+          >
+        </div>
+        <div class="code">
+          <div class="code-title">01 / YOUR TERMINAL</div>
+          <pre><code>git clone https://github.com/Zoraz01/budget-automation-studio.git
+cd budget-automation-studio
+npm ci
+npm start</code></pre>
+          <p class="code-note">
+            Full instructions and personal-workspace setup are in the
+            <a
+              href="https://github.com/Zoraz01/budget-automation-studio#quick-start"
+              >README</a
+            >.
+          </p>
+          <div class="code-title">02 / YOUR BROWSER</div>
+          <pre><code>http://127.0.0.1:4310
+Demo password: demo</code></pre>
+          <p class="code-note">
+            Choose “Explore the demo.” No provider credentials or live financial
+            accounts are needed. Demo edits persist locally.
+          </p>
+        </div>
+      </section>
+      <section class="wrap section faq" id="questions">
+        <p class="eyebrow">Clear before you connect.</p>
+        <h2>A few things to know.</h2>
+        <details>
+          <summary>Is this a hosted finance service?</summary>
+          <p>
+            BAS is an open-source, self-hosted starter. The included server
+            binds to your computer’s loopback address. A secure remote
+            deployment requires additional setup and validation; a desktop
+            localhost address is not reachable from a phone.
+          </p>
+        </details>
+        <details>
+          <summary>Do I have to connect a bank or use AI?</summary>
+          <p>
+            No. The synthetic demo works without either. You can use manual
+            transactions in a personal workspace. Optional provider connections
+            require your own eligible accounts, credentials and configuration.
+          </p>
+        </details>
+        <details>
+          <summary>Where does my information go?</summary>
+          <p>
+            The workspace database and provider credentials live on the server
+            you run. If you enable cloud AI, your question and budget aggregates
+            are sent to your chosen provider. Local Ollama is an alternative.
+            Review the setup guide and provider terms before connecting
+            services.
+          </p>
+        </details>
+        <details>
+          <summary>What does it cost?</summary>
+          <p>
+            The source is available under the MIT license. Your hosting,
+            provider access and optional AI usage may have their own costs. BAS
+            does not include a paid hosting plan or financial advice.
+          </p>
+        </details>
+      </section>
+      <section class="wrap closing">
+        <div>
+          <p class="eyebrow">Made by Vitality Labs.</p>
+          <h2>A useful tool. A foundation to build on.</h2>
+          <p>
+            Need a custom dashboard, integration or workflow for your business?
+          </p>
+        </div>
+        <a
+          class="button"
+          href="https://vitality-labs-website.zorazhaseeb1.workers.dev/#consultation"
+          >Talk to Vitality Labs ↗</a
+        >
+      </section>
+    </main>
+    <footer>
+      <div class="wrap">
+        <span>BAS · Budget Automation Studio · MIT licensed source</span>
+        <nav aria-label="Footer">
+          <a href="https://github.com/Zoraz01/budget-automation-studio"
+            >GitHub</a
+          ><a href="brand.html">Brand guide</a
+          ><a href="https://vital-analysis.com/">Vital</a
+          ><a href="https://zorofin.app/">Zorofin</a
+          ><a href="https://vitality-labs-website.zorazhaseeb1.workers.dev/"
+            >Vitality Labs preview</a
+          >
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
