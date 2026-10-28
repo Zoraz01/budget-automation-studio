@@ -45,3 +45,9 @@ The app entrance and compact wordmark use the same voice and type hierarchy. Thi
 ## Applied product polish
 
 The app entrance now has an identity/story panel and a clearly labeled demo or personal sign-in panel. Home, Activity and Budgets share a more consistent hierarchy, tabular figures and readable search controls. Financial calculations, provider behavior and authentication are unchanged. The product tour uses four unmodified native browser JPEG captures from an isolated synthetic demo; screenshots were visually reviewed before publication. The hero panel remains an explicitly illustrative composition. No screenshot of a real account was used.
+
+## Verified static preview
+
+The static product site is at <https://budget-automation-studio.zorazhaseeb1.workers.dev/>. Its initial source is `0e7b18c`, Cloudflare version `b75663a9-af96-4221-bf5d-60bafdec1e42`. HTTPS health checks pass for the page, guide, fish and all four screenshots; private environment, app API and unknown paths return 404. Security/noindex headers are verified. Cloudflare canonicalizes flat `.html` URLs to their extensionless equivalents; the health command checks that redirect remains on the same origin.
+
+The owner requested applying this brand release. The source release is delivered through the public PR/main workflow; no adopter’s finance instance or private companion runtime is deployed by it.

@@ -18,7 +18,16 @@ for (const path of [
   "/assets/bas-budgets.jpg",
   "/assets/bas-mobile.jpg",
 ]) {
-  const response = await fetch(new URL(path, origin), { redirect: "manual" });
+  let response = await fetch(new URL(path, origin), { redirect: "manual" });
+  if (path.endsWith(".html") && [301, 307, 308].includes(response.status)) {
+    const destination = new URL(response.headers.get("location"), origin);
+    if (
+      destination.origin !== origin.origin ||
+      destination.pathname !== path.slice(0, -5)
+    )
+      throw new Error("Unexpected HTML redirect");
+    response = await fetch(destination, { redirect: "manual" });
+  }
   if (response.status !== 200) throw new Error(`${path}: ${response.status}`);
   if (path.endsWith(".jpg")) {
     const bytes = new Uint8Array(await response.arrayBuffer());

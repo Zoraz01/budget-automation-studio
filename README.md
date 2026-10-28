@@ -26,6 +26,8 @@ Designed for your phone, with a dark interface and bottom navigation throughout.
 </p>
 </details>
 
+[Explore BAS](https://budget-automation-studio.zorazhaseeb1.workers.dev/) · [Visual brand guide](https://budget-automation-studio.zorazhaseeb1.workers.dev/brand)
+
 ## Product page and brand
 
 A portable product page and visual brand guide live in `docs/site/`. Run `npm run preview:site` and open `http://127.0.0.1:4311`. This static page uses an illustrative dashboard with invented figures; it is separate from the real local demo below. [Brand system and publishing notes](docs/BRAND.md). The product page includes real synthetic-demo screens; it is not a hosted finance account.
