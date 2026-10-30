@@ -24,7 +24,7 @@
     "health:site": "node scripts/health-site.mjs"
   },
   "dependencies": {
-    "snaptrade-typescript-sdk": "12.2.22"
+    "snaptrade-typescript-sdk": "13.1.11"
   },
   "devDependencies": {
     "prettier": "3.9.6",
