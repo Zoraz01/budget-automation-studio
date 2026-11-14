@@ -1,5 +1,7 @@
 # Overhaul feature implementation ledger
 
+Historical September planning ledger. For the current source inventory, Goals/history status and November navigation proposal, read [PLATFORM-OVERHAUL.md](PLATFORM-OVERHAUL.md) before using these rows. A historical Planned label does not override later implementation evidence.
+
 All rows are planned. A preview or specification is not runtime implementation. Update evidence and both repository statuses as milestones ship; keep private implementation details in private notes. M0 isolation is a prerequisite to every row.
 
 | Contract | Capability | Milestone | Runtime status | Public counterpart | Evidence / gap |

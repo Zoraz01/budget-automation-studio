@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>BAS platform design study</title>
+    <link rel="stylesheet" href="platform-concepts.css" />
+  </head>
+  <body>
+    <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="home" viewBox="0 0 24 24">
+          <path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8" />
+        </symbol>
+        <symbol id="review" viewBox="0 0 24 24">
+          <path d="M4 4h16v16H4zM8 12l3 3 5-6" />
+        </symbol>
+        <symbol id="activity" viewBox="0 0 24 24">
+          <path d="M4 4h16v16H4zM4 10h16M10 4v16" />
+        </symbol>
+        <symbol id="chart" viewBox="0 0 24 24">
+          <path d="M4 3v18h17M8 16v-5m5 5V6m5 10V9" />
+        </symbol>
+        <symbol id="wallet" viewBox="0 0 24 24">
+          <path d="M3 6h18v14H3zM3 10h18m-5 5h2" />
+        </symbol>
+        <symbol id="tag" viewBox="0 0 24 24">
+          <path d="M3 3h8l10 10-8 8L3 11zM7 7h.01" />
+        </symbol>
+        <symbol id="more" viewBox="0 0 24 24">
+          <path d="M4 12h.01M12 12h.01M20 12h.01" />
+        </symbol>
+        <symbol id="ask" viewBox="0 0 24 24">
+          <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z" />
+        </symbol>
+      </defs>
+    </svg>
+    <div class="shell">
+      <aside
+        class="sidebar"
+        aria-label="Proposed platform navigation; advanced BAS features remain planned"
+      >
+        <div class="brand">
+          <svg
+            width="24"
+            height="24"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 96 96"
+          >
+            <rect width="96" height="96" rx="28" fill="#12161d" />
+            <path
+              d="M33 43 19 32v32l14-11c12 15 30 15 45-5-15-20-33-20-45-5Z"
+              fill="#10b981"
+            />
+            <path d="m43 34 11-12 8 13M43 62l11 12 8-13" fill="#6ee7b7" />
+            <path
+              d="M42 48c7-8 15-8 23-3"
+              fill="none"
+              stroke="#0a0d12"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <circle cx="68" cy="44" r="3" fill="#0a0d12" />
+          </svg>
+          BAS
+        </div>
+        <span class="nav-item active"
+          ><svg class="nav-icon"><use href="#home" /></svg>Home</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#review" /></svg>Review
+          <span class="badge">4</span></span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#activity" /></svg>Activity</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#chart" /></svg>Analytics</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#wallet" /></svg>Wealth</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#wallet" /></svg>Goals</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#tag" /></svg>Categories</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#more" /></svg>More</span
+        >
+        <div class="sidebar-foot">
+          <span class="shell-control" aria-label="Dark appearance">☾</span
+          ><span class="shell-control" aria-label="Assistant"
+            ><svg class="nav-icon"><use href="#ask" /></svg></span
+          ><span class="desktop-note">study</span>
+        </div>
+      </aside>
+      <div class="workspace">
+        <header class="mobile-top">
+          <div class="brand">
+            <svg
+              width="24"
+              height="24"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 96 96"
+            >
+              <rect width="96" height="96" rx="28" fill="#12161d" />
+              <path
+                d="M33 43 19 32v32l14-11c12 15 30 15 45-5-15-20-33-20-45-5Z"
+                fill="#10b981"
+              />
+              <path d="m43 34 11-12 8 13M43 62l11 12 8-13" fill="#6ee7b7" />
+              <path
+                d="M42 48c7-8 15-8 23-3"
+                fill="none"
+                stroke="#0a0d12"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <circle cx="68" cy="44" r="3" fill="#0a0d12" />
+            </svg>
+            BAS
+          </div>
+          <span class="shell-control" aria-label="Assistant"
+            ><svg class="nav-icon"><use href="#ask" /></svg
+          ></span>
+        </header>
+        <main class="main">
+          <div class="study-note">
+            <span
+              >BAS concept · invented figures · advanced features are
+              planned</span
+            ><a href="platform-directions.html">Compare directions</a>
+          </div>
+          <!-- REGION START -->
+          <h1>Home baseline</h1>
+          <!-- REGION END -->
+        </main>
+        <nav
+          class="bottomnav"
+          aria-label="Proposed phone navigation; advanced BAS features remain planned"
+        >
+          <span class="active"
+            ><svg class="nav-icon"><use href="#home" /></svg>Home</span
+          ><span
+            ><svg class="nav-icon"><use href="#review" /></svg>Review</span
+          ><span
+            ><svg class="nav-icon"><use href="#activity" /></svg>Activity</span
+          ><span
+            ><svg class="nav-icon"><use href="#wallet" /></svg>Wealth</span
+          ><span
+            ><svg class="nav-icon"><use href="#more" /></svg>More</span
+          >
+        </nav>
+      </div>
+    </div>
+  </body>
+</html>

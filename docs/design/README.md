@@ -1,5 +1,9 @@
 # Complete mobile UI specification
 
+## Current platform research — 2026-11-14
+
+Start with the [Mobbin-backed platform proposal](PLATFORM-OVERHAUL.md), [desktop comparison](platform-directions.html), [phone comparison](platform-directions-mobile.html) and [validation](PLATFORM-VALIDATION.md). These are three synthetic Home directions plus a plan for every existing feature area, not a runtime overhaul. Basic saved history and Goals already exist in source; the September milestone tables below are historical and need row-by-row reconciliation before execution.
+
 Status: design proposal and synthetic interactive prototype. No production UI, accounting, provider, chat database or deployment has changed. The public starter receives the same generic design package as a roadmap; a preview screen does not imply that capability already exists in its runtime.
 
 Open [mobile-concept.html](mobile-concept.html) through a static local server. Use **Coverage map** to find every feature contract, **Preview state** to inspect recovery states, the bottom navigation to explore screens, and the chart information buttons for chart-specific requirements.

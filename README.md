@@ -159,3 +159,7 @@ Use Goals to keep a wishlist, reserve existing cash, plan individual monthly con
 ### Cash planning and daily checks
 
 Home includes a read-only 30-day cash preview for uncertain income. Use verified cash, dated obligations and confirmed one-off receipts. [Cash planning](docs/CASH-PLANNING.md) documents the API, freshness limits, daily read-only checks and explicit opt-in cached Plaid ingestion.
+
+## Platform design research
+
+The [November platform proposal](docs/design/PLATFORM-OVERHAUL.md) maps the existing feature set into Home, Activity, Plan, Wealth and Assistant, with three Home directions backed by inspected Mobbin references. Compare the [desktop](docs/design/platform-directions.html) and [phone](docs/design/platform-directions-mobile.html) boards. These are invented-data concepts; runtime support and remaining gaps are explicit.

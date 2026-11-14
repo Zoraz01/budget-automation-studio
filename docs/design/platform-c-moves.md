@@ -1,0 +1,18 @@
+# C: Wealth first
+
+Generic target-design notes. Baseline observations describe the companion Home study; advanced BAS runtime capabilities remain planned as documented in [the platform proposal](PLATFORM-OVERHAUL.md).
+
+Status: static, synthetic Home exploration. No runtime change or financial action.
+
+Axis: which financial question leads Home. C starts with observed net worth and accounts, then the current month and planning.
+
+| Move | Job step and source issue | Reference decision | Take and leave | Judgement |
+| --- | --- | --- | --- | --- |
+| Lead with net worth history | Understand the overall position. The current Home starts with period cash flow; wealth is a separate destination. | [Origin](https://mobbin.com/screens/3f5b8c0d-271b-4c71-9468-832b16de07f4) and [Quicken](https://mobbin.com/screens/2343998c-7cec-4727-b885-63c4bd6a96d8) both give net worth the dominant graph. | Take the large observed-value chart and supporting account context. Leave their light surfaces, typography, colours, onboarding and promotions. | Six-month range and the exact breakdown labels are this proposal's choices. |
+| Put accounts beside that graph | Assess the figures beside the wealth total. The current Home does not expose the balance sources near its headline. | [Quicken](https://mobbin.com/screens/2343998c-7cec-4727-b885-63c4bd6a96d8) places account totals beside the net-worth graph. | Take a grouped account list. Leave its additional narrow icon rail and account-specific content. | Use a right column within the existing shell. Show individual observation times; checking is included in assets, never added twice. |
+| Keep current-month and review summaries below wealth | Find this month's position and outstanding work. A wealth headline otherwise displaces the existing cash-flow context. | [Origin](https://mobbin.com/screens/3f5b8c0d-271b-4c71-9468-832b16de07f4) puts monthly spending and budget below/beside net worth; [Quicken](https://mobbin.com/screens/2343998c-7cec-4727-b885-63c4bd6a96d8) shows recent transactions beneath it. | Keep liquid cash flow, budget and four-to-review summaries as the second row; keep recent activity below. Leave calendar heatmaps and empty illustrations. | The three equal summaries and exact review wording are this proposal's choices. Budget remainder is labelled separately from available cash. |
+| Pair upcoming obligations with activity | Find the next planning step. The current Home's cash plan and forecast follow several analytics modules. | [Quicken](https://mobbin.com/screens/2343998c-7cec-4727-b885-63c4bd6a96d8) places Bills & Income alongside Recent Transactions. | Take the paired activity/obligations row and retain complete cash-plan assumptions farther down. Leave illustration and empty-state copy. | Show the existing no-further-pay baseline and forecast low; do not infer future income. |
+
+All original Home information remains on this page: liquid cash-flow breakdown and comparison, monthly income/spending chart, exact category totals, top merchants, comparison insights, paycheck plan assumptions, goal reservations and contribution plan, and the checking forecast. The wealth chart and account values are invented design fixtures. Assets $68,000 minus liabilities $12,000 equals net worth $56,000. Checking $8,420 plus savings $9,580 plus investments $50,000 equals assets $68,000. Liquid cash flow is $6,400 income minus $2,850 spending minus $1,200 accessible savings deposits, or $2,350.
+
+Downside: net worth occupies the first phone screen; review and cash planning require more scrolling than in the daily-overview direction. The design does not establish live-data freshness or physical-phone acceptance.

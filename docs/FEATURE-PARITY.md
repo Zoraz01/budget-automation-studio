@@ -1,5 +1,13 @@
 # Feature parity and safe adaptations
 
+## Whole-platform design exploration — 2026-11-14
+
+Both repositories now contain three independently branded, invented-data Home concepts, desktop/phone comparison boards, a feature-by-feature [platform proposal](design/PLATFORM-OVERHAUL.md), evidence links to inspected Mobbin screens and a portable static capture command. BAS uses its own synthetic demo baseline and explicitly labels advanced concepts as planned. No financial runtime, schema, provider behavior, auth or deployment changes.
+
+This is design-package parity only. BAS retains manual cash planning, Goals and saved history; connected balance automation, advanced wealth/analytics, richer transaction metadata and external sharing remain scoped gaps. The full platform plan is specified; only Home has rendered directions in this session. Existing September blanket Planned rows are flagged as historical rather than represented as the current source inventory.
+
+Validation: 24 concept/viewport checks across the two repositories; isolated baseline captures; temporary frontend build; 98 public regression tests; syntax and execution checks for both static capture scripts; public formatting, exact screenshot allowlist, credential/Gitleaks scans and manual public source/image review. See [evidence and commands](design/PLATFORM-VALIDATION.md). An existing public dependency advisory remains documented; no runtime dependency change or runtime release is included. No new setup variables, migrations or paid provider calls are needed for this static package. Source branches do not constitute deployment or physical-phone acceptance.
+
 ## Reliability and evidence preservation — 2026-10-12
 
 | Capability | Companion assessment | BAS implementation and remaining gap |

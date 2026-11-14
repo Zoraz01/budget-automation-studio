@@ -95,6 +95,14 @@ function check(path, buffer, label) {
         "docs/design/mobile-concept.jpg",
         "docs/design/mobile-chat.jpg",
         "docs/design/mobile-charts.jpg",
+        "docs/design/platform-before-desktop.jpg",
+        "docs/design/platform-before-mobile.jpg",
+        "docs/design/platform-a-desktop.jpg",
+        "docs/design/platform-a-mobile.jpg",
+        "docs/design/platform-b-desktop.jpg",
+        "docs/design/platform-b-mobile.jpg",
+        "docs/design/platform-c-desktop.jpg",
+        "docs/design/platform-c-mobile.jpg",
       ].includes(path)
     )
       violations.push(`${path}: unapproved binary`);

@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>BAS · A · Daily overview</title>
+    <link rel="stylesheet" href="platform-concepts.css" />
+  </head>
+  <body>
+    <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="home" viewBox="0 0 24 24">
+          <path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8" />
+        </symbol>
+        <symbol id="review" viewBox="0 0 24 24">
+          <path d="M4 4h16v16H4zM8 12l3 3 5-6" />
+        </symbol>
+        <symbol id="activity" viewBox="0 0 24 24">
+          <path d="M4 4h16v16H4zM4 10h16M10 4v16" />
+        </symbol>
+        <symbol id="chart" viewBox="0 0 24 24">
+          <path d="M4 3v18h17M8 16v-5m5 5V6m5 10V9" />
+        </symbol>
+        <symbol id="wallet" viewBox="0 0 24 24">
+          <path d="M3 6h18v14H3zM3 10h18m-5 5h2" />
+        </symbol>
+        <symbol id="tag" viewBox="0 0 24 24">
+          <path d="M3 3h8l10 10-8 8L3 11zM7 7h.01" />
+        </symbol>
+        <symbol id="more" viewBox="0 0 24 24">
+          <path d="M4 12h.01M12 12h.01M20 12h.01" />
+        </symbol>
+        <symbol id="ask" viewBox="0 0 24 24">
+          <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z" />
+        </symbol>
+      </defs>
+    </svg>
+    <div class="shell">
+      <aside
+        class="sidebar"
+        aria-label="Proposed platform navigation; advanced BAS features remain planned"
+      >
+        <div class="brand">
+          <svg
+            width="24"
+            height="24"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 96 96"
+          >
+            <rect width="96" height="96" rx="28" fill="#12161d" />
+            <path
+              d="M33 43 19 32v32l14-11c12 15 30 15 45-5-15-20-33-20-45-5Z"
+              fill="#10b981"
+            />
+            <path d="m43 34 11-12 8 13M43 62l11 12 8-13" fill="#6ee7b7" />
+            <path
+              d="M42 48c7-8 15-8 23-3"
+              fill="none"
+              stroke="#0a0d12"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <circle cx="68" cy="44" r="3" fill="#0a0d12" />
+          </svg>
+          BAS
+        </div>
+        <span class="nav-item active"
+          ><svg class="nav-icon"><use href="#home" /></svg>Home</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#review" /></svg>Review
+          <span class="badge">4</span></span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#activity" /></svg>Activity</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#chart" /></svg>Analytics</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#wallet" /></svg>Wealth</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#wallet" /></svg>Goals</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#tag" /></svg>Categories</span
+        >
+        <span class="nav-item"
+          ><svg class="nav-icon"><use href="#more" /></svg>More</span
+        >
+        <div class="sidebar-foot">
+          <span class="shell-control" aria-label="Dark appearance">☾</span
+          ><span class="shell-control" aria-label="Assistant"
+            ><svg class="nav-icon"><use href="#ask" /></svg></span
+          ><span class="desktop-note">study</span>
+        </div>
+      </aside>
+      <div class="workspace">
+        <header class="mobile-top">
+          <div class="brand">
+            <svg
+              width="24"
+              height="24"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 96 96"
+            >
+              <rect width="96" height="96" rx="28" fill="#12161d" />
+              <path
+                d="M33 43 19 32v32l14-11c12 15 30 15 45-5-15-20-33-20-45-5Z"
+                fill="#10b981"
+              />
+              <path d="m43 34 11-12 8 13M43 62l11 12 8-13" fill="#6ee7b7" />
+              <path
+                d="M42 48c7-8 15-8 23-3"
+                fill="none"
+                stroke="#0a0d12"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <circle cx="68" cy="44" r="3" fill="#0a0d12" />
+            </svg>
+            BAS
+          </div>
+          <span class="shell-control" aria-label="Assistant"
+            ><svg class="nav-icon"><use href="#ask" /></svg
+          ></span>
+        </header>
+        <main class="main">
+          <div class="study-note">
+            <span
+              >BAS concept · invented figures · advanced features are
+              planned</span
+            ><a href="platform-directions.html">Compare directions</a>
+          </div>
+          <!-- REGION START -->
+
+          <header class="head">
+            <h1>Home</h1>
+            <div>
+              <span class="control">Nov 1–14, 2026</span>
+              <span class="control" aria-label="Period selector preview"
+                >1M · 3M · 6M · 12M · YTD · All</span
+              >
+            </div>
+          </header>
+          <section
+            class="grid three-col overview-metrics"
+            aria-label="Current month and checking balance"
+          >
+            <div class="card">
+              <div class="eyebrow">Liquid cash flow</div>
+              <div class="amount metric-number positive">+$2,350.00</div>
+              <p class="sub">Nov 1–14 · after savings transfers</p>
+            </div>
+            <div class="card">
+              <div class="eyebrow">Spending</div>
+              <div class="amount metric-number">$2,850.00</div>
+              <p class="sub">Nov 1–14 · posted activity</p>
+            </div>
+            <div class="card">
+              <div class="eyebrow">Checking balance</div>
+              <div class="amount metric-number">$8,420.00</div>
+              <p class="sub">Observed Nov 14 · 9:30 am</p>
+            </div>
+          </section>
+          <div class="grid two-col space">
+            <section class="card" aria-labelledby="review-title">
+              <div class="section-head">
+                <h2 id="review-title">4 transactions to review</h2>
+                <span class="primary">Start review</span>
+              </div>
+              <div class="row">
+                <div>Willow Market<small>Nov 13 · confirm category</small></div>
+                <span class="amount">−$25.00</span>
+              </div>
+              <div class="row">
+                <div>Metro Transit<small>Nov 12 · confirm category</small></div>
+                <span class="amount">−$25.00</span>
+              </div>
+              <div class="row">
+                <div>
+                  Juniper Cafe<small>Nov 12 · check shared expense</small>
+                </div>
+                <span class="amount">−$25.00</span>
+              </div>
+              <div class="row">
+                <div>Stream Club<small>Nov 11 · confirm category</small></div>
+                <span class="amount">−$25.00</span>
+              </div>
+              <p class="caption">
+                Review suggestions before approving. Shared expenses require a
+                separate confirmation.
+              </p>
+            </section>
+            <section class="card" aria-labelledby="budget-title">
+              <div class="section-head">
+                <h2 id="budget-title">November budget</h2>
+                <span class="text-link">View budget →</span>
+              </div>
+              <div class="amount hero-number">$1,150</div>
+              <p class="sub">Remaining in the full-month budget</p>
+              <div
+                class="bar"
+                role="img"
+                aria-label="$2,850 spent of $4,000 budget, 71.25 percent"
+              >
+                <span style="width: 71.25%"></span>
+              </div>
+              <div class="row">
+                <span class="muted">Spent through Nov 14</span
+                ><span class="amount">$2,850</span>
+              </div>
+              <div class="row">
+                <span class="muted">Full-month target</span
+                ><span class="amount">$4,000</span>
+              </div>
+              <p class="caption">
+                Budget remaining is a target comparison, not available cash.
+              </p>
+            </section>
+          </div>
+          <div class="grid two-col space">
+            <section class="card" aria-labelledby="plan-title">
+              <div class="section-head">
+                <h2 id="plan-title">Protect the next 30 days</h2>
+                <span class="text-link">Open cash plan →</span>
+              </div>
+              <p class="sub">No future paycheck assumed</p>
+              <div class="row">
+                <span>Card and goal reserves</span
+                ><strong class="amount">$1,400</strong>
+              </div>
+              <div class="row">
+                <span
+                  >Lowest forecast checking balance<small
+                    >Dec 14 · includes $30/day spending</small
+                  ></span
+                ><strong class="amount">$5,720</strong>
+              </div>
+              <div class="row">
+                <span
+                  >Goals reserved<small
+                    >$300/month planned · no purchase holds</small
+                  ></span
+                ><strong class="amount">$800</strong>
+              </div>
+              <details class="detail">
+                <summary>See cash-plan assumptions</summary>
+                <p>
+                  Checking observed Nov 14: $8,420. Estimated bills: $180 in 7
+                  days, $180 in 14 days, $1,800 in 30 days. Checking buffer:
+                  $200. This partial estimate is not a safe-to-save amount. Goal
+                  reservations do not change income, spending or balances.
+                </p>
+              </details>
+            </section>
+            <section class="card" aria-labelledby="wealth-title">
+              <div class="section-head">
+                <h2 id="wealth-title">Wealth</h2>
+                <span class="text-link">View accounts →</span>
+              </div>
+              <div class="amount hero-number">$56,000</div>
+              <p class="sub">Net worth · observed Nov 14</p>
+              <div class="row">
+                <span class="muted">Assets</span
+                ><span class="amount">$68,000</span>
+              </div>
+              <div class="row">
+                <span class="muted">Liabilities</span
+                ><span class="amount">$12,000</span>
+              </div>
+              <p class="caption">
+                Account values are separate from monthly cash flow.
+              </p>
+            </section>
+          </div>
+          <h2 class="section-label">The month in detail</h2>
+          <div class="grid two-col">
+            <section class="card" aria-labelledby="flow-title">
+              <div class="section-head">
+                <h2 id="flow-title">Income and spending</h2>
+                <span class="sub">Last 12 months</span>
+              </div>
+              <svg
+                preserveAspectRatio="none"
+                class="chart"
+                viewBox="0 0 600 210"
+                role="img"
+                aria-labelledby="flow-chart-title flow-chart-desc"
+              >
+                <title id="flow-chart-title">Monthly income and spending</title>
+                <desc id="flow-chart-desc">
+                  Income is $6,400 each month from December 2025 through
+                  November 2026. Spending is December $3,100, January $3,300,
+                  February $2,900, March $3,600, April $3,200, May $3,350, June
+                  $2,950, July $3,400, August $3,100, September $3,250, October
+                  $3,000, November through the 14th $2,850.
+                </desc>
+                <path class="gridline" d="M42 20H580M42 95H580M42 170H580" />
+                <text x="2" y="24">$8k</text>
+                <text x="2" y="99">$4k</text>
+                <text x="2" y="174">$0</text>
+                <path class="line" d="M45 50H580" />
+                <path
+                  d="M45 112 L94 108 L143 116 L192 102 L241 110 L290 107 L339 115 L388 106 L437 112 L486 109 L535 114 L580 117"
+                  fill="none"
+                  stroke="var(--negative)"
+                  stroke-width="2.5"
+                />
+                <text x="42" y="198">Dec 25</text>
+                <text x="185" y="198">Mar</text>
+                <text x="333" y="198">Jun</text>
+                <text x="480" y="198">Sep</text>
+                <text x="560" y="198">Nov</text>
+              </svg>
+              <div class="legend">
+                <span><i class="key"></i>Income</span
+                ><span
+                  ><i class="key" style="background: var(--negative)"></i
+                  >Spending</span
+                >
+              </div>
+              <details class="detail">
+                <summary>Exact amounts and cash-flow calculation</summary>
+                <p>
+                  Nov 1–14: $6,400 income − $2,850 spending − $1,200 net
+                  accessible savings deposits = +$2,350 liquid cash flow.
+                  Savings rate: 18.75%. Roth contributions: $0. Unmatched
+                  savings: $0. Liquid cash flow is period activity, not an
+                  account balance.
+                </p>
+                <p>
+                  Spending by month: Dec 2025 $3,100; Jan $3,300; Feb $2,900;
+                  Mar $3,600; Apr $3,200; May $3,350; Jun $2,950; Jul $3,400;
+                  Aug $3,100; Sep $3,250; Oct $3,000; Nov through the 14th
+                  $2,850. Historical income fixture: $6,400/month. The November
+                  period is incomplete.
+                </p>
+              </details>
+            </section>
+            <section class="card" aria-labelledby="category-title">
+              <div class="section-head">
+                <h2 id="category-title">Spending by category</h2>
+                <span class="sub">Nov 1–14</span>
+              </div>
+              <div class="row">
+                <span>Housing</span><span class="amount">$1,500</span>
+              </div>
+              <div class="row">
+                <span>Groceries</span><span class="amount">$600</span>
+              </div>
+              <div class="row">
+                <span>Transport</span><span class="amount">$350</span>
+              </div>
+              <div class="row">
+                <span>Dining</span><span class="amount">$250</span>
+              </div>
+              <div class="row">
+                <span>Subscriptions</span><span class="amount">$150</span>
+              </div>
+              <div class="row">
+                <strong>Total</strong><strong class="amount">$2,850</strong>
+              </div>
+            </section>
+          </div>
+          <div class="grid two-col space">
+            <section class="card" aria-labelledby="merchants-title">
+              <div class="section-head">
+                <h2 id="merchants-title">Top merchants</h2>
+                <span class="sub">Nov 1–14</span>
+              </div>
+              <div class="row">
+                <span>Demo Property Co.</span><span class="amount">$1,500</span>
+              </div>
+              <div class="row">
+                <span>Willow Market</span><span class="amount">$600</span>
+              </div>
+              <div class="row">
+                <span>Metro Transit</span><span class="amount">$350</span>
+              </div>
+              <div class="row">
+                <span>Juniper Cafe</span><span class="amount">$250</span>
+              </div>
+              <div class="row">
+                <span>Stream Club</span><span class="amount">$150</span>
+              </div>
+            </section>
+            <section class="card" aria-labelledby="insights-title">
+              <div class="section-head">
+                <h2 id="insights-title">Changes in spending</h2>
+                <span class="sub">Vs previous period</span>
+              </div>
+              <div class="row">
+                <span>Dining<small>$250 now · $200 before</small></span
+                ><span class="amount negative">+$50</span>
+              </div>
+              <div class="row">
+                <span>Groceries<small>$600 now · $700 before</small></span
+                ><span class="amount positive">−$100</span>
+              </div>
+              <p class="caption">
+                Cash flow, income and total spending are unchanged from the
+                previous synthetic period.
+              </p>
+            </section>
+          </div>
+          <section class="card space" aria-labelledby="forecast-title">
+            <div class="section-head">
+              <h2 id="forecast-title">Cash reserve forecast</h2>
+              <span class="sub">Next 30 days</span>
+            </div>
+            <div class="legend">
+              <span
+                >Checking starts at <strong class="amount">$8,420</strong></span
+              ><span>No future pay assumed</span
+              ><span>Typical spending included: $30/day</span>
+            </div>
+            <svg
+              preserveAspectRatio="none"
+              class="chart"
+              viewBox="0 0 1000 190"
+              role="img"
+              aria-labelledby="forecast-chart-title forecast-chart-desc"
+            >
+              <title id="forecast-chart-title">
+                Projected checking balance
+              </title>
+              <desc id="forecast-chart-desc">
+                Nov 14 $8,420; Nov 18 $8,120; Dec 1 $6,230; Dec 14 $5,720.
+                Lowest projected balance is $5,720 on Dec 14. This is a
+                checking-balance forecast, not liquid cash flow.
+              </desc>
+              <path class="gridline" d="M50 15H975M50 85H975M50 155H975" />
+              <text x="1" y="19">$10k</text>
+              <text x="1" y="89">$5k</text>
+              <text x="1" y="159">$0</text>
+              <path class="line" d="M50 37H173V41H574V68H975V75" />
+              <text x="50" y="183">Nov 14</text>
+              <text x="160" y="183">Nov 18</text>
+              <text x="555" y="183">Dec 1</text>
+              <text x="940" y="183">Dec 14</text>
+            </svg>
+            <details class="detail">
+              <summary>Forecast events and exact values</summary>
+              <p>
+                Nov 14: $8,420; Nov 18: $8,120; Dec 1: $6,230; Dec 14: $5,720.
+                Estimated bills shown in this fixture include $180 on Nov 18 and
+                $1,500 rent on Dec 1, and $120 internet on Dec 14. A further
+                $120 internet bill falls on Dec 14. Typical variable spending is
+                included. These illustrative events are estimates, not scheduled
+                payments.
+              </p>
+            </details>
+          </section>
+
+          <!-- REGION END -->
+        </main>
+        <nav
+          class="bottomnav"
+          aria-label="Proposed phone navigation; advanced BAS features remain planned"
+        >
+          <span class="active"
+            ><svg class="nav-icon"><use href="#home" /></svg>Home</span
+          ><span
+            ><svg class="nav-icon"><use href="#review" /></svg>Review</span
+          ><span
+            ><svg class="nav-icon"><use href="#activity" /></svg>Activity</span
+          ><span
+            ><svg class="nav-icon"><use href="#wallet" /></svg>Wealth</span
+          ><span
+            ><svg class="nav-icon"><use href="#more" /></svg>More</span
+          >
+        </nav>
+      </div>
+    </div>
+  </body>
+</html>
