@@ -1,5 +1,7 @@
 # Overhaul feature implementation ledger
 
+2026-11-14: [Quick Review](QUICK-REVIEW.md) has a validated synthetic prototype for direct approval and optional edits. F10-F14 runtime redesign remains planned in both repositories; this prototype does not implement approval endpoints or advanced public adapters.
+
 2026-11-14: A Home presentation is implemented, including existing period/cash-flow/chart behavior, a review entry, monthly budget preview, planning and Goals/account summaries. This is a presentation slice, not closure of the historical M0-M6 checklist. Current definitions and repository-specific gaps are in [FEATURE-PARITY](../FEATURE-PARITY.md).
 
 Historical September planning ledger. For the current source inventory, Goals/history status and November navigation proposal, read [PLATFORM-OVERHAUL.md](PLATFORM-OVERHAUL.md) before using these rows. A historical Planned label does not override later implementation evidence.

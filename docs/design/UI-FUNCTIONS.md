@@ -98,7 +98,7 @@ Acceptance: test normal, empty, loading, failed and stale inputs as applicable; 
 
 Destination: **{f["screen"]}**.
 
-Controls and behavior: Count, grouped purchase identity, AI-suggestion badge and focused purchase card with next/previous controls.
+Controls and behavior: Count and focused read-only purchase summary with merchant, exact amount, date, category and account; Edit beside Approve; remaining purchases visible below. The quick-review concept is described in QUICK-REVIEW.md.
 
 Semantics and recovery: Empty inbox is success; provider-pending charges remain distinguishable from posted items awaiting review.
 
@@ -108,7 +108,7 @@ Acceptance: test normal, empty, loading, failed and stale inputs as applicable; 
 
 Destination: **{f["screen"]}**.
 
-Controls and behavior: Description, amount, category, account and transfer classification before approval; date shown with details.
+Controls and behavior: Edit opens description, amount, date, category, account and transfer fields on demand. Close cancels the draft; Save changes returns to the summary; Save & approve is an explicit combined action. Editing by itself never approves.
 
 Semantics and recovery: Save failures preserve the draft; posted or uncertain shared expenses block incompatible edits.
 
@@ -118,7 +118,7 @@ Acceptance: test normal, empty, loading, failed and stale inputs as applicable; 
 
 Destination: **{f["screen"]}**.
 
-Controls and behavior: Preview final category and amount, then approve and learn the merchant rule.
+Controls and behavior: Show final category and exact amount on the summary; one explicit Approve action approves an ordinary local record and advances, without a second confirmation dialog. Preserve existing merchant-rule behavior. External sharing retains its own preparation and confirmation.
 
 Semantics and recovery: Disable duplicate submission; success advances queue and updates count; failures keep the card.
 

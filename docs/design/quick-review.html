@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>BAS · Quick review concept</title>
+    <link rel="stylesheet" href="preview.css" />
+    <link rel="stylesheet" href="quick-review.css" />
+    <script src="quick-review.js" defer></script>
+  </head>
+  <body>
+    <div class="design-bar">
+      <span
+        ><b>QUICK REVIEW CONCEPT</b
+        ><small>Invented data · demo actions only</small></span
+      >
+      <a href="mobile-concept.html#review">Earlier concept</a>
+    </div>
+    <div class="phone" id="quick-review" data-product="BAS">
+      <header class="top">
+        <a class="brand quiet" href="mobile-concept.html"
+          ><svg
+            width="24"
+            height="24"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 96 96"
+          >
+            <rect width="96" height="96" rx="28" fill="#12161d" />
+            <path
+              d="M33 43 19 32v32l14-11c12 15 30 15 45-5-15-20-33-20-45-5Z"
+              fill="#10b981"
+            />
+            <path d="m43 34 11-12 8 13M43 62l11 12 8-13" fill="#6ee7b7" />
+            <path
+              d="M42 48c7-8 15-8 23-3"
+              fill="none"
+              stroke="#0a0d12"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <circle cx="68" cy="44" r="3" fill="#0a0d12" /></svg
+          ><span data-brand>BAS</span></a
+        >
+        <span class="review-demo-label">Design preview</span>
+      </header>
+      <main id="quick-review-main" aria-label="Quick review"></main>
+      <dialog id="review-editor" aria-labelledby="review-dialog-title">
+        <header class="sheet-head">
+          <h2 id="review-dialog-title">Edit purchase</h2>
+          <button type="button" data-action="close-dialog">Close</button>
+        </header>
+        <div id="review-dialog-body"></div>
+      </dialog>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,11 @@
 # Feature parity and safe adaptations
 
+## Quick Review design refinement - 2026-11-14
+
+Both repositories contain an independently branded [working quick-review concept](design/quick-review.html), their own invented before/after captures and a [portable check script and scope record](design/QUICK-REVIEW.md). The summary leads with amount, merchant, category and account. Ordinary Approve advances the demo directly; Edit supports Save changes or Save & approve. Bulk and rejection retain confirmation, and linking/sharing remain explicit separate flows.
+
+This is design parity only. Neither runtime Review implementation changed; public advanced split/refund/sharing gaps remain open. The generic fixtures contain no account history or provider identity. Each prototype passed four-width, edit/cancel/approval/cent/transfer/bulk/refund/rejection checks with zero HTTP requests or browser exceptions. No setup variables, production build, migration, provider call or deployment is introduced.
+
 ## Selected A daily overview implementation — 2026-11-14
 
 The selected Home arrangement is now implemented in both source trees: compact period measures, review beside the monthly budget, cash planning and Goals before detailed activity/analytics, and named links to account/assistant tools. Existing navigation is preserved. This is Home presentation parity, not completion of the platform-wide screen plan.

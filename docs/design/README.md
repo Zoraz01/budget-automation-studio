@@ -1,5 +1,7 @@
 # Complete mobile UI specification
 
+The [quick Review concept](quick-review.html) now shows a read-only summary, direct Approve and an on-demand editor with Save & approve. See its [scope and checks](QUICK-REVIEW.md) and [comparison](quick-review-comparison.html). This is a design prototype; runtime Review is unchanged.
+
 Selected A now has a source implementation. Review the actual [desktop](daily-overview-desktop.html) and [phone](daily-overview-mobile.html) before/after captures. This implements Home; other platform screens remain planned.
 
 ## Current platform research — 2026-11-14
