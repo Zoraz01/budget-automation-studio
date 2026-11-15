@@ -750,6 +750,11 @@ export function goalsService(
   return {
     execute,
     state,
+    summary: () => ({
+      reserved_cents: reserved(),
+      payment_holds_cents: holds(),
+      monthly_total_cents: planned(),
+    }),
     runDue,
     capacity,
     transactions: (q = "") => transactions(String(q).slice(0, 100)),

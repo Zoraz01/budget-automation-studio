@@ -1,5 +1,7 @@
 # Overhaul feature implementation ledger
 
+2026-11-14: A Home presentation is implemented, including existing period/cash-flow/chart behavior, a review entry, monthly budget preview, planning and Goals/account summaries. This is a presentation slice, not closure of the historical M0-M6 checklist. Current definitions and repository-specific gaps are in [FEATURE-PARITY](../FEATURE-PARITY.md).
+
 Historical September planning ledger. For the current source inventory, Goals/history status and November navigation proposal, read [PLATFORM-OVERHAUL.md](PLATFORM-OVERHAUL.md) before using these rows. A historical Planned label does not override later implementation evidence.
 
 All rows are planned. A preview or specification is not runtime implementation. Update evidence and both repository statuses as milestones ship; keep private implementation details in private notes. M0 isolation is a prerequisite to every row.

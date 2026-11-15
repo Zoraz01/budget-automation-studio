@@ -8,12 +8,15 @@ import { join } from "node:path";
 import { createApp } from "../server/app.mjs";
 import { configuration } from "../server/config.mjs";
 import { openStore } from "../server/store.mjs";
+import { seedGoalDemo } from "../server/goals-demo.mjs";
 const { chromium } = createRequire(import.meta.url)(
   process.env.PLAYWRIGHT_MODULE || "playwright",
 );
 const config = configuration({ APP_MODE: "demo" });
 const store = openStore(":memory:", config.vaultKey, "USD");
 store.seed("2026-05");
+seedGoalDemo(store, "USD");
+store.db.prepare("UPDATE transactions SET reviewed=0 WHERE pending=0").run();
 const server = createApp(config, store);
 server.listen(0, "127.0.0.1");
 await once(server, "listening");
@@ -66,6 +69,43 @@ try {
   await page.goto(config.origin);
   await page.getByRole("button", { name: "Explore the demo" }).click();
   await page.locator(".big").waitFor();
+  await page.locator("#month").fill("2026-05");
+  await page.locator(".big").waitFor();
+  assert.match(
+    await page.locator(".home-context-value").first().innerText(),
+    /2,940/,
+  );
+  const reviewCount = store.summary("2026-05").unreviewed_count;
+  assert.ok(reviewCount > 0);
+  await page.getByRole("button", { name: "Start review", exact: true }).click();
+  await page.getByRole("button", { name: /Needs review/ }).waitFor();
+  assert.equal(
+    await page
+      .locator('[data-activity-mode="review"]')
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.equal(await page.locator("#transaction-list .pending").count(), 0);
+  const confirm = page.locator("[data-review]").first();
+  await confirm.click();
+  await page
+    .getByRole("button", {
+      name: `Needs review · ${reviewCount - 1}`,
+      exact: true,
+    })
+    .waitFor();
+  await page.getByRole("button", { name: "Home", exact: true }).first().click();
+  await page
+    .getByRole("heading", {
+      name: new RegExp(`${reviewCount - 1} transaction`),
+    })
+    .waitFor();
+  await page.getByRole("button", { name: "Start review", exact: true }).click();
+  await page.locator("#search").fill("No matching invented purchase");
+  await page.getByRole("button", { name: "Home", exact: true }).first().click();
+  await page.getByRole("button", { name: "Start review", exact: true }).click();
+  assert.equal(await page.locator("#search").inputValue(), "");
+  await page.getByRole("button", { name: "Home", exact: true }).first().click();
   await page.getByText("Build a 30-day cash plan", { exact: true }).click();
   const plan = page.locator("#cash-plan-form");
   await plan.locator("[name=cash]").fill("2000");
@@ -142,6 +182,22 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Home", exact: true }).first().click();
   await page.screenshot({ path: join(output, "home.png"), fullPage: true });
+  store.db.prepare("UPDATE transactions SET reviewed=1").run();
+  await page.getByRole("button", { name: "Home", exact: true }).first().click();
+  await page
+    .getByRole("heading", { name: "You're up to date", exact: true })
+    .waitFor();
+  await page
+    .getByRole("button", { name: "Open activity", exact: true })
+    .click();
+  assert.equal(
+    await page
+      .locator('[data-activity-mode="all"]')
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.ok((await page.locator("#transaction-list .txn").count()) > 0);
+  await page.getByRole("button", { name: "Home", exact: true }).first().click();
   const oldStarted = new Promise((resolve) => {
     captureOld = resolve;
   });
@@ -154,7 +210,7 @@ try {
   assert.equal(await page.locator("#login-form").count(), 1);
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: delayed month responses, stale authorization, logout cancellation, failure/retry, 20 page/viewport checks; no page errors.",
+    "PASS: daily overview, goal summary, filtered review and explicit category confirmation; delayed months, auth recovery, cash planning and 20 page/viewport checks; no page errors.",
   );
 } finally {
   await browser.close();

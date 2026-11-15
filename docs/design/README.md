@@ -1,5 +1,7 @@
 # Complete mobile UI specification
 
+Selected A now has a source implementation. Review the actual [desktop](daily-overview-desktop.html) and [phone](daily-overview-mobile.html) before/after captures. This implements Home; other platform screens remain planned.
+
 ## Current platform research — 2026-11-14
 
 Start with the [Mobbin-backed platform proposal](PLATFORM-OVERHAUL.md), [desktop comparison](platform-directions.html), [phone comparison](platform-directions-mobile.html) and [validation](PLATFORM-VALIDATION.md). These are three synthetic Home directions plus a plan for every existing feature area, not a runtime overhaul. Basic saved history and Goals already exist in source; the September milestone tables below are historical and need row-by-row reconciliation before execution.

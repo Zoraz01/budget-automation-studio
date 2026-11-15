@@ -103,6 +103,10 @@ function check(path, buffer, label) {
         "docs/design/platform-b-mobile.jpg",
         "docs/design/platform-c-desktop.jpg",
         "docs/design/platform-c-mobile.jpg",
+        "docs/design/daily-overview-before-desktop.jpg",
+        "docs/design/daily-overview-before-mobile.jpg",
+        "docs/design/daily-overview-after-desktop.jpg",
+        "docs/design/daily-overview-after-mobile.jpg",
       ].includes(path)
     )
       violations.push(`${path}: unapproved binary`);

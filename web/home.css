@@ -1,0 +1,241 @@
+/* Daily overview, adapted to the local workspace's supported capabilities. */
+.daily-home {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.home-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.daily-home .card {
+  background: var(--panel);
+  padding: 24px;
+}
+.daily-home .primary {
+  color: #0a0d12;
+}
+.daily-home .card-head {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.daily-home h2 {
+  margin: 0;
+  color: #eef2f7;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  text-transform: none;
+}
+.daily-home .home-metric-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+.home-metric-value {
+  margin: 10px 0 8px;
+  font-size: clamp(24px, 2.7vw, 34px);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.home-flow .home-metric-value {
+  color: #6ee7b7;
+}
+.home-flow .negative,
+.daily-home .negative {
+  color: var(--red);
+}
+.home-caption,
+.home-note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.home-caption {
+  margin: 6px 0 0;
+}
+.home-note {
+  margin: 14px 0 0;
+}
+.home-link,
+button.home-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #6ee7b7;
+  font-size: 13px;
+  font-weight: 550;
+  text-decoration: none;
+}
+.home-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  margin-bottom: 32px;
+}
+.home-overview-grid > * {
+  min-width: 0;
+}
+.home-context-stack {
+  display: grid;
+  gap: 18px;
+}
+.daily-home .txn {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 14px 0;
+}
+.daily-home .txn-icon {
+  display: none;
+}
+.daily-home .txn strong {
+  font-weight: 550;
+}
+.home-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 58px;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  font-size: 14px;
+}
+.home-row:last-child {
+  border-bottom: 0;
+}
+.home-row > :first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.home-row strong {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.home-row small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.home-budget-value {
+  margin-top: 24px;
+  font-size: clamp(36px, 4.2vw, 52px);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.home-progress {
+  display: block;
+  width: 100%;
+  height: 5px;
+  accent-color: var(--green);
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 18px 0 4px;
+  background: var(--border);
+}
+.home-progress::-webkit-progress-bar {
+  background: var(--border);
+}
+.home-progress::-webkit-progress-value {
+  background: var(--green);
+  border-radius: 4px;
+}
+.home-progress::-moz-progress-bar {
+  background: var(--green);
+  border-radius: 4px;
+}
+.home-context-value {
+  font-size: 30px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.home-context-value small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+.daily-home .home-section-title {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+.home-cash-plan details {
+  margin-top: 16px;
+}
+.home-cash-plan summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: #6ee7b7;
+  font-size: 13px;
+  font-weight: 550;
+}
+#home-flow-details {
+  scroll-margin-top: 90px;
+}
+.activity-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.activity-modes .active {
+  background: var(--tint);
+  color: #6ee7b7;
+  border-color: var(--green);
+}
+@media (max-width: 1150px) {
+  .home-overview-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+  .daily-home .card {
+    padding: 20px;
+  }
+}
+@media (max-width: 850px) {
+  .home-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 650px) {
+  .home-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .home-metrics .home-flow {
+    grid-column: 1 / -1;
+  }
+  .daily-home .home-metric {
+    padding: 16px;
+  }
+  .home-metric-value {
+    font-size: clamp(18px, 5.2vw, 24px);
+  }
+  .home-flow .home-metric-value {
+    font-size: 30px;
+  }
+  .daily-home .home-metric-label {
+    font-size: 12px;
+  }
+  .home-overview-grid .card-head .primary {
+    margin-left: auto;
+  }
+  .home-row {
+    gap: 12px;
+  }
+}

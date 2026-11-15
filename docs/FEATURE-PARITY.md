@@ -1,5 +1,13 @@
 # Feature parity and safe adaptations
 
+## Selected A daily overview implementation — 2026-11-14
+
+The selected Home arrangement is now implemented in both source trees: compact period measures, review beside the monthly budget, cash planning and Goals before detailed activity/analytics, and named links to account/assistant tools. Existing navigation is preserved. This is Home presentation parity, not completion of the platform-wide screen plan.
+
+Finance retains its liquid-cash-flow bridge, observed checking/freshness, targeted-category budget totals, existing no-pay plan/forecast, goal holds and wealth definitions. BAS independently adapts the same layout with its own net cash flow, income as the third metric, manual cash-plan form and individual investment values. It adds a read-only three-amount Goals summary and a focused Needs review activity view with explicit category confirmation. No connected balance or combined net worth is invented for BAS; existing advanced-provider, sharing and analytics gaps remain open.
+
+Validation: 94 Finance tests plus an isolated frontend build; 99 BAS tests including goal-summary privacy/no-write assertions; 20 route/viewport checks per application plus same-fixture synthetic before/after captures. Public formatting, exact screenshot allowlist, release-content/credential checks, Gitleaks and manual source/image review accompany its separate source publication. No migration, new runtime dependency, provider/model call or production activation is part of this implementation. The previously recorded public dependency advisory remains open.
+
 ## Whole-platform design exploration — 2026-11-14
 
 Both repositories now contain three independently branded, invented-data Home concepts, desktop/phone comparison boards, a feature-by-feature [platform proposal](design/PLATFORM-OVERHAUL.md), evidence links to inspected Mobbin screens and a portable static capture command. BAS uses its own synthetic demo baseline and explicitly labels advanced concepts as planned. No financial runtime, schema, provider behavior, auth or deployment changes.

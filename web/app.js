@@ -34,6 +34,8 @@ const localMonth = () => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 };
+let activityReviewOnly = false,
+  activitySearch = "";
 let selectedMonth = localMonth(),
   page = "overview",
   state = null,
@@ -79,6 +81,8 @@ async function api(path, method = "GET", data, { signal } = {}) {
     if (response.status === 401 && path != "/api/login") {
       state = null;
       clearChat();
+      activitySearch = "";
+      activityReviewOnly = false;
       await loginScreen();
     }
     const error = new Error(result.error || "Something went wrong");
@@ -147,7 +151,7 @@ function render() {
 
   if (!state) return;
   const ready = !stateError && state.summary.month === selectedMonth;
-  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="sr-only">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${!ready ? stateStatus() : { overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note" ${ready ? "" : "hidden"}>${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
+  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="home-page-title">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${!ready ? stateStatus() : { overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note" ${ready ? "" : "hidden"}>${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
   if (page === "goals")
     document.querySelector("#main").classList.add("goals-main");
   if (page === "goals" && ready)
@@ -186,7 +190,39 @@ function txnList(rows, editable = false) {
 }
 function overview() {
   const s = state.summary;
-  return `<div class="dashboard-grid"><div><section class="hero" aria-labelledby="net-heading"><div class="hero-top"><div><h2 class="eyebrow" id="net-heading">NET CASH FLOW · ${escape(monthTitle())}</h2><div class="big">${money(s.net_cents)}</div><p>Income minus spending, after refunds.</p></div></div><div class="flow-metrics"><div><span>Money in</span><strong>${money(s.income_cents)}</strong></div><div><span>Money out</span><strong>${money(s.spent_cents)}</strong></div></div><div class="hero-bottom"><span><strong>${money(s.budget_cents)}</strong> planned</span><span>${s.pending_count} pending · excluded</span></div></section>${s.unreviewed_count ? `<button class="review-callout" data-page="transactions"><span class="review-count">${s.unreviewed_count}</span><span><strong>A little review. A clearer picture.</strong><small>Confirm categories to keep your totals useful.</small></span>${icon("arrow")}</button>` : ""}<section class="card section-gap activity-card"><div class="card-head"><h2>Recent activity</h2><button class="small ghost" data-page="transactions">View all →</button></div>${txnList(state.transactions.slice(0, 5))}</section></div><div class="stack">${cashPlanCard()}<section class="card"><div class="card-head"><h2>Your monthly plan</h2><button class="small ghost" data-page="budgets">Edit →</button></div>${budgetRows()}</section><section class="card"><div class="card-head"><h2>Goals</h2></div><p>Plan purchases and build long-term funds with monthly contributions.</p><button data-page="goals">Open goals →</button></section><section class="card helper-card"><div class="helper-icon">${icon("spark")}</div><h2>A clearer view<br>starts with a question.</h2><p>Explore the numbers behind your month with your own budget assistant.</p><button data-page="chat">Ask BAS →</button></section></div></div>`;
+  const review = state.transactions.filter((t) => !t.pending && !t.reviewed);
+  const g = state.goalSummary;
+  const remaining = s.budget_cents - s.spent_cents;
+  const investments = state.investments.slice(0, 3);
+  const investmentAmount = (account) => {
+    if (account.value_cents == null || !account.currency) return "Unavailable";
+    if (account.currency !== state.currency)
+      return `${escape(account.currency)} ${escape((account.value_cents / 100).toFixed(2))}`;
+    return money(account.value_cents);
+  };
+  return `<div class="daily-home">
+    <div class="home-metrics">
+      <section class="card home-metric home-flow" aria-label="Net cash flow"><h2 class="home-metric-label">Net cash flow</h2><div class="home-metric-value big ${s.net_cents < 0 ? "negative" : ""}">${money(s.net_cents)}</div><p class="home-caption">${escape(monthTitle())} · income minus spending</p><a class="home-link" href="#home-flow-details">How it's calculated ↓</a></section>
+      <section class="card home-metric" aria-label="Period spending"><h2 class="home-metric-label">Spending</h2><div class="home-metric-value">${money(s.spent_cents)}</div><p class="home-caption">Posted activity · ${escape(monthTitle())}</p><button class="ghost small home-link" data-page="transactions">View spending →</button></section>
+      <section class="card home-metric" aria-label="Period income"><h2 class="home-metric-label">Money in</h2><div class="home-metric-value">${money(s.income_cents)}</div><p class="home-caption">Recorded income for this period</p><p class="home-caption">${s.pending_count} pending · excluded from totals</p></section>
+    </div>
+    <div class="home-overview-grid">
+      <section class="card home-review"><div class="card-head"><h2>${s.unreviewed_count ? `${s.unreviewed_count} transaction${s.unreviewed_count === 1 ? "" : "s"} to review` : "You're up to date"}</h2><button class="${s.unreviewed_count ? "primary" : "ghost"} small" data-page="transactions" data-review-only="${s.unreviewed_count > 0}">${s.unreviewed_count ? "Start review" : "Open activity"}</button></div>${review.length ? txnList(review.slice(0, 4)) : '<p class="home-note">New posted purchases will appear here for you to check.</p>'}<p class="home-note">Review category suggestions before confirming them.</p></section>
+      <section class="card home-budget"><div class="card-head"><h2>${escape(monthTitle())} budget</h2><button class="ghost small home-link" data-page="budgets">View budget →</button></div>${s.budget_cents > 0 ? `<div class="home-budget-value ${remaining < 0 ? "negative" : ""}">${money(Math.abs(remaining))}</div><p class="home-caption">${remaining < 0 ? "Over" : "Remaining in"} the full-month budget</p><progress class="home-progress" aria-label="Monthly budget used" max="${s.budget_cents}" value="${Math.max(0, Math.min(s.spent_cents, s.budget_cents))}"></progress><div class="home-row"><span>Spent this month</span><strong>${money(s.spent_cents)}</strong></div><div class="home-row"><span>Full-month target</span><strong>${money(s.budget_cents)}</strong></div><p class="home-note">Budget remaining is a target comparison, not available cash. Spending without an allocated budget still counts.</p>` : '<p class="home-note">Set monthly targets to compare your spending with a plan.</p><button data-page="budgets">Set a budget</button>'}</section>
+      ${cashPlanCard()}
+      <div class="home-context-stack">
+        <section class="card"><div class="card-head"><h2>Goals</h2><button class="ghost small home-link" data-page="goals">View goals →</button></div>${g ? `<div class="home-context-value">${money(g.reserved_cents)} <small>reserved</small></div><p class="home-caption">${money(g.monthly_total_cents)}/month planned</p>${g.payment_holds_cents > 0 ? `<p class="home-note">${money(g.payment_holds_cents)} held for purchase payments.</p>` : ""}<p class="home-note">Reservations set aside existing cash. They don't move money between accounts.</p>` : '<p class="home-note">Open Goals to inspect reservations and monthly contributions.</p>'}</section>
+        <section class="card"><div class="card-head"><h2>Investments</h2><button class="ghost small home-link" data-page="connections">View accounts →</button></div>${investments.length ? investments.map((a) => `<div class="home-row"><div>${escape(a.name)}<small>${escape(a.status)} · ${escape(a.synced_at ? new Date(a.synced_at).toLocaleDateString() : "Not yet observed")}</small></div><strong>${investmentAmount(a)}</strong></div>`).join("") : '<p class="home-note">Investment account values appear after a successful import.</p>'}<p class="home-note">Account values stay separate from monthly cash flow. Missing values remain unavailable; last-known values can be stale.</p></section>
+      </div>
+    </div>
+    <h2 class="home-section-title">The month in detail</h2>
+    <div class="home-overview-grid">
+      <section class="card activity-card"><div class="card-head"><h2>Recent activity</h2><button class="small ghost home-link" data-page="transactions">View all →</button></div>${txnList(state.transactions.slice(0, 5))}</section>
+      <section class="card"><div class="card-head"><h2>Budget by category</h2><button class="small ghost home-link" data-page="budgets">Edit →</button></div>${budgetRows()}</section>
+      <section class="card" id="home-flow-details"><div class="card-head"><h2>Cash-flow breakdown</h2><span class="home-caption">${escape(monthTitle())}</span></div><div class="home-row"><span>Money in</span><strong>${money(s.income_cents)}</strong></div><div class="home-row"><span>Spending, after refunds</span><strong>${money(s.spent_cents)}</strong></div><p class="home-note">Net cash flow is income minus spending for the selected month. It is not an account balance. Transfers are excluded; pending transactions stay outside these totals.</p></section>
+      <section class="card"><div class="card-head"><h2>Assistant</h2><button class="small ghost home-link" data-page="chat">Ask BAS →</button></div><p class="home-note">Continue a saved conversation or ask about this month's numbers.</p></section>
+    </div>
+  </div>`;
 }
 function categoryOptions(selected = "uncategorized") {
   return state.categories
@@ -196,8 +232,17 @@ function categoryOptions(selected = "uncategorized") {
     )
     .join("");
 }
+function activityRows() {
+  return state.transactions.filter(
+    (t) =>
+      (!activityReviewOnly || (!t.reviewed && !t.pending)) &&
+      `${t.description} ${state.categories.find((c) => c.id === t.category_id)?.name}`
+        .toLowerCase()
+        .includes(activitySearch.toLowerCase()),
+  );
+}
 function transactions() {
-  return `<section class="card wide"><div class="filter-row"><label class="search"><span class="sr-only">Search transactions</span><input id="search" placeholder="Search description or category…" type="search"></label><button class="primary" data-action="add-transaction">+ Add transaction</button></div><div id="transaction-list">${txnList(state.transactions, true)}</div></section>`;
+  return `<section class="card wide"><div class="filter-row"><div class="activity-modes" aria-label="Activity view"><button class="small ${!activityReviewOnly ? "active" : "ghost"}" data-activity-mode="all" aria-pressed="${!activityReviewOnly}">All activity</button><button class="small ${activityReviewOnly ? "active" : "ghost"}" data-activity-mode="review" aria-pressed="${activityReviewOnly}">Needs review · ${state.summary.unreviewed_count}</button></div><label class="search"><span class="sr-only">Search transactions</span><input id="search" value="${escape(activitySearch)}" placeholder="Search description or category…" type="search"></label><button class="primary" data-action="add-transaction">+ Add transaction</button></div><div id="transaction-list">${activityRows().length ? txnList(activityRows(), true) : `<p class="empty">${activityReviewOnly ? "No posted transactions need review in this view." : "No transactions match this view."}</p>`}</div></section>`;
 }
 function budgets() {
   return `<div class="dashboard-grid"><section class="card"><div class="card-head"><h2>${escape(monthTitle())}</h2><button class="small" data-action="add-category">+ Category</button></div>${state.summary.categories.map((c) => `<form class="budget-editor" data-budget="${escape(c.id)}"><label>${escape(c.name)}<input name="amount" inputmode="decimal" type="text" value="${(c.limit_cents / 100).toFixed(2)}" pattern="[0-9]+([.][0-9]{1,2})?" required aria-label="${escape(c.name)} monthly budget in ${escape(state.currency)}"></label><button type="submit">Save</button></form>`).join("")}</section><div class="stack"><section class="card"><h2>Plan, then adjust.</h2><p class="muted">These limits belong to ${escape(monthTitle())}. Change the month to set a different plan.</p><p class="note">Amounts are in ${escape(state.currency)}. Zero means no budget has been allocated. Unused budgets do not roll over automatically.</p></section><section class="card"><h2>Budget progress</h2>${budgetRows()}</section></div></div>`;
@@ -351,8 +396,18 @@ async function plaidConnect() {
 document.addEventListener("click", async (event) => {
   const button = event.target.closest("button");
   if (!button) return;
+  if (button.dataset.activityMode) {
+    activityReviewOnly = button.dataset.activityMode === "review";
+    if (state) render();
+    return;
+  }
   if (button.dataset.page) {
     page = button.dataset.page;
+    if (page === "transactions") {
+      activityReviewOnly = button.dataset.reviewOnly === "true";
+      if (activityReviewOnly) activitySearch = "";
+    }
+    if (page === "overview") await load();
     if (page === "chat")
       try {
         await loadConversations();
@@ -455,6 +510,8 @@ document.addEventListener("click", async (event) => {
       await api("/api/logout", "POST", {});
       state = null;
       clearChat();
+      activitySearch = "";
+      activityReviewOnly = false;
       await loginScreen();
     }
     if (action === "close-dialog") dialog.close();
@@ -580,15 +637,11 @@ document.addEventListener("input", (event) => {
   if (event.target.matches("#chat-form textarea"))
     chatDrafts[activeConversation?.id || "new"] = event.target.value;
   if (event.target.id === "search") {
-    const q = event.target.value.toLowerCase();
-    document.querySelector("#transaction-list").innerHTML = txnList(
-      state.transactions.filter((t) =>
-        `${t.description} ${state.categories.find((c) => c.id === t.category_id)?.name}`
-          .toLowerCase()
-          .includes(q),
-      ),
-      true,
-    );
+    activitySearch = event.target.value;
+    const rows = activityRows();
+    document.querySelector("#transaction-list").innerHTML = rows.length
+      ? txnList(rows, true)
+      : '<p class="empty">No transactions match this view.</p>';
   }
 });
 load().catch(async (e) => {

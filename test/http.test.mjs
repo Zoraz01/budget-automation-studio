@@ -5,6 +5,7 @@ import { request as httpRequest } from "node:http";
 import { createApp } from "../server/app.mjs";
 import { configuration } from "../server/config.mjs";
 import { openStore } from "../server/store.mjs";
+import { seedGoalDemo } from "../server/goals-demo.mjs";
 async function fixture(t, env = {}, options = {}) {
   const config = configuration(env);
   const store = openStore(":memory:", config.vaultKey, "USD");
@@ -45,6 +46,25 @@ test("financial APIs require a session; cookie is HttpOnly and SameSite Strict",
   const login = await f.login();
   assert.match(login.headers.get("set-cookie"), /HttpOnly; SameSite=Strict/);
   assert.equal((await f.call("/api/state?month=2026-05")).status, 200);
+});
+test("Home reads goal reservations separately from cash flow without exposing goal notes or changing the ledger", async (t) => {
+  const f = await fixture(t);
+  seedGoalDemo(f.store, "USD");
+  f.store.db
+    .prepare("UPDATE goals SET notes=?")
+    .run("Private goal note stays in Goals");
+  const before = f.store.summary("2026-05");
+  const changes = f.store.db.prepare("SELECT total_changes() n").get().n;
+  await f.login();
+  const state = await (await f.call("/api/state?month=2026-05")).json();
+  assert.deepEqual(state.goalSummary, {
+    reserved_cents: 294000,
+    payment_holds_cents: 0,
+    monthly_total_cents: 45000,
+  });
+  assert.deepEqual(state.summary, before);
+  assert.equal(JSON.stringify(state).includes("Private goal note"), false);
+  assert.equal(f.store.db.prepare("SELECT total_changes() n").get().n, changes);
 });
 test("cross-origin writes and host-header attacks are blocked", async (t) => {
   const f = await fixture(t);

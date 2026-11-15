@@ -1,5 +1,5 @@
 export function cashPlanCard() {
-  return `<section class="card"><h2>Plan without a steady paycheck</h2><p>Start with verified cash and dated bills. Leave income blank when uncertain. This preview does not change your records.</p><details><summary>Build a 30-day cash plan</summary><form id="cash-plan-form" class="cash-plan-form">
+  return `<section class="card home-cash-plan"><div class="card-head"><h2>Cash plan · next 30 days</h2></div><p class="home-note">Start with verified cash and dated bills. Future income stays out unless you confirm its amount and date.</p><details><summary>Build a 30-day cash plan</summary><form id="cash-plan-form" class="cash-plan-form">
   <label>Spendable cash balance<input name="cash" inputmode="decimal" required placeholder="0.00"></label>
   <label>Balance observed at<input name="observed" type="datetime-local" required></label>
   <label>Keep a cash buffer<input name="buffer" inputmode="decimal" value="0" required></label>

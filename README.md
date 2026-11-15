@@ -163,3 +163,5 @@ Home includes a read-only 30-day cash preview for uncertain income. Use verified
 ## Platform design research
 
 The [November platform proposal](docs/design/PLATFORM-OVERHAUL.md) maps the existing feature set into Home, Activity, Plan, Wealth and Assistant, with three Home directions backed by inspected Mobbin references. Compare the [desktop](docs/design/platform-directions.html) and [phone](docs/design/platform-directions-mobile.html) boards. These are invented-data concepts; runtime support and remaining gaps are explicit.
+
+Selected direction A now has a working Home implementation, with review and budgets ahead of detailed analytics. See the [desktop before/after](docs/design/daily-overview-desktop.html) and [phone before/after](docs/design/daily-overview-mobile.html). Source publication and production activation are recorded separately.

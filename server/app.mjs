@@ -20,6 +20,7 @@ import {
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
+  ["/home.css", ["home.css", "text/css"]],
   ["/cash-plan.js", ["cash-plan.js", "text/javascript"]],
   ["/latest-request.js", ["latest-request.js", "text/javascript"]],
   ["/goals.js", ["goals.js", "text/javascript"]],
@@ -205,6 +206,7 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
           mode: config.mode,
           currency: config.currency,
           summary: store.summary(selectedMonth),
+          goalSummary: goals.summary(),
           categories: store.db
             .prepare("SELECT * FROM categories ORDER BY kind,name")
             .all(),
