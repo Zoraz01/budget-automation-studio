@@ -39,7 +39,7 @@ If Playwright is outside the repository, set `PLAYWRIGHT_MODULE` to its module e
 
 Validation: 99 public regression tests pass. The new HTTP test checks exact goal-summary amounts, absence of notes, unchanged cash-flow totals and no database writes on the summary read. Browser checks cover review filtering and explicit confirmation, search reset, empty review, manual cash planning, stale response/auth/logout recovery and 20 page/viewport combinations at 320, 390, 768 and 1280px. Reconciled synthetic before/after captures were also checked at 390 and 1440px. Formatting, release-content, credential/Gitleaks scanning and manual public source/image review apply to publication.
 
-The existing `follow-redirects` advisory recorded in [the design validation](design/PLATFORM-VALIDATION.md) remains open; no dependency or provider transport change is included here. Source publication is not a hosted runtime deployment. Real phone installation, software-keyboard behavior and physical-device acceptance remain separate.
+The later release patch updates only `follow-redirects` to 1.16.3 and clears the previously recorded [dependency advisory](https://github.com/advisories/GHSA-mrwp-f3q8-3g9p). The production dependency audit passes. Source publication is not a hosted runtime deployment. Real phone installation, software-keyboard behavior and physical-device acceptance remain separate.
 
 ## Preview and rollback
 

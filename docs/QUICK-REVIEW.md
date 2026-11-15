@@ -29,7 +29,7 @@ node test/browser-quick-review.mjs
 node test/browser-acceptance.mjs
 ```
 
-The new browser harness uses explicit demo configuration and a separate in-memory database, blocks off-origin requests and closes its browser/server/database in `finally`. `BAS_TEST_OUTPUT` redirects screenshots; the default is a temporary directory. No adopter environment is loaded. The existing dependency advisory remains open and unrelated to this change.
+The new browser harness uses explicit demo configuration and a separate in-memory database, blocks off-origin requests and closes its browser/server/database in `finally`. `BAS_TEST_OUTPUT` redirects screenshots; the default is a temporary directory. No adopter environment is loaded. The subsequent release patch updates only `follow-redirects` to 1.16.3; the production dependency audit passes. No other dependency version changes.
 
 Validation: 102 tests, including snapshot conflicts, auth/origin, exact cents, pending/removed records, rollback and refund/transfer semantics. Both browser suites pass, including editor cancel/save/approve, duplicate-click guard, retained failed drafts, status recovery, typed queue search and category changes that remain unapproved. The new view was checked at 320/390/768/1280 pixels, with Approve above the phone navigation before and after advancing. The existing suite checks 20 page/viewport combinations plus auth and stale-response recovery. Formatting, exact screenshot allowlist, release-content checks, secret scanning and manual public source/image review accompany the separate source publication.
 
