@@ -40,6 +40,194 @@ async function fixture(t, env = {}, options = {}) {
   };
   return { call, login, config, store };
 }
+
+const displayed = (row) =>
+  Object.fromEntries(
+    [
+      "date",
+      "description",
+      "amount_cents",
+      "category_id",
+      "pending",
+      "reviewed",
+    ].map((key) => [key, row[key]]),
+  );
+test("review edits stay unapproved until explicit approval and keep source identity", async (t) => {
+  const f = await fixture(t);
+  f.store.db
+    .prepare("UPDATE transactions SET reviewed=0 WHERE pending=0")
+    .run();
+  const original = f.store.db
+    .prepare("SELECT * FROM transactions WHERE pending=0 LIMIT 1")
+    .get();
+  const request = {
+    id: original.id,
+    expected: displayed(original),
+    approve: false,
+    edits: {
+      description: "Corrected demo purchase",
+      date: "2026-05-12",
+      amount: "12.34",
+      category_id: "food",
+    },
+  };
+  assert.equal(
+    (await f.call("/api/transactions/review", "PATCH", request)).status,
+    401,
+  );
+  await f.login();
+  assert.equal(
+    (
+      await f.call("/api/transactions/review", "PATCH", request, {
+        Origin: "https://example.org",
+      })
+    ).status,
+    403,
+  );
+  const savedResponse = await f.call(
+    "/api/transactions/review",
+    "PATCH",
+    request,
+  );
+  assert.equal(savedResponse.status, 200);
+  const { transaction: saved } = await savedResponse.json();
+  assert.equal(saved.reviewed, 0);
+  assert.equal(saved.amount_cents, 1234);
+  assert.equal(saved.description, "Corrected demo purchase");
+  assert.equal(saved.date, "2026-05-12");
+  assert.equal(saved.category_id, "food");
+  assert.equal(saved.id, original.id);
+  assert.equal(saved.source, original.source);
+  assert.equal(saved.currency, original.currency);
+  assert.equal("connection_id" in saved, false);
+  const approval = await f.call("/api/transactions/review", "PATCH", {
+    id: saved.id,
+    expected: displayed(saved),
+    approve: true,
+  });
+  assert.equal(approval.status, 200);
+  const approved = (await approval.json()).transaction;
+  assert.deepEqual({ ...approved, reviewed: 0 }, saved);
+  const retry = await f.call("/api/transactions/review", "PATCH", {
+    id: saved.id,
+    expected: displayed(saved),
+    approve: true,
+  });
+  assert.equal(retry.status, 409);
+});
+test("review rejects stale snapshots, invalid edits and pending or removed records atomically", async (t) => {
+  const f = await fixture(t);
+  await f.login();
+  f.store.db.prepare("UPDATE transactions SET reviewed=0").run();
+  const original = f.store.db
+    .prepare("SELECT * FROM transactions WHERE pending=0 LIMIT 1")
+    .get();
+  for (const edits of [
+    { amount: "1.001" },
+    { date: "2026-02-30" },
+    { category_id: "missing" },
+    { currency: "EUR" },
+    { description: " " },
+  ]) {
+    const response = await f.call("/api/transactions/review", "PATCH", {
+      id: original.id,
+      expected: displayed(original),
+      approve: true,
+      edits,
+    });
+    assert.equal(response.status, 400);
+    assert.deepEqual(
+      f.store.db
+        .prepare("SELECT * FROM transactions WHERE id=?")
+        .get(original.id),
+      original,
+    );
+  }
+  f.store.db
+    .prepare("UPDATE transactions SET amount_cents=amount_cents+1 WHERE id=?")
+    .run(original.id);
+  const stale = await f.call("/api/transactions/review", "PATCH", {
+    id: original.id,
+    expected: displayed(original),
+    approve: true,
+  });
+  assert.equal(stale.status, 409);
+  assert.equal(
+    f.store.db
+      .prepare("SELECT reviewed FROM transactions WHERE id=?")
+      .get(original.id).reviewed,
+    0,
+  );
+  const pending = f.store.db
+    .prepare("SELECT * FROM transactions WHERE pending=1 LIMIT 1")
+    .get();
+  assert.equal(
+    (
+      await f.call("/api/transactions/review", "PATCH", {
+        id: pending.id,
+        expected: displayed(pending),
+        approve: true,
+      })
+    ).status,
+    409,
+  );
+  assert.equal(
+    (
+      await f.call("/api/transactions/category", "PATCH", {
+        id: pending.id,
+        category_id: "food",
+      })
+    ).status,
+    400,
+  );
+  assert.equal(
+    f.store.db
+      .prepare("SELECT reviewed FROM transactions WHERE id=?")
+      .get(pending.id).reviewed,
+    0,
+  );
+  f.store.db
+    .prepare("UPDATE transactions SET removed=1 WHERE id=?")
+    .run(original.id);
+  assert.equal(
+    (
+      await f.call("/api/transactions/review", "PATCH", {
+        id: original.id,
+        expected: displayed(original),
+        approve: true,
+      })
+    ).status,
+    409,
+  );
+});
+test("review corrections retain signed refunds and transfer semantics", async (t) => {
+  const f = await fixture(t);
+  await f.login();
+  f.store.db
+    .prepare("UPDATE transactions SET reviewed=0 WHERE pending=0")
+    .run();
+  const original = f.store.db
+    .prepare("SELECT * FROM transactions WHERE pending=0 LIMIT 1")
+    .get();
+  const response = await f.call("/api/transactions/review", "PATCH", {
+    id: original.id,
+    expected: displayed(original),
+    approve: false,
+    edits: { amount: "-0.27", category_id: "food" },
+  });
+  assert.equal(response.status, 200);
+  const refund = (await response.json()).transaction;
+  assert.equal(refund.amount_cents, -27);
+  assert.equal(refund.reviewed, 0);
+  const transfer = await f.call("/api/transactions/review", "PATCH", {
+    id: refund.id,
+    expected: displayed(refund),
+    approve: true,
+    edits: { category_id: "transfer" },
+  });
+  assert.equal(transfer.status, 200);
+  assert.equal((await transfer.json()).transaction.category_id, "transfer");
+});
 test("financial APIs require a session; cookie is HttpOnly and SameSite Strict", async (t) => {
   const f = await fixture(t);
   assert.equal((await f.call("/api/state")).status, 401);

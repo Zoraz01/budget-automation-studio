@@ -1,5 +1,7 @@
 # BAS · Budget Automation Studio
 
+Quick Review is implemented in source with direct approval and optional edits. See [behavior, screenshots and validation](docs/QUICK-REVIEW.md); production activation is separate.
+
 <img src="docs/site/assets/social.svg" alt="BAS — Find your financial flow. Your budget. Your connections. Your code." width="100%">
 
 **Find your financial flow.**

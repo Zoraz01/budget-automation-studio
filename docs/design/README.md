@@ -1,8 +1,8 @@
 # Complete mobile UI specification
 
-The [quick Review concept](quick-review.html) now shows a read-only summary, direct Approve and an on-demand editor with Save & approve. See its [scope and checks](QUICK-REVIEW.md) and [comparison](quick-review-comparison.html). This is a design prototype; runtime Review is unchanged.
+Quick Review is now implemented in source: a purchase summary, direct Approve and an on-demand editor with Save & approve. See the [implementation and checks](../QUICK-REVIEW.md), actual [phone](quick-review-runtime-mobile.jpg) and [desktop](quick-review-runtime-desktop.jpg) captures. It is not deployed. The [earlier concept](quick-review.html) and [design comparison](quick-review-comparison.html) remain design history.
 
-Selected A now has a source implementation. Review the actual [desktop](daily-overview-desktop.html) and [phone](daily-overview-mobile.html) before/after captures. This implements Home; other platform screens remain planned.
+Selected A now has a source implementation. Review the actual [desktop](daily-overview-desktop.html) and [phone](daily-overview-mobile.html) before/after captures. Home and Quick Review are implemented in source; the remaining platform screens stay planned.
 
 ## Current platform research — 2026-11-14
 

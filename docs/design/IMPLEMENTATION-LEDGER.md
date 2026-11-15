@@ -1,12 +1,12 @@
 # Overhaul feature implementation ledger
 
-2026-11-14: [Quick Review](QUICK-REVIEW.md) has a validated synthetic prototype for direct approval and optional edits. F10-F14 runtime redesign remains planned in both repositories; this prototype does not implement approval endpoints or advanced public adapters.
+2026-11-14: Approved Quick Review is implemented and validated in source. F10-F12 now have source evidence in both architectures; private bulk/reject/sharing operations are retained with their protections. BAS account, bulk, reject and advanced-sharing adapters remain existing gaps. See the [implementation record](../QUICK-REVIEW.md); this does not close all of M4 or constitute deployment.
 
 2026-11-14: A Home presentation is implemented, including existing period/cash-flow/chart behavior, a review entry, monthly budget preview, planning and Goals/account summaries. This is a presentation slice, not closure of the historical M0-M6 checklist. Current definitions and repository-specific gaps are in [FEATURE-PARITY](../FEATURE-PARITY.md).
 
 Historical September planning ledger. For the current source inventory, Goals/history status and November navigation proposal, read [PLATFORM-OVERHAUL.md](PLATFORM-OVERHAUL.md) before using these rows. A historical Planned label does not override later implementation evidence.
 
-All rows are planned. A preview or specification is not runtime implementation. Update evidence and both repository statuses as milestones ship; keep private implementation details in private notes. M0 isolation is a prerequisite to every row.
+Rows without new source evidence remain historical plans. A preview or specification is not runtime implementation. Update evidence and both repository statuses as milestones ship; keep private implementation details in private notes. M0 isolation is a prerequisite to every row.
 
 | Contract | Capability | Milestone | Runtime status | Public counterpart | Evidence / gap |
 |---|---|---|---|---|---|
@@ -19,11 +19,11 @@ All rows are planned. A preview or specification is not runtime implementation. 
 | F07 | Typical spending toggle | M3 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
 | F08 | Next paycheck | M3 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
 | F09 | Savings scenarios | M3 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
-| F10 | Review queue | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
-| F11 | Edit review purchase | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
-| F12 | Approve purchase | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
-| F13 | Bulk approval | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
-| F14 | Reject purchase | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
+| F10 | Review queue | M4 | Source implemented | Source implemented | Focused summary, next purchase and count; implementation record above |
+| F11 | Edit review purchase | M4 | Source implemented | Source implemented; no account picker | Cancel/save/save-and-approve verified; BAS retains signed amounts and category-based transfers |
+| F12 | Approve purchase | M4 | Source implemented | Source implemented | Direct confirmation, repeated-click guard and failed-status recovery; BAS checks a displayed snapshot atomically |
+| F13 | Bulk approval | M4 | Existing workflow retained; displayed IDs bound | Existing bulk capability gap | Finance confirms eligible records; BAS bounds each individual approval to its displayed snapshot |
+| F14 | Reject purchase | M4 | Existing workflow retained with confirmation | Existing ignore-ledger adapter gap | Finance preserves posted/uncertain sharing protections; no unsupported public reject action |
 | F15 | Category split | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
 | F16 | Refund suggestion | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |
 | F17 | Expense-sharing connection | M4 | Planned | Planned | UI-FUNCTIONS.md; no overhaul implementation evidence |

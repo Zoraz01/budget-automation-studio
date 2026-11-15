@@ -1,5 +1,9 @@
 # Quick review concept
 
+Approved and implemented in source. See the [implementation record](../QUICK-REVIEW.md) and actual [phone](quick-review-runtime-mobile.jpg) / [desktop](quick-review-runtime-desktop.jpg) captures. Production activation is separate.
+
+## Original design study
+
 Open [the working preview](quick-review.html) or [the before/after comparison](quick-review-comparison.html). This is a synthetic design prototype for the selected A direction, not a runtime release. It changes no account data, approval endpoint, provider, database or production asset.
 
 The default card shows the merchant, exact amount, date, category and account. **Approve** is the explicit confirmation for an ordinary local review and immediately advances the demo queue. It has no second confirmation dialog. **Edit** opens description, amount, date, category, account and transfer fields. Close or Escape discards the draft; **Save changes** returns to the summary; **Save & approve** applies the correction and advances. Editing alone never approves a purchase.

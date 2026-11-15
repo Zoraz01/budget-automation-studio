@@ -1,5 +1,7 @@
 # Daily overview
 
+The subsequent [Quick Review implementation](QUICK-REVIEW.md) now provides the focused summary and optional editor behind Start review.
+
 Direction A selected and implemented in source on 2026-11-14. This is the Home implementation of the selected concept. The wider navigation and other screen designs in [the platform proposal](design/PLATFORM-OVERHAUL.md) remain separate planned work. Existing navigation and financial workflows remain available.
 
 ## What changed

@@ -1,3 +1,4 @@
+import { reviewTransaction, ReviewError } from "./review.mjs";
 import { planCash } from "./cash-plan.mjs";
 import { workspaceGoals } from "./goals-adapter.mjs";
 import { GoalError } from "./goals.mjs";
@@ -20,6 +21,8 @@ import {
 import { answer, AIError } from "./providers/ai.mjs";
 import { historyStore, historyWorker, HistoryError } from "./chat-history.mjs";
 const staticFiles = new Map([
+  ["/review.js", ["review.js", "text/javascript"]],
+  ["/review.css", ["review.css", "text/css"]],
   ["/home.css", ["home.css", "text/css"]],
   ["/cash-plan.js", ["cash-plan.js", "text/javascript"]],
   ["/latest-request.js", ["latest-request.js", "text/javascript"]],
@@ -274,6 +277,10 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
           );
         return json(res, 201, { id });
       }
+      if (path === "/api/transactions/review" && req.method === "PATCH") {
+        const transaction = reviewTransaction(store, await body(req));
+        return json(res, 200, { transaction });
+      }
       if (path === "/api/transactions/category" && req.method === "PATCH") {
         const input = await body(req);
         if (
@@ -284,7 +291,7 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
           throw new InputError("Unknown category");
         const result = store.db
           .prepare(
-            "UPDATE transactions SET category_id=?,reviewed=1 WHERE id=? AND removed=0",
+            "UPDATE transactions SET category_id=?,reviewed=1 WHERE id=? AND removed=0 AND pending=0",
           )
           .run(input.category_id, text(input.id, 300));
         if (!result.changes) throw new InputError("Unknown transaction");
@@ -433,6 +440,8 @@ export function createApp(config, store, { aiFetch = fetch } = {}) {
       if (e instanceof GoalError)
         return json(res, e.status, { error: e.message });
       if (e instanceof HistoryError)
+        return json(res, e.status, { error: e.message });
+      if (e instanceof ReviewError)
         return json(res, e.status, { error: e.message });
       if (e instanceof InputError) return json(res, 400, { error: e.message });
       return json(res, 502, {

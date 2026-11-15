@@ -1,10 +1,20 @@
 # Feature parity and safe adaptations
 
-## Quick Review design refinement - 2026-11-14
+## Approved Quick Review implementation - 2026-11-14
+
+Both source trees implement the approved summary-first Review: one selected purchase, direct Approve, an editor with cancel/save/Save & approve, compact next purchases and explicit handling of failed status reads. Saving alone does not approve. The normal application setup needs no new secret, dependency or schema.
+
+Finance preserves account and transfer editing, explicit refund links, category splitting, shared-expense recovery and confirmed rejection. Ordinary approval avoids an unnecessary metadata patch. Bulk confirmation now binds its displayed IDs so later arrivals cannot be silently included. BAS independently adapts the pattern inside Activity's Needs review view with source labels, signed amounts and categories. Its new authenticated review endpoint compares the displayed record atomically; changed/pending/removed records are rejected. All activity category changes no longer approve an unreviewed record.
+
+The generic public counterpart to bounded confirmation is its required per-record snapshot, not a new bulk capability. BAS account selection, bulk/ignore-ledger operations and advanced split/refund/sharing adapters remain existing gaps, not synchronized features. Its demo process/database and screenshots are independent; no private history, identifiers, credentials, deployment files or Git metadata are copied.
+
+Validation: 95 Finance tests, an isolated frontend build, four-width Review/sharing/failure checks and the existing 20 route/viewport/freshness checks. BAS passes 102 tests, independent four-width Review checks and its existing 20 page/viewport/auth/freshness checks. Public formatting, exact screenshot allowlist, release-content checks, Gitleaks and manual review accompany source publication. No production activation or physical-phone acceptance is claimed. See the current Quick Review implementation record linked from the design index.
+
+## Earlier Quick Review design refinement - 2026-11-14
 
 Both repositories contain an independently branded [working quick-review concept](design/quick-review.html), their own invented before/after captures and a [portable check script and scope record](design/QUICK-REVIEW.md). The summary leads with amount, merchant, category and account. Ordinary Approve advances the demo directly; Edit supports Save changes or Save & approve. Bulk and rejection retain confirmation, and linking/sharing remain explicit separate flows.
 
-This is design parity only. Neither runtime Review implementation changed; public advanced split/refund/sharing gaps remain open. The generic fixtures contain no account history or provider identity. Each prototype passed four-width, edit/cancel/approval/cent/transfer/bulk/refund/rejection checks with zero HTTP requests or browser exceptions. No setup variables, production build, migration, provider call or deployment is introduced.
+That earlier commit was design parity only; the approved source implementation is recorded above. At that point neither runtime Review implementation changed; public advanced split/refund/sharing gaps remain open. The generic fixtures contain no account history or provider identity. Each prototype passed four-width, edit/cancel/approval/cent/transfer/bulk/refund/rejection checks with zero HTTP requests or browser exceptions. No setup variables, production build, migration, provider call or deployment is introduced.
 
 ## Selected A daily overview implementation — 2026-11-14
 

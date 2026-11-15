@@ -1,3 +1,4 @@
+import { reviewPane, reviewForm, reviewSnapshot } from "./review.js";
 import { cashPlanCard, previewCashPlan } from "./cash-plan.js";
 import { latestRequest } from "./latest-request.js";
 const stateRequests = latestRequest();
@@ -34,6 +35,13 @@ const localMonth = () => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 };
+let reviewAnnouncement = "";
+let reviewSelectedId = null,
+  reviewBusy = false,
+  reviewError = null,
+  reviewRefreshRequired = false,
+  reviewEditSnapshot = null,
+  reviewEpoch = 0;
 let activityReviewOnly = false,
   activitySearch = "";
 let selectedMonth = localMonth(),
@@ -80,6 +88,7 @@ async function api(path, method = "GET", data, { signal } = {}) {
   if (!response.ok) {
     if (response.status === 401 && path != "/api/login") {
       state = null;
+      resetReview();
       clearChat();
       activitySearch = "";
       activityReviewOnly = false;
@@ -105,6 +114,10 @@ async function load() {
     );
     if (!request.current()) return;
     state = next;
+    if (reviewRefreshRequired) {
+      reviewRefreshRequired = false;
+      reviewError = null;
+    }
     render();
   } catch (error) {
     if (!request.current()) return;
@@ -118,6 +131,165 @@ function stateStatus() {
     return `<section class="card" role="alert"><p>Budget data could not be loaded. ${escape(stateError)}</p><button data-action="refresh">Retry</button></section>`;
   return `<section class="card" role="status">Loading ${escape(monthTitle())}…</section>`;
 }
+
+function clearReviewFeedback() {
+  clearTimeout(noticeTimer);
+  document.querySelector("#notice").textContent = "";
+  reviewAnnouncement = "";
+}
+function reviewNotice(message) {
+  if (page === "transactions" && activityReviewOnly) {
+    clearReviewFeedback();
+    reviewAnnouncement = message;
+    if (state) render();
+  } else notice(message);
+}
+function resetReview() {
+  clearReviewFeedback();
+  reviewEpoch++;
+  reviewBusy = false;
+  reviewSelectedId = null;
+  reviewError = null;
+  reviewRefreshRequired = false;
+  if (reviewEditSnapshot || dialog.querySelector("#review-edit-form")) {
+    dialog.close();
+    dialog.innerHTML = "";
+  }
+  reviewEditSnapshot = null;
+}
+function focusedReview() {
+  return reviewPane(activityRows(), state.categories, {
+    selectedId: reviewSelectedId,
+    disabled: reviewBusy,
+    error: reviewError,
+    refreshRequired: reviewRefreshRequired,
+    filtered: !!activitySearch.trim(),
+    searchValue: activitySearch,
+    escape,
+    money,
+  });
+}
+async function refreshReview() {
+  if (reviewBusy) return;
+  try {
+    await load();
+    if (state && !stateError && state.summary.month === selectedMonth) {
+      reviewError = null;
+      reviewRefreshRequired = false;
+      render();
+    }
+  } catch (error) {
+    notice(error.message);
+  }
+}
+async function approveReview(id) {
+  if (reviewBusy || reviewRefreshRequired || !state || stateError) return;
+  const transaction = state.transactions.find((row) => row.id === id);
+  if (!transaction || transaction.pending || transaction.reviewed) return;
+  const epoch = reviewEpoch;
+  reviewBusy = true;
+  reviewError = null;
+  render();
+  try {
+    await api("/api/transactions/review", "PATCH", {
+      id,
+      approve: true,
+      expected: reviewSnapshot(transaction),
+    });
+    if (epoch !== reviewEpoch || !state) return;
+    reviewSelectedId = null;
+    await load();
+    reviewNotice("Purchase approved.");
+  } catch (error) {
+    if (epoch !== reviewEpoch || !state) return;
+    reviewError = error.message;
+    reviewRefreshRequired = true;
+    if (page === "transactions" && activityReviewOnly) reviewNotice("");
+    else notice(error.message);
+  } finally {
+    if (epoch === reviewEpoch) {
+      reviewBusy = false;
+      if (state) render();
+      if (page === "transactions" && activityReviewOnly)
+        (
+          document.querySelector(".review-approve") ||
+          document.querySelector("#main")
+        )?.focus({ preventScroll: true });
+    }
+  }
+}
+function editReview(id) {
+  if (reviewBusy || reviewRefreshRequired || !state || stateError) return;
+  const transaction = state.transactions.find((row) => row.id === id);
+  if (!transaction || transaction.pending || transaction.reviewed) return;
+  reviewEditSnapshot = { id, expected: reviewSnapshot(transaction) };
+  openDialog(
+    "Edit purchase",
+    reviewForm(transaction, state.categories, {
+      currency: state.currency,
+      escape,
+    }),
+  );
+}
+async function saveReview(form, approve) {
+  if (reviewBusy || !reviewEditSnapshot || !state) return;
+  if (reviewRefreshRequired) {
+    document.querySelector("#dialog-error").textContent =
+      "Close the editor and refresh the purchase status before trying again. Your draft is still here.";
+    return;
+  }
+  const epoch = reviewEpoch;
+  const values = Object.fromEntries(new FormData(form));
+  const snapshot = reviewEditSnapshot;
+  reviewBusy = true;
+  form.querySelector("fieldset").disabled = true;
+  dialog.querySelectorAll("button").forEach((button) => {
+    button.disabled = true;
+  });
+  document.querySelector("#dialog-error").textContent = "";
+  try {
+    await api("/api/transactions/review", "PATCH", {
+      ...snapshot,
+      approve,
+      edits: values,
+    });
+    if (epoch !== reviewEpoch || !state) return;
+    reviewEditSnapshot = null;
+    dialog.close();
+    await load();
+    reviewNotice(
+      approve
+        ? "Purchase approved."
+        : "Changes saved. Approval is still required.",
+    );
+  } catch (error) {
+    if (epoch !== reviewEpoch || !state) return;
+    if (approve) {
+      reviewError = error.message;
+      reviewRefreshRequired = true;
+    }
+    document.querySelector("#dialog-error").textContent = error.message;
+  } finally {
+    if (epoch === reviewEpoch) {
+      reviewBusy = false;
+      form.querySelector("fieldset").disabled = false;
+      dialog.querySelectorAll("button").forEach((button) => {
+        button.disabled = false;
+      });
+      if (state) render();
+      if (!dialog.open && page === "transactions" && activityReviewOnly)
+        document
+          .querySelector(".review-approve")
+          ?.focus({ preventScroll: true });
+    }
+  }
+}
+dialog.addEventListener("cancel", (event) => {
+  if (reviewBusy && reviewEditSnapshot) event.preventDefault();
+});
+dialog.addEventListener("close", () => {
+  if (!reviewBusy) reviewEditSnapshot = null;
+});
 
 function brand() {
   return '<div class="brand"><img src="/logo.svg" alt=""/><span>BAS<small>Budget Automation Studio</small></span></div>';
@@ -151,7 +323,13 @@ function render() {
 
   if (!state) return;
   const ready = !stateError && state.summary.month === selectedMonth;
-  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="home-page-title">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${!ready ? stateStatus() : { overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note" ${ready ? "" : "hidden"}>${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
+  const reviewCountLabel = `${state.summary.unreviewed_count} purchase${state.summary.unreviewed_count === 1 ? "" : "s"} left`;
+  const reviewDescription = ready
+    ? reviewCountLabel
+    : stateError
+      ? "Review unavailable"
+      : "Loading purchases…";
+  app.innerHTML = `<div class="shell"><aside class="sidebar">${brand()}<nav class="nav" aria-label="Main navigation">${nav.map(([id, label]) => `<button data-page="${id}" class="${id === page ? "active" : ""}" ${id === page ? 'aria-current="page"' : ""}>${icon(id === "goals" ? "wallet" : id)}<span>${label}</span></button>`).join("")}</nav><div class="sidebar-foot">${icon("shield")}<strong>Your budget. Your control.</strong><p>Local storage, open source, and connections you choose.</p></div></aside><div class="workspace"><header class="topbar"><span class="breadcrumbs">Your workspace / ${nav.find((n) => n[0] === page)[1]}</span><div class="top-actions"><span class="badge">${state.mode === "demo" ? "Synthetic demo" : "Personal workspace"}</span><button class="ghost small" data-action="logout">Sign out</button><span class="avatar" aria-hidden="true">BAS</span></div></header><main id="main" tabindex="-1"><div class="page-head">${page === "goals" ? "<span></span>" : page === "overview" ? '<h1 class="home-page-title">Home</h1>' : `<div><div class="page-eyebrow">${"YOUR STUDIO / " + escape(nav.find((n) => n[0] === page)[1].toUpperCase())}</div><h1>${{ transactions: activityReviewOnly ? "Review" : "Every transaction, in view.", budgets: "A plan that fits your life.", connections: "Bring it all together.", chat: "A little help with the numbers." }[page]}</h1><p>${{ transactions: activityReviewOnly ? reviewDescription : "Review, categorize, and keep the details organized.", budgets: "Set your priorities. Adjust as life happens.", connections: "Connect the services you choose, with your own keys.", chat: "Ask about the month you’re looking at." }[page]}</p></div>`}<label class="month-label" for="month" ${page === "goals" ? "hidden" : ""}>YOUR BUDGET MONTH<input type="month" id="month" value="${selectedMonth}" required></label></div>${!ready ? stateStatus() : { overview: overview, transactions: transactions, budgets: budgets, connections: connections, chat: chat, goals: () => '<div id="goals-content"></div>' }[page]()}<p class="footer-note" ${ready ? "" : "hidden"}>${state.mode === "demo" ? "All figures are invented demo data. " : ""}One currency per workspace · ${escape(state.currency)} · Posted transactions only in totals · ${state.summary.unreviewed_count} awaiting review</p></main></div></div>`;
   if (page === "goals")
     document.querySelector("#main").classList.add("goals-main");
   if (page === "goals" && ready)
@@ -159,6 +337,13 @@ function render() {
       document.querySelector("#goals-content"),
       (path, method = "GET", body) => api("/api" + path, method, body),
     );
+  if (page === "transactions" && activityReviewOnly) {
+    const status = document.querySelector(".page-head p");
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    if (reviewAnnouncement && ready)
+      status.textContent = `${reviewCountLabel} · ${reviewAnnouncement}`;
+  }
   if (restoreComposer) {
     const composer = document.querySelector("#chat-form textarea");
     if (composer && !composer.disabled) {
@@ -183,7 +368,7 @@ function txnList(rows, editable = false) {
     ? rows
         .map(
           (t) =>
-            `<div class="txn"><span class="txn-icon">${icon(t.amount_cents < 0 ? "down" : "wallet")}</span><div><strong>${escape(t.description)}</strong><small>${escape(t.date)} · ${escape(state.categories.find((c) => c.id === t.category_id)?.name || "Uncategorized")}${!t.reviewed ? " · Needs review" : ""}</small>${editable ? `<label class="sr-only" for="cat-${escape(t.id)}">Category for ${escape(t.description)}</label><select id="cat-${escape(t.id)}" data-transaction="${escape(t.id)}">${categoryOptions(t.category_id)}</select>${!t.reviewed ? `<button class="small ghost" data-review="${escape(t.id)}" data-category="${escape(t.category_id)}">Confirm category</button>` : ""}` : ""}</div><div class="amount ${t.amount_cents < 0 ? "income" : ""}">${t.amount_cents < 0 ? "+" : "−"}${money(Math.abs(t.amount_cents))}${t.pending ? '<small class="pending">Pending · excluded</small>' : ""}</div></div>`,
+            `<div class="txn"><span class="txn-icon">${icon(t.amount_cents < 0 ? "down" : "wallet")}</span><div><strong>${escape(t.description)}</strong><small>${escape(t.date)} · ${escape(state.categories.find((c) => c.id === t.category_id)?.name || "Uncategorized")}${!t.reviewed ? " · Needs review" : ""}</small>${editable && !t.pending ? `<label class="sr-only" for="cat-${escape(t.id)}">Category for ${escape(t.description)}</label><select id="cat-${escape(t.id)}" data-transaction="${escape(t.id)}">${categoryOptions(t.category_id)}</select>${!t.reviewed ? `<button class="small ghost" data-review="${escape(t.id)}" data-category="${escape(t.category_id)}">Approve</button>` : ""}` : ""}</div><div class="amount ${t.amount_cents < 0 ? "income" : ""}">${t.amount_cents < 0 ? "+" : "−"}${money(Math.abs(t.amount_cents))}${t.pending ? '<small class="pending">Pending · excluded</small>' : ""}</div></div>`,
         )
         .join("")
     : '<p class="empty">No transactions this month.<br>Add one manually or connect a provider.</p>';
@@ -242,8 +427,10 @@ function activityRows() {
   );
 }
 function transactions() {
-  return `<section class="card wide"><div class="filter-row"><div class="activity-modes" aria-label="Activity view"><button class="small ${!activityReviewOnly ? "active" : "ghost"}" data-activity-mode="all" aria-pressed="${!activityReviewOnly}">All activity</button><button class="small ${activityReviewOnly ? "active" : "ghost"}" data-activity-mode="review" aria-pressed="${activityReviewOnly}">Needs review · ${state.summary.unreviewed_count}</button></div><label class="search"><span class="sr-only">Search transactions</span><input id="search" value="${escape(activitySearch)}" placeholder="Search description or category…" type="search"></label><button class="primary" data-action="add-transaction">+ Add transaction</button></div><div id="transaction-list">${activityRows().length ? txnList(activityRows(), true) : `<p class="empty">${activityReviewOnly ? "No posted transactions need review in this view." : "No transactions match this view."}</p>`}</div></section>`;
+  const controls = `<div class="filter-row"><div class="activity-modes" aria-label="Activity view"><button class="small ${!activityReviewOnly ? "active" : "ghost"}" data-activity-mode="all" aria-pressed="${!activityReviewOnly}">All activity</button><button class="small ${activityReviewOnly ? "active" : "ghost"}" data-activity-mode="review" aria-pressed="${activityReviewOnly}">Needs review · ${state.summary.unreviewed_count}</button></div>${activityReviewOnly ? "" : `<label class="search"><span class="sr-only">Search transactions</span><input id="search" value="${escape(activitySearch)}" placeholder="Search description or category…" type="search"></label>`}${activityReviewOnly ? "" : '<button class="primary" data-action="add-transaction">+ Add transaction</button>'}</div>`;
+  return `<section class="${activityReviewOnly ? "review-workspace" : "card wide"}">${controls}<div id="transaction-list">${activityReviewOnly ? focusedReview() : activityRows().length ? txnList(activityRows(), true) : '<p class="empty">No transactions match this view.</p>'}</div></section>`;
 }
+
 function budgets() {
   return `<div class="dashboard-grid"><section class="card"><div class="card-head"><h2>${escape(monthTitle())}</h2><button class="small" data-action="add-category">+ Category</button></div>${state.summary.categories.map((c) => `<form class="budget-editor" data-budget="${escape(c.id)}"><label>${escape(c.name)}<input name="amount" inputmode="decimal" type="text" value="${(c.limit_cents / 100).toFixed(2)}" pattern="[0-9]+([.][0-9]{1,2})?" required aria-label="${escape(c.name)} monthly budget in ${escape(state.currency)}"></label><button type="submit">Save</button></form>`).join("")}</section><div class="stack"><section class="card"><h2>Plan, then adjust.</h2><p class="muted">These limits belong to ${escape(monthTitle())}. Change the month to set a different plan.</p><p class="note">Amounts are in ${escape(state.currency)}. Zero means no budget has been allocated. Unused budgets do not roll over automatically.</p></section><section class="card"><h2>Budget progress</h2>${budgetRows()}</section></div></div>`;
 }
@@ -395,9 +582,36 @@ async function plaidConnect() {
 }
 document.addEventListener("click", async (event) => {
   const button = event.target.closest("button");
-  if (!button) return;
+  if (!button || button.disabled) return;
+  if (button.closest("#review-edit-form")) return;
+  if (button.dataset.selectReview) {
+    if (!reviewBusy) {
+      reviewSelectedId = button.dataset.selectReview;
+      render();
+    }
+    return;
+  }
+  if (button.dataset.editReview) {
+    editReview(button.dataset.editReview);
+    return;
+  }
+  if (button.dataset.review) {
+    await approveReview(button.dataset.review);
+    return;
+  }
+  if (button.dataset.action === "refresh-review") {
+    await refreshReview();
+    return;
+  }
+  if (
+    button.dataset.action === "close-dialog" &&
+    reviewBusy &&
+    reviewEditSnapshot
+  )
+    return;
   if (button.dataset.activityMode) {
     activityReviewOnly = button.dataset.activityMode === "review";
+    if (activityReviewOnly) clearReviewFeedback();
     if (state) render();
     return;
   }
@@ -405,7 +619,10 @@ document.addEventListener("click", async (event) => {
     page = button.dataset.page;
     if (page === "transactions") {
       activityReviewOnly = button.dataset.reviewOnly === "true";
-      if (activityReviewOnly) activitySearch = "";
+      if (activityReviewOnly) {
+        activitySearch = "";
+        clearReviewFeedback();
+      }
     }
     if (page === "overview") await load();
     if (page === "chat")
@@ -509,6 +726,7 @@ document.addEventListener("click", async (event) => {
       stateRequests.cancel();
       await api("/api/logout", "POST", {});
       state = null;
+      resetReview();
       clearChat();
       activitySearch = "";
       activityReviewOnly = false;
@@ -542,14 +760,6 @@ document.addEventListener("click", async (event) => {
       await load();
       notice("Import finished. Review the latest data and categories.");
     }
-    if (button.dataset.review) {
-      await api("/api/transactions/category", "PATCH", {
-        id: button.dataset.review,
-        category_id: button.dataset.category,
-      });
-      await load();
-      notice("Category reviewed.");
-    }
   } catch (e) {
     notice(e.message);
   } finally {
@@ -558,6 +768,10 @@ document.addEventListener("click", async (event) => {
 });
 document.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (event.target.id === "review-edit-form") {
+    await saveReview(event.target, event.submitter?.value === "approve");
+    return;
+  }
   const form = event.target,
     data = Object.fromEntries(new FormData(form));
   const button = form.querySelector('button[type="submit"]');
@@ -618,16 +832,34 @@ document.addEventListener("change", async (event) => {
   try {
     if (target.id === "month") {
       if (!target.value) return;
+      resetReview();
       selectedMonth = target.value;
       await load();
     }
     if (target.dataset.transaction) {
-      await api("/api/transactions/category", "PATCH", {
-        id: target.dataset.transaction,
-        category_id: target.value,
-      });
+      const transaction = state?.transactions.find(
+        (row) => row.id === target.dataset.transaction,
+      );
+      if (!transaction || transaction.pending || reviewBusy) return;
+      if (transaction.reviewed) {
+        await api("/api/transactions/category", "PATCH", {
+          id: transaction.id,
+          category_id: target.value,
+        });
+      } else {
+        await api("/api/transactions/review", "PATCH", {
+          id: transaction.id,
+          approve: false,
+          expected: reviewSnapshot(transaction),
+          edits: { category_id: target.value },
+        });
+      }
       await load();
-      notice("Category updated.");
+      notice(
+        transaction.reviewed
+          ? "Category updated."
+          : "Category saved. Approval is still required.",
+      );
     }
   } catch (e) {
     notice(e.message);
@@ -637,11 +869,19 @@ document.addEventListener("input", (event) => {
   if (event.target.matches("#chat-form textarea"))
     chatDrafts[activeConversation?.id || "new"] = event.target.value;
   if (event.target.id === "search") {
+    const caret = [event.target.selectionStart, event.target.selectionEnd];
     activitySearch = event.target.value;
     const rows = activityRows();
-    document.querySelector("#transaction-list").innerHTML = rows.length
-      ? txnList(rows, true)
-      : '<p class="empty">No transactions match this view.</p>';
+    document.querySelector("#transaction-list").innerHTML = activityReviewOnly
+      ? focusedReview()
+      : rows.length
+        ? txnList(rows, true)
+        : '<p class="empty">No transactions match this view.</p>';
+    if (activityReviewOnly) {
+      const search = document.querySelector("#search");
+      search?.focus({ preventScroll: true });
+      search?.setSelectionRange(...caret);
+    }
   }
 });
 load().catch(async (e) => {

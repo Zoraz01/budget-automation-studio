@@ -1,6 +1,6 @@
 # BAS platform overhaul
 
-A selected on 2026-11-14. Its Home arrangement is now implemented in source; the larger platform screen and navigation plan below remains a proposal. See the actual [desktop before/after](daily-overview-desktop.html) and [phone before/after](daily-overview-mobile.html). The original three concepts remain design history.
+A selected on 2026-11-14. Its Home arrangement and the approved Quick Review are now implemented in source; the remaining platform screens and navigation changes below stay proposals. See the actual [desktop before/after](daily-overview-desktop.html) and [phone before/after](daily-overview-mobile.html). See the [Quick Review implementation](../QUICK-REVIEW.md). The original three concepts remain design history.
 
 Design proposal, 2026-11-14. This package contains three Home studies and a plan for the whole platform. It changes no financial behavior, runtime screen, database or deployment. Every displayed amount is invented. The three concepts use the same study navigation so Home directions can be judged on the same terms. That navigation includes planned capabilities and is not a statement of current BAS runtime support. The navigation below is a separate proposal.
 
