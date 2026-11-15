@@ -27,7 +27,7 @@
     "snaptrade-typescript-sdk": "12.2.22"
   },
   "devDependencies": {
-    "prettier": "3.9.6",
+    "prettier": "3.9.10",
     "wrangler": "4.154.0"
   }
 }
